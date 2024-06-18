@@ -1,0 +1,31 @@
+{
+	"info": {
+		"_postman_id": "e8028060-9c06-420c-85dc-7a76f4e2ea9a",
+		"name": "M2 SG WebCheckout",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5289226"
+	},
+	"item": [
+		{
+			"name": "Test request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://magento2.test/sgwebcheckout/login/index",
+					"protocol": "http",
+					"host": [
+						"magento2",
+						"test"
+					],
+					"path": [
+						"sgwebcheckout",
+						"login",
+						"index"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
