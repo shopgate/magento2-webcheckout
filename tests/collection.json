@@ -26,6 +26,29 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Token API",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://magento2.test/rest/V1/sgwebcheckout/guest/token",
+					"protocol": "http",
+					"host": [
+						"magento2",
+						"test"
+					],
+					"path": [
+						"rest",
+						"V1",
+						"sgwebcheckout",
+						"guest",
+						"token"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

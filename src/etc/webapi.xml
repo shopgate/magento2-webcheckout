@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Webapi/etc/webapi.xsd">
+    <route url="/V1/sgwebcheckout/mine/token" method="GET">
+        <service class="Shopgate\WebCheckout\Api\TokenInterface" method="getCustomerToken"/>
+        <resources>
+            <resource ref="Magento_Customer::customer_self" />
+        </resources>
+    </route>
+    <route url="/V1/sgwebcheckout/guest/token" method="GET">
+        <service class="Shopgate\WebCheckout\Api\TokenInterface" method="getGuestToken"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+</routes>
