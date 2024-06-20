@@ -3,8 +3,11 @@
     <route url="/V1/sgwebcheckout/mine/token" method="GET">
         <service class="Shopgate\WebCheckout\Api\TokenInterface" method="getCustomerToken"/>
         <resources>
-            <resource ref="Magento_Customer::customer_self" />
+            <resource ref="self"/>
         </resources>
+        <data>
+            <parameter name="customerId" force="true">%customer_id%</parameter>
+        </data>
     </route>
     <route url="/V1/sgwebcheckout/guest/token" method="GET">
         <service class="Shopgate\WebCheckout\Api\TokenInterface" method="getGuestToken"/>

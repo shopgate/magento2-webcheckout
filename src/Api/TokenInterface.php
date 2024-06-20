@@ -5,9 +5,10 @@ namespace Shopgate\WebCheckout\Api;
 interface TokenInterface
 {
     /**
-     * @return string
+     * @param int $customerId
+     * @return TokenResultInterface
      */
-    public function getCustomerToken(): string;
+    public function getCustomerToken(int $customerId): TokenResultInterface;
 
     /**
      * @return string
