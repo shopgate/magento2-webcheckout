@@ -11,8 +11,8 @@ interface TokenInterface
     public function getCustomerToken(int $customerId): TokenResultInterface;
 
     /**
-     * @param string $maskedQuoteId
+     * @param string $cartId
      * @return TokenResultInterface
      */
-    public function getGuestToken(string $maskedQuoteId): TokenResultInterface;
+    public function getGuestToken(string $cartId): TokenResultInterface;
 }

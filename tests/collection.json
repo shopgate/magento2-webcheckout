@@ -334,7 +334,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"maskedQuoteId\": \"some-quote\"\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -342,14 +342,20 @@
 							}
 						},
 						"url": {
-							"raw": "{{m2_endpoint_api}}/sgwebcheckout/guest/token",
+							"raw": "{{m2_endpoint_api}}/sgwebcheckout/:cartId/token",
 							"host": [
 								"{{m2_endpoint_api}}"
 							],
 							"path": [
 								"sgwebcheckout",
-								"guest",
+								":cartId",
 								"token"
+							],
+							"variable": [
+								{
+									"key": "cartId",
+									"value": "some-quote"
+								}
 							]
 						}
 					},

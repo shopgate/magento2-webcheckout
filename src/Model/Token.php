@@ -52,16 +52,16 @@ class Token implements TokenInterface
     /**
      * This is an unauthenticated route, need to be extra careful with inc data
      *
-     * @param string $maskedQuoteId
+     * @param string $cartId
      * @return TokenResultInterface
      * @throws BuildException
      * @throws EncodeException
      */
-    public function getGuestToken(string $maskedQuoteId): TokenResultInterface
+    public function getGuestToken(string $cartId): TokenResultInterface
     {
         return $this->tokenManager->createToken(
             $this->keys[$this->keyVersion],
-            $maskedQuoteId,
+            $cartId,
             $this->request->getHttpHost(),
             null
         );

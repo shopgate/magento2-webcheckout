@@ -10,7 +10,7 @@
             <parameter name="customerId" force="true">%customer_id%</parameter>
         </data>
     </route>
-    <route url="/V1/sgwebcheckout/guest/token" method="POST">
+    <route url="/V1/sgwebcheckout/:cartId/token" method="POST">
         <service class="Shopgate\WebCheckout\Api\TokenInterface" method="getGuestToken"/>
         <resources>
             <resource ref="anonymous"/>
