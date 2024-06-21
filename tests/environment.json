@@ -1,0 +1,48 @@
+{
+	"id": "79c96378-fa29-46c5-95aa-b77cc6c8f040",
+	"name": "M2 - WebCheckout",
+	"values": [
+		{
+			"key": "host",
+			"value": "http://magento2.test",
+			"enabled": true
+		},
+		{
+			"key": "storeCode",
+			"value": "default",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "m2_endpoint_api",
+			"value": "{{host}}{{system_port}}/rest/{{storeCode}}/V1",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "m2_admin",
+			"value": "admin",
+			"enabled": true
+		},
+		{
+			"key": "m2_pass",
+			"value": "magento123",
+			"enabled": true
+		},
+		{
+			"key": "default_customer_email",
+			"value": "roni_cost@example.com",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "default_customer_pass",
+			"value": "roni_cost3@example.com",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2024-06-21T10:57:52.343Z",
+	"_postman_exported_using": "Postman/11.2.0"
+}

@@ -7,296 +7,390 @@
 	},
 	"item": [
 		{
-			"name": "M2: user login",
-			"event": [
+			"name": "Customer",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.test(\"Body is a string\", function () {",
-							"    const token = pm.response.text().replace(/['\"]+/g, '');",
-							"    pm.expect(token).to.be.a('string');",
-							"    pm.environment.set('gen_customerToken', token);",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					},
-					{
-						"key": "Accept",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"username\": \"{{default_customer_email}}\",\n  \"password\": \"{{default_customer_pass}}\"\n}",
-					"options": {
-						"raw": {
-							"headerFamily": "json",
-							"language": "json"
+					"name": "M2: user login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Body is a string\", function () {",
+									"    const token = pm.response.text().replace(/['\"]+/g, '');",
+									"    pm.expect(token).to.be.a('string');",
+									"    pm.environment.set('gen_customerToken', token);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
 						}
-					}
-				},
-				"url": {
-					"raw": "{{m2_endpoint_api}}/integration/customer/token",
-					"host": [
-						"{{m2_endpoint_api}}"
 					],
-					"path": [
-						"integration",
-						"customer",
-						"token"
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"{{default_customer_email}}\",\n  \"password\": \"{{default_customer_pass}}\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{m2_endpoint_api}}/integration/customer/token",
+							"host": [
+								"{{m2_endpoint_api}}"
+							],
+							"path": [
+								"integration",
+								"customer",
+								"token"
+							]
+						},
+						"description": "Create access token for admin given the customer credentials."
+					},
+					"response": [
+						{
+							"name": "200 Success.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/V1/integration/customer/token",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"V1",
+										"integration",
+										"customer",
+										"token"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "<string>"
+						},
+						{
+							"name": "400 Bad Request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/V1/integration/customer/token",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"V1",
+										"integration",
+										"customer",
+										"token"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"<string>\",\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"code\": \"<integer>\",\n  \"parameters\": [\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    },\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    }\n  ],\n  \"trace\": \"<string>\"\n}"
+						},
+						{
+							"name": "Unexpected error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/V1/integration/customer/token",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"V1",
+										"integration",
+										"customer",
+										"token"
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"<string>\",\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"code\": \"<integer>\",\n  \"parameters\": [\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    },\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    }\n  ],\n  \"trace\": \"<string>\"\n}"
+						}
 					]
 				},
-				"description": "Create access token for admin given the customer credentials."
-			},
-			"response": [
 				{
-					"name": "200 Success.",
-					"originalRequest": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Accept",
-								"value": "application/json"
+					"name": "M2: Token API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Has token\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.token).to.be.a('string')",
+									"    pm.environment.set(\"gen_sgToken\", jsonData.token);",
+									"    pm.expect(jsonData.expiration).to.be.a('number');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
 							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
-							"options": {
-								"raw": {
-									"headerFamily": "json",
-									"language": "json"
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{gen_customerToken}}",
+									"type": "string"
 								}
-							}
+							]
 						},
+						"method": "POST",
+						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/V1/integration/customer/token",
+							"raw": "{{m2_endpoint_api}}/sgwebcheckout/me/token",
 							"host": [
-								"{{baseUrl}}"
+								"{{m2_endpoint_api}}"
 							],
 							"path": [
-								"V1",
-								"integration",
-								"customer",
+								"sgwebcheckout",
+								"me",
 								"token"
 							]
 						}
 					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Content-Type",
-							"value": "application/json"
-						}
-					],
-					"cookie": [],
-					"body": "<string>"
+					"response": []
 				},
 				{
-					"name": "400 Bad Request",
-					"originalRequest": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
-							"options": {
-								"raw": {
-									"headerFamily": "json",
-									"language": "json"
-								}
-							}
-						},
+					"name": "FE: auto-login",
+					"request": {
+						"method": "GET",
+						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/V1/integration/customer/token",
+							"raw": "http://magento2.test/sgwebcheckout/login/index?token={{gen_sgToken}}&redirectTo=registered&sgcloud_checkout=1",
+							"protocol": "http",
 							"host": [
-								"{{baseUrl}}"
+								"magento2",
+								"test"
 							],
 							"path": [
-								"V1",
-								"integration",
-								"customer",
-								"token"
+								"sgwebcheckout",
+								"login",
+								"index"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{gen_sgToken}}"
+								},
+								{
+									"key": "redirectTo",
+									"value": "registered"
+								},
+								{
+									"key": "sgcloud_checkout",
+									"value": "1"
+								}
 							]
 						}
 					},
-					"status": "Bad Request",
-					"code": 400,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Content-Type",
-							"value": "application/json"
-						}
-					],
-					"cookie": [],
-					"body": "{\n  \"message\": \"<string>\",\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"code\": \"<integer>\",\n  \"parameters\": [\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    },\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    }\n  ],\n  \"trace\": \"<string>\"\n}"
-				},
-				{
-					"name": "Unexpected error",
-					"originalRequest": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
-							"options": {
-								"raw": {
-									"headerFamily": "json",
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/V1/integration/customer/token",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"V1",
-								"integration",
-								"customer",
-								"token"
-							]
-						}
-					},
-					"status": "Internal Server Error",
-					"code": 500,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Content-Type",
-							"value": "application/json"
-						}
-					],
-					"cookie": [],
-					"body": "{\n  \"message\": \"<string>\",\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"code\": \"<integer>\",\n  \"parameters\": [\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    },\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    }\n  ],\n  \"trace\": \"<string>\"\n}"
+					"response": []
 				}
 			]
 		},
 		{
-			"name": "M2: Token API",
-			"event": [
+			"name": "Guest",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.test(\"Has token\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.token).to.be.a('string')",
-							"    pm.environment.set(\"gen_sgToken\", jsonData.token);",
-							"    pm.expect(jsonData.expiration).to.be.a('number');",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
+					"name": "M2: Guest Token API",
+					"event": [
 						{
-							"key": "token",
-							"value": "{{gen_customerToken}}",
-							"type": "string"
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Has token\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.token).to.be.a('string')",
+									"    pm.environment.set(\"gen_guest_sgToken\", jsonData.token);",
+									"    pm.expect(jsonData.expiration).to.be.a('number');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
 						}
-					]
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"maskedQuoteId\": \"some-quote\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{m2_endpoint_api}}/sgwebcheckout/guest/token",
+							"host": [
+								"{{m2_endpoint_api}}"
+							],
+							"path": [
+								"sgwebcheckout",
+								"guest",
+								"token"
+							]
+						}
+					},
+					"response": []
 				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{m2_endpoint_api}}/sgwebcheckout/mine/token",
-					"host": [
-						"{{m2_endpoint_api}}"
-					],
-					"path": [
-						"sgwebcheckout",
-						"mine",
-						"token"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "FE: auto-login",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://magento2.test/sgwebcheckout/login/index?token={{gen_sgToken}}&redirectTo=registered&sgcloud_checkout=1",
-					"protocol": "http",
-					"host": [
-						"magento2",
-						"test"
-					],
-					"path": [
-						"sgwebcheckout",
-						"login",
-						"index"
-					],
-					"query": [
-						{
-							"key": "token",
-							"value": "{{gen_sgToken}}"
-						},
-						{
-							"key": "redirectTo",
-							"value": "registered"
-						},
-						{
-							"key": "sgcloud_checkout",
-							"value": "1"
+				{
+					"name": "FE: auto-login",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://magento2.test/sgwebcheckout/login/index?token={{gen_guest_sgToken}}&redirectTo=registered&sgcloud_checkout=1",
+							"protocol": "http",
+							"host": [
+								"magento2",
+								"test"
+							],
+							"path": [
+								"sgwebcheckout",
+								"login",
+								"index"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{gen_guest_sgToken}}"
+								},
+								{
+									"key": "redirectTo",
+									"value": "registered"
+								},
+								{
+									"key": "sgcloud_checkout",
+									"value": "1"
+								}
+							]
 						}
-					]
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	]
 }

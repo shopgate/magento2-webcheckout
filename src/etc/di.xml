@@ -2,4 +2,9 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Shopgate\WebCheckout\Api\TokenInterface" type="Shopgate\WebCheckout\Model\Token"/>
     <preference for="Shopgate\WebCheckout\Api\TokenResultInterface" type="Shopgate\WebCheckout\Model\TokenResult"/>
+    <type name="Shopgate\WebCheckout\Controller\Login\Index">
+        <arguments>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
 </config>
