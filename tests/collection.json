@@ -253,12 +253,11 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{m2_endpoint_api}}/sgwebcheckout/me/token",
+							"raw": "{{m2_endpoint_api_sgwebc}}/me/token",
 							"host": [
-								"{{m2_endpoint_api}}"
+								"{{m2_endpoint_api_sgwebc}}"
 							],
 							"path": [
-								"sgwebcheckout",
 								"me",
 								"token"
 							]
@@ -268,20 +267,36 @@
 				},
 				{
 					"name": "FE: auto-login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load the HTML response to $",
+									"const pkg = require('cheerio')",
+									"const $ = pkg.load(pm.response.text());",
+									"",
+									"pm.test(\"Check login status\", function () {",
+									"    const bodyClass = $('body.customer-account-index');",
+									"    pm.expect(bodyClass).to.be.lengthOf(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://magento2.test/sgwebcheckout/login/index?token={{gen_sgToken}}&redirectTo=registered&sgcloud_checkout=1",
-							"protocol": "http",
+							"raw": "{{m2_endpoint_fe_sgwebc}}/account/login?token={{gen_sgToken}}&redirectTo=customer/account&sgcloud_checkout=1",
 							"host": [
-								"magento2",
-								"test"
+								"{{m2_endpoint_fe_sgwebc}}"
 							],
 							"path": [
-								"sgwebcheckout",
-								"login",
-								"index"
+								"account",
+								"login"
 							],
 							"query": [
 								{
@@ -290,12 +305,102 @@
 								},
 								{
 									"key": "redirectTo",
-									"value": "registered"
+									"value": "customer/account"
 								},
 								{
 									"key": "sgcloud_checkout",
 									"value": "1"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FE: customer session persistent",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load the HTML response to $",
+									"const pkg = require('cheerio')",
+									"const $ = pkg.load(pm.response.text());",
+									"",
+									"pm.test(\"Check login status\", function () {",
+									"    const bodyClass = $('body.customer-account-index');",
+									"    pm.expect(bodyClass).to.be.lengthOf(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/customer/account",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"customer",
+								"account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FE: unset cookie",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load the HTML response to $",
+									"const pkg = require('cheerio')",
+									"const $ = pkg.load(pm.response.text());",
+									"",
+									"pm.test(\"Check login status\", function () {",
+									"    const bodyClass = $('body.customer-account-login');",
+									"    pm.expect(bodyClass).to.be.lengthOf(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Allow cookie deletion by going to cookies -> Domain Allowlist",
+									"const jar = pm.cookies.jar();",
+									"jar.unset(pm.environment.get(\"host\"), 'PHPSESSID', function (error) {",
+									"    if (error) {",
+									"        console.log(error.message)",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/customer/account",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"customer",
+								"account"
 							]
 						}
 					},
@@ -306,6 +411,346 @@
 		{
 			"name": "Guest",
 			"item": [
+				{
+					"name": "m2: create guest cart",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Body is a string\", function () {",
+									"    const cartId = pm.response.text().replace(/['\"]+/g, '');",
+									"    pm.expect(cartId).to.be.a('string');",
+									"    pm.environment.set('gen_cartId', cartId);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{m2_endpoint_api}}/guest-carts",
+							"host": [
+								"{{m2_endpoint_api}}"
+							],
+							"path": [
+								"guest-carts"
+							]
+						},
+						"description": "Enable an customer or guest user to create an empty cart and quote for an anonymous customer."
+					},
+					"response": [
+						{
+							"name": "200 Success.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/V1/guest-carts",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"V1",
+										"guest-carts"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "<string>"
+						},
+						{
+							"name": "400 Bad Request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/V1/guest-carts",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"V1",
+										"guest-carts"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"<string>\",\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"code\": \"<integer>\",\n  \"parameters\": [\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    },\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    }\n  ],\n  \"trace\": \"<string>\"\n}"
+						},
+						{
+							"name": "Unexpected error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/V1/guest-carts",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"V1",
+										"guest-carts"
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"<string>\",\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"code\": \"<integer>\",\n  \"parameters\": [\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    },\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    }\n  ],\n  \"trace\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "m2: add prod 1",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  addSimpleProductsToCart(\n    input: {\n      cart_id: \"{{gen_cartId}}\", \n      cart_items: [{\n        data: {\n          quantity: 1\n          sku: \"24-WG02\"\n        }\n      }]\n    }) {\n    cart {\n      id\n    }\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/graphql",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"graphql"
+							]
+						},
+						"description": "Add/update the specified cart item."
+					},
+					"response": [
+						{
+							"name": "200 Success.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"cartItem\": {\n    \"qty\": \"<number>\",\n    \"quote_id\": \"<string>\",\n    \"item_id\": \"<integer>\",\n    \"sku\": \"<string>\",\n    \"name\": \"<string>\",\n    \"price\": \"<number>\",\n    \"product_type\": \"<string>\",\n    \"product_option\": {\n      \"extension_attributes\": {\n        \"custom_options\": [\n          {\n            \"option_id\": \"<string>\",\n            \"option_value\": \"<string>\",\n            \"extension_attributes\": {\n              \"file_info\": {\n                \"base64_encoded_data\": \"<string>\",\n                \"type\": \"<string>\",\n                \"name\": \"<string>\"\n              }\n            }\n          },\n          {\n            \"option_id\": \"<string>\",\n            \"option_value\": \"<string>\",\n            \"extension_attributes\": {\n              \"file_info\": {\n                \"base64_encoded_data\": \"<string>\",\n                \"type\": \"<string>\",\n                \"name\": \"<string>\"\n              }\n            }\n          }\n        ],\n        \"bundle_options\": [\n          {\n            \"option_id\": \"<integer>\",\n            \"option_qty\": \"<integer>\",\n            \"option_selections\": [\n              \"<integer>\",\n              \"<integer>\"\n            ],\n            \"extension_attributes\": {}\n          },\n          {\n            \"option_id\": \"<integer>\",\n            \"option_qty\": \"<integer>\",\n            \"option_selections\": [\n              \"<integer>\",\n              \"<integer>\"\n            ],\n            \"extension_attributes\": {}\n          }\n        ],\n        \"downloadable_option\": {\n          \"downloadable_links\": [\n            \"<integer>\",\n            \"<integer>\"\n          ]\n        },\n        \"configurable_item_options\": [\n          {\n            \"option_id\": \"<string>\",\n            \"option_value\": \"<integer>\",\n            \"extension_attributes\": {}\n          },\n          {\n            \"option_id\": \"<string>\",\n            \"option_value\": \"<integer>\",\n            \"extension_attributes\": {}\n          }\n        ],\n        \"grouped_options\": [\n          {\n            \"id\": \"<integer>\",\n            \"qty\": \"<integer>\",\n            \"extension_attributes\": {}\n          },\n          {\n            \"id\": \"<integer>\",\n            \"qty\": \"<integer>\",\n            \"extension_attributes\": {}\n          }\n        ]\n      }\n    },\n    \"extension_attributes\": {\n      \"discounts\": [\n        {\n          \"discount_data\": {\n            \"amount\": \"<number>\",\n            \"base_amount\": \"<number>\",\n            \"original_amount\": \"<number>\",\n            \"base_original_amount\": \"<number>\"\n          },\n          \"rule_label\": \"<string>\",\n          \"rule_id\": \"<integer>\"\n        },\n        {\n          \"discount_data\": {\n            \"amount\": \"<number>\",\n            \"base_amount\": \"<number>\",\n            \"original_amount\": \"<number>\",\n            \"base_original_amount\": \"<number>\"\n          },\n          \"rule_label\": \"<string>\",\n          \"rule_id\": \"<integer>\"\n        }\n      ]\n    }\n  }\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/V1/guest-carts/:cartId/items",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"V1",
+										"guest-carts",
+										":cartId",
+										"items"
+									],
+									"variable": [
+										{
+											"key": "cartId"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"qty\": \"<number>\",\n  \"quote_id\": \"<string>\",\n  \"item_id\": \"<integer>\",\n  \"sku\": \"<string>\",\n  \"name\": \"<string>\",\n  \"price\": \"<number>\",\n  \"product_type\": \"<string>\",\n  \"product_option\": {\n    \"extension_attributes\": {\n      \"custom_options\": [\n        {\n          \"option_id\": \"<string>\",\n          \"option_value\": \"<string>\",\n          \"extension_attributes\": {\n            \"file_info\": {\n              \"base64_encoded_data\": \"<string>\",\n              \"type\": \"<string>\",\n              \"name\": \"<string>\"\n            }\n          }\n        },\n        {\n          \"option_id\": \"<string>\",\n          \"option_value\": \"<string>\",\n          \"extension_attributes\": {\n            \"file_info\": {\n              \"base64_encoded_data\": \"<string>\",\n              \"type\": \"<string>\",\n              \"name\": \"<string>\"\n            }\n          }\n        }\n      ],\n      \"bundle_options\": [\n        {\n          \"option_id\": \"<integer>\",\n          \"option_qty\": \"<integer>\",\n          \"option_selections\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"extension_attributes\": {}\n        },\n        {\n          \"option_id\": \"<integer>\",\n          \"option_qty\": \"<integer>\",\n          \"option_selections\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"extension_attributes\": {}\n        }\n      ],\n      \"downloadable_option\": {\n        \"downloadable_links\": [\n          \"<integer>\",\n          \"<integer>\"\n        ]\n      },\n      \"configurable_item_options\": [\n        {\n          \"option_id\": \"<string>\",\n          \"option_value\": \"<integer>\",\n          \"extension_attributes\": {}\n        },\n        {\n          \"option_id\": \"<string>\",\n          \"option_value\": \"<integer>\",\n          \"extension_attributes\": {}\n        }\n      ],\n      \"grouped_options\": [\n        {\n          \"id\": \"<integer>\",\n          \"qty\": \"<integer>\",\n          \"extension_attributes\": {}\n        },\n        {\n          \"id\": \"<integer>\",\n          \"qty\": \"<integer>\",\n          \"extension_attributes\": {}\n        }\n      ]\n    }\n  },\n  \"extension_attributes\": {\n    \"discounts\": [\n      {\n        \"discount_data\": {\n          \"amount\": \"<number>\",\n          \"base_amount\": \"<number>\",\n          \"original_amount\": \"<number>\",\n          \"base_original_amount\": \"<number>\"\n        },\n        \"rule_label\": \"<string>\",\n        \"rule_id\": \"<integer>\"\n      },\n      {\n        \"discount_data\": {\n          \"amount\": \"<number>\",\n          \"base_amount\": \"<number>\",\n          \"original_amount\": \"<number>\",\n          \"base_original_amount\": \"<number>\"\n        },\n        \"rule_label\": \"<string>\",\n        \"rule_id\": \"<integer>\"\n      }\n    ]\n  }\n}"
+						},
+						{
+							"name": "400 Bad Request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"cartItem\": {\n    \"qty\": \"<number>\",\n    \"quote_id\": \"<string>\",\n    \"item_id\": \"<integer>\",\n    \"sku\": \"<string>\",\n    \"name\": \"<string>\",\n    \"price\": \"<number>\",\n    \"product_type\": \"<string>\",\n    \"product_option\": {\n      \"extension_attributes\": {\n        \"custom_options\": [\n          {\n            \"option_id\": \"<string>\",\n            \"option_value\": \"<string>\",\n            \"extension_attributes\": {\n              \"file_info\": {\n                \"base64_encoded_data\": \"<string>\",\n                \"type\": \"<string>\",\n                \"name\": \"<string>\"\n              }\n            }\n          },\n          {\n            \"option_id\": \"<string>\",\n            \"option_value\": \"<string>\",\n            \"extension_attributes\": {\n              \"file_info\": {\n                \"base64_encoded_data\": \"<string>\",\n                \"type\": \"<string>\",\n                \"name\": \"<string>\"\n              }\n            }\n          }\n        ],\n        \"bundle_options\": [\n          {\n            \"option_id\": \"<integer>\",\n            \"option_qty\": \"<integer>\",\n            \"option_selections\": [\n              \"<integer>\",\n              \"<integer>\"\n            ],\n            \"extension_attributes\": {}\n          },\n          {\n            \"option_id\": \"<integer>\",\n            \"option_qty\": \"<integer>\",\n            \"option_selections\": [\n              \"<integer>\",\n              \"<integer>\"\n            ],\n            \"extension_attributes\": {}\n          }\n        ],\n        \"downloadable_option\": {\n          \"downloadable_links\": [\n            \"<integer>\",\n            \"<integer>\"\n          ]\n        },\n        \"configurable_item_options\": [\n          {\n            \"option_id\": \"<string>\",\n            \"option_value\": \"<integer>\",\n            \"extension_attributes\": {}\n          },\n          {\n            \"option_id\": \"<string>\",\n            \"option_value\": \"<integer>\",\n            \"extension_attributes\": {}\n          }\n        ],\n        \"grouped_options\": [\n          {\n            \"id\": \"<integer>\",\n            \"qty\": \"<integer>\",\n            \"extension_attributes\": {}\n          },\n          {\n            \"id\": \"<integer>\",\n            \"qty\": \"<integer>\",\n            \"extension_attributes\": {}\n          }\n        ]\n      }\n    },\n    \"extension_attributes\": {\n      \"discounts\": [\n        {\n          \"discount_data\": {\n            \"amount\": \"<number>\",\n            \"base_amount\": \"<number>\",\n            \"original_amount\": \"<number>\",\n            \"base_original_amount\": \"<number>\"\n          },\n          \"rule_label\": \"<string>\",\n          \"rule_id\": \"<integer>\"\n        },\n        {\n          \"discount_data\": {\n            \"amount\": \"<number>\",\n            \"base_amount\": \"<number>\",\n            \"original_amount\": \"<number>\",\n            \"base_original_amount\": \"<number>\"\n          },\n          \"rule_label\": \"<string>\",\n          \"rule_id\": \"<integer>\"\n        }\n      ]\n    }\n  }\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/V1/guest-carts/:cartId/items",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"V1",
+										"guest-carts",
+										":cartId",
+										"items"
+									],
+									"variable": [
+										{
+											"key": "cartId"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"<string>\",\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"code\": \"<integer>\",\n  \"parameters\": [\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    },\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    }\n  ],\n  \"trace\": \"<string>\"\n}"
+						},
+						{
+							"name": "Unexpected error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"cartItem\": {\n    \"qty\": \"<number>\",\n    \"quote_id\": \"<string>\",\n    \"item_id\": \"<integer>\",\n    \"sku\": \"<string>\",\n    \"name\": \"<string>\",\n    \"price\": \"<number>\",\n    \"product_type\": \"<string>\",\n    \"product_option\": {\n      \"extension_attributes\": {\n        \"custom_options\": [\n          {\n            \"option_id\": \"<string>\",\n            \"option_value\": \"<string>\",\n            \"extension_attributes\": {\n              \"file_info\": {\n                \"base64_encoded_data\": \"<string>\",\n                \"type\": \"<string>\",\n                \"name\": \"<string>\"\n              }\n            }\n          },\n          {\n            \"option_id\": \"<string>\",\n            \"option_value\": \"<string>\",\n            \"extension_attributes\": {\n              \"file_info\": {\n                \"base64_encoded_data\": \"<string>\",\n                \"type\": \"<string>\",\n                \"name\": \"<string>\"\n              }\n            }\n          }\n        ],\n        \"bundle_options\": [\n          {\n            \"option_id\": \"<integer>\",\n            \"option_qty\": \"<integer>\",\n            \"option_selections\": [\n              \"<integer>\",\n              \"<integer>\"\n            ],\n            \"extension_attributes\": {}\n          },\n          {\n            \"option_id\": \"<integer>\",\n            \"option_qty\": \"<integer>\",\n            \"option_selections\": [\n              \"<integer>\",\n              \"<integer>\"\n            ],\n            \"extension_attributes\": {}\n          }\n        ],\n        \"downloadable_option\": {\n          \"downloadable_links\": [\n            \"<integer>\",\n            \"<integer>\"\n          ]\n        },\n        \"configurable_item_options\": [\n          {\n            \"option_id\": \"<string>\",\n            \"option_value\": \"<integer>\",\n            \"extension_attributes\": {}\n          },\n          {\n            \"option_id\": \"<string>\",\n            \"option_value\": \"<integer>\",\n            \"extension_attributes\": {}\n          }\n        ],\n        \"grouped_options\": [\n          {\n            \"id\": \"<integer>\",\n            \"qty\": \"<integer>\",\n            \"extension_attributes\": {}\n          },\n          {\n            \"id\": \"<integer>\",\n            \"qty\": \"<integer>\",\n            \"extension_attributes\": {}\n          }\n        ]\n      }\n    },\n    \"extension_attributes\": {\n      \"discounts\": [\n        {\n          \"discount_data\": {\n            \"amount\": \"<number>\",\n            \"base_amount\": \"<number>\",\n            \"original_amount\": \"<number>\",\n            \"base_original_amount\": \"<number>\"\n          },\n          \"rule_label\": \"<string>\",\n          \"rule_id\": \"<integer>\"\n        },\n        {\n          \"discount_data\": {\n            \"amount\": \"<number>\",\n            \"base_amount\": \"<number>\",\n            \"original_amount\": \"<number>\",\n            \"base_original_amount\": \"<number>\"\n          },\n          \"rule_label\": \"<string>\",\n          \"rule_id\": \"<integer>\"\n        }\n      ]\n    }\n  }\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/V1/guest-carts/:cartId/items",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"V1",
+										"guest-carts",
+										":cartId",
+										"items"
+									],
+									"variable": [
+										{
+											"key": "cartId"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"<string>\",\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"code\": \"<integer>\",\n  \"parameters\": [\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    },\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    }\n  ],\n  \"trace\": \"<string>\"\n}"
+						}
+					]
+				},
 				{
 					"name": "M2: Guest Token API",
 					"event": [
@@ -342,19 +787,18 @@
 							}
 						},
 						"url": {
-							"raw": "{{m2_endpoint_api}}/sgwebcheckout/:cartId/token",
+							"raw": "{{m2_endpoint_api_sgwebc}}/:cartId/token",
 							"host": [
-								"{{m2_endpoint_api}}"
+								"{{m2_endpoint_api_sgwebc}}"
 							],
 							"path": [
-								"sgwebcheckout",
 								":cartId",
 								"token"
 							],
 							"variable": [
 								{
 									"key": "cartId",
-									"value": "some-quote"
+									"value": "{{gen_cartId}}"
 								}
 							]
 						}
@@ -363,34 +807,135 @@
 				},
 				{
 					"name": "FE: auto-login",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "// Load the HTML response to $\nconst pkg = require('cheerio')\nconst $ = pkg.load(pm.response.text());\n\npm.test(\"Check login status\", function () {\n    const input = $('input[data-item-qty]');\n    pm.expect(input).to.be.lengthOf(1);\n    pm.expect(input[0].attribs.value).to.eql('1');\n});",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{m2_endpoint_fe_sgwebc}}/account/login?sgcloud_checkout=1&token={{gen_guest_sgToken}}",
+							"host": [
+								"{{m2_endpoint_fe_sgwebc}}"
+							],
+							"path": [
+								"account",
+								"login"
+							],
+							"query": [
+								{
+									"key": "sgcloud_checkout",
+									"value": "1"
+								},
+								{
+									"key": "redirectTo",
+									"value": "registered",
+									"disabled": true
+								},
+								{
+									"key": "token",
+									"value": "{{gen_guest_sgToken}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FE: check cart persistent",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load the HTML response to $",
+									"const pkg = require('cheerio')",
+									"const $ = pkg.load(pm.response.text());",
+									"",
+									"pm.test(\"Check login status\", function () {",
+									"    const input = $('input[data-item-qty]');",
+									"    pm.expect(input).to.be.lengthOf(1);",
+									"    pm.expect(input[0].attribs.value).to.eql('1');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://magento2.test/sgwebcheckout/login/index?token={{gen_guest_sgToken}}&redirectTo=registered&sgcloud_checkout=1",
-							"protocol": "http",
+							"raw": "{{domain}}/checkout/cart",
 							"host": [
-								"magento2",
-								"test"
+								"{{domain}}"
 							],
 							"path": [
-								"sgwebcheckout",
-								"login",
-								"index"
+								"checkout",
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FE: unset cookie",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load the HTML response to $",
+									"const pkg = require('cheerio')",
+									"const $ = pkg.load(pm.response.text());",
+									"",
+									"pm.test(\"Check login status\", function () {",
+									"    const input = $('.cart-empty');",
+									"    pm.expect(input).to.be.lengthOf(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Allow cookie deletion by going to cookies -> Domain Allowlist",
+									"const jar = pm.cookies.jar();",
+									"jar.unset(pm.environment.get(\"host\"), 'PHPSESSID', function (error) {",
+									"    if (error) {",
+									"        console.log(error.message)",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/checkout/cart",
+							"host": [
+								"{{domain}}"
 							],
-							"query": [
-								{
-									"key": "token",
-									"value": "{{gen_guest_sgToken}}"
-								},
-								{
-									"key": "redirectTo",
-									"value": "registered"
-								},
-								{
-									"key": "sgcloud_checkout",
-									"value": "1"
-								}
+							"path": [
+								"checkout",
+								"cart"
 							]
 						}
 					},

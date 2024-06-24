@@ -23,7 +23,7 @@ class TokenManager
         return $this->tokens->validateExpiration($token);
     }
 
-    public function getCustomerId(string $token): ?string
+    public function getCustomerId(string $token): ?int
     {
         return $this->tokens->getPayload($token)[self::USER_ID_KEY] ?? null;
     }

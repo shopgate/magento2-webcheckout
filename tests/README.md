@@ -22,3 +22,8 @@ bin/magento setup:upgrade
 
 ### Run Postman tests
 
+```shell
+cd plugins/shopgate-webcheckout/tests
+npm i
+npm run local
+```

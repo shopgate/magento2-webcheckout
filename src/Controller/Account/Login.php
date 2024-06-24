@@ -1,9 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Shopgate\WebCheckout\Controller\Login;
+namespace Shopgate\WebCheckout\Controller\Account;
 
+use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
@@ -16,7 +17,7 @@ use Magento\Framework\View\Result\Page;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Shopgate\WebCheckout\Services\TokenManager;
 
-class Index implements HttpGetActionInterface
+class Login implements HttpGetActionInterface
 {
     private ResultInterface $redirect;
 
@@ -25,7 +26,8 @@ class Index implements HttpGetActionInterface
         private readonly RequestInterface $request,
         private readonly ResultFactory $resultFactory,
         private readonly TokenManager $tokenManager,
-        private readonly Session $customerSession,
+        private readonly CustomerSession $customerSession,
+        private readonly CheckoutSession $checkoutSession,
         private readonly UrlInterface $urlInterface,
         private readonly MaskedQuoteIdToQuoteIdInterface $maskedQuoteToQuote
     ) {
@@ -72,7 +74,7 @@ class Index implements HttpGetActionInterface
      * @throws NoSuchEntityException
      * @throws LocalizedException
      */
-    private function loginCustomer(string $customerId): void
+    private function loginCustomer(int $customerId): void
     {
         $customer = $this->customerRepository->getById($customerId);
         $this->customerSession->setCustomerId($customerId);
@@ -80,24 +82,20 @@ class Index implements HttpGetActionInterface
         $this->customerSession->setCustomerDataAsLoggedIn($customer);
     }
 
-    private function getRedirectUrl(): string {
-        // todo: cart route as default?
-        // customer/account/
+    private function getRedirectUrl(): string
+    {
         $redirectTo = $this->request->getParam('redirectTo', 'checkout/cart');
         $url = $this->urlInterface->getUrl($redirectTo);
-        // todo: validate URL to be internal
+
         return $this->urlInterface->getRedirectUrl($url);
     }
 
     /**
-     * todo: finish up guest login / session manipulation
      * @throws NoSuchEntityException
      */
     private function loginGuest(string $maskedQuoteId): void
     {
-        // todo:
-        //  belongs to a customer? Mby not needed
-        //  add masked quote to checkout/session
         $quoteId = $this->maskedQuoteToQuote->execute($maskedQuoteId);
+        $this->checkoutSession->setQuoteId($quoteId);
     }
 }
