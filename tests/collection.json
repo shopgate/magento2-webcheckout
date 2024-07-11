@@ -807,6 +807,26 @@
 				},
 				{
 					"name": "FE: auto-login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load the HTML response to $",
+									"const pkg = require('cheerio')",
+									"const $ = pkg.load(pm.response.text());",
+									"",
+									"pm.test(\"Check login status\", function () {",
+									"    const input = $('input[data-item-qty]');",
+									"    pm.expect(input).to.be.lengthOf(1);",
+									"    pm.expect(input[0].attribs.value).to.eql('1');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -815,7 +835,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "// Load the HTML response to $\nconst pkg = require('cheerio')\nconst $ = pkg.load(pm.response.text());\n\npm.test(\"Check login status\", function () {\n    const input = $('input[data-item-qty]');\n    pm.expect(input).to.be.lengthOf(1);\n    pm.expect(input[0].attribs.value).to.eql('1');\n});",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -840,6 +860,57 @@
 									"key": "redirectTo",
 									"value": "registered",
 									"disabled": true
+								},
+								{
+									"key": "token",
+									"value": "{{gen_guest_sgToken}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FE:  check register page",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load the HTML response to $",
+									"const pkg = require('cheerio')",
+									"const $ = pkg.load(pm.response.text());",
+									"",
+									"pm.test(\"Check page\", function () {",
+									"    const input = $('body.customer-account-create]');",
+									"    pm.expect(input).to.be.lengthOf(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{m2_endpoint_fe_sgwebc}}/account/login?sgcloud_checkout=1&redirectTo={{domain}}/customer/account/create&token={{gen_guest_sgToken}}",
+							"host": [
+								"{{m2_endpoint_fe_sgwebc}}"
+							],
+							"path": [
+								"account",
+								"login"
+							],
+							"query": [
+								{
+									"key": "sgcloud_checkout",
+									"value": "1"
+								},
+								{
+									"key": "redirectTo",
+									"value": "{{domain}}/customer/account/create"
 								},
 								{
 									"key": "token",
