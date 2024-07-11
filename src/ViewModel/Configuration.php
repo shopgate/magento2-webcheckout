@@ -6,7 +6,7 @@ namespace Shopgate\WebCheckout\ViewModel;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Shopgate\WebCheckout\Model\Config;
 
-class ShortDescription implements ArgumentInterface
+class Configuration implements ArgumentInterface
 {
     /**
      * @param Config $config
