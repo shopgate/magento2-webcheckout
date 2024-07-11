@@ -47,16 +47,4 @@ trait ShopgateDetect
 
         return $sgAgent || $sgSession || $sgCookie;
     }
-
-    /**
-     * @param RequestInterface $request
-     *
-     * @return bool
-     */
-    private function isNativeBase(RequestInterface $request): bool {
-        $regex = "/libshopgate.*?Codebase:(\d+\.\d+(\.\d+)?)/";
-        preg_match($regex, (string) $request->getHeader('User-Agent'), $matches);
-
-        return version_compare($matches[1] ?? '0.0.0', '11.0.0', '>=');
-    }
 }
