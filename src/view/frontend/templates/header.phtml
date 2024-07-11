@@ -1,0 +1,10 @@
+<?php
+/** @var $block Shopgate\WebCheckout\Block\Script */
+?>
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Shopgate_WebCheckout/js/init": <?= $block->getInitData(); ?>
+    }
+}
+</script>
