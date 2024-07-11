@@ -5,6 +5,7 @@ namespace Shopgate\WebCheckout\Model\Traits;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Session\SessionManagerInterface;
+use Shopgate\WebCheckout\Api\ShopgateCookieManagementInterface;
 use Shopgate\WebCheckout\Model\Config;
 
 trait ShopgateDetect
@@ -24,9 +25,9 @@ trait ShopgateDetect
      */
     private function handleDevelopmentCookie(RequestInterface $request, SessionManagerInterface $session): bool
     {
-        $sgCookie = $request->getCookie(Config::SG_SESSION_KEY, false);
+        $sgCookie = $request->getCookie(ShopgateCookieManagementInterface::COOKIE_NAME, false);
         if ($sgCookie === '0' && $session->isSessionExists()) {
-            $session->getData(Config::SG_SESSION_KEY, true);
+            $session->getData(ShopgateCookieManagementInterface::COOKIE_NAME, true);
         }
         return (bool) $sgCookie;
     }
@@ -42,7 +43,7 @@ trait ShopgateDetect
         $sgCookie = $this->handleDevelopmentCookie($request, $session);
         $sgAgent = str_contains((string) $request->getHeader('User-Agent'), 'libshopgate');
         $hasSession = $session->isSessionExists();
-        $sgSession = $hasSession && $session->getData(Config::SG_SESSION_KEY);
+        $sgSession = $hasSession && $session->getData(ShopgateCookieManagementInterface::COOKIE_NAME);
 
         return $sgAgent || $sgSession || $sgCookie;
     }
