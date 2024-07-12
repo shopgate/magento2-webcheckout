@@ -7,6 +7,9 @@
     "authors": [
         {
             "name": "Konstantin Kiritsenko"
+        },
+        {
+            "name": "André Kraus"
         }
     ],
     "require": {

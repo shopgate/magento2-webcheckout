@@ -12,6 +12,7 @@ trait ShopgateDetect
 {
     public function isShopgateApiCall(RequestInterface $request): bool
     {
+        // todo: check headers for magento2 api calls from shopgate
         return $request->headers->has(Config::IS_SHOPGATE_CHECK) &&
             $request->headers->has('sw-context-token') &&
             $request->headers->has('sw-access-key');

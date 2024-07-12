@@ -15,6 +15,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Result\Page;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
+use Shopgate\WebCheckout\Api\ShopgateCookieManagementInterface;
 use Shopgate\WebCheckout\Services\TokenManager;
 
 class Login implements HttpGetActionInterface
@@ -29,7 +30,8 @@ class Login implements HttpGetActionInterface
         private readonly CustomerSession $customerSession,
         private readonly CheckoutSession $checkoutSession,
         private readonly UrlInterface $urlInterface,
-        private readonly MaskedQuoteIdToQuoteIdInterface $maskedQuoteToQuote
+        private readonly MaskedQuoteIdToQuoteIdInterface $maskedQuoteToQuote,
+        private readonly ShopgateCookieManagementInterface $shopgateCookieManagement
     ) {
         $this->redirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
     }
@@ -67,6 +69,8 @@ class Login implements HttpGetActionInterface
             }
         }
 
+        $this->shopgateCookieManagement->saveCookie('1');
+
         return $this->redirect->setUrl($this->getRedirectUrl());
     }
 
@@ -84,7 +88,7 @@ class Login implements HttpGetActionInterface
 
     private function getRedirectUrl(): string
     {
-        $redirectTo = $this->request->getParam('redirectTo', 'checkout/cart');
+        $redirectTo = $this->request->getParam('redirectTo', 'checkout');
         $url = $this->urlInterface->getUrl($redirectTo);
 
         return $this->urlInterface->getRedirectUrl($url);

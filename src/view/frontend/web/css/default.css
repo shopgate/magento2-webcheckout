@@ -1,0 +1,53 @@
+/**
+ * Global
+ */
+.is-sg-app {
+    .header-logo-main-link {
+        pointer-events: none;
+        cursor: default;
+    }
+
+    header,
+    footer,
+    .nav-sections,
+    .page-header,
+    .page-footer,
+    .copyright {
+        display: none!important;
+    }
+
+    .offcanvas {
+        margin-top: 4em;
+        padding-bottom: 4em;
+    }
+
+    .modal {
+        top: 4em;
+        padding-bottom: 4em;
+    }
+}
+
+/**
+ * Java/Swift based App specifics
+ */
+.is-sg-codebase-v1 {
+    padding-top: 4em;
+}
+
+/**
+ * Account pages
+ */
+
+/**
+ * Login page
+ */
+
+
+/**
+ * Checkout / Finish pages
+ */
+.is-sg-app {
+    .cart-container .crosssell{
+        display: none;
+    }
+}

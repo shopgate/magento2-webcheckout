@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Shopgate\WebCheckout\Api;
 
-interface CookieManagementInterface
+interface ShopgateCookieManagementInterface
 {
     final public const COOKIE_NAME = 'sgWebView';
 

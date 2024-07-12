@@ -9,6 +9,7 @@ use Magento\Store\Model\ScopeInterface;
 class Config
 {
     final public const IS_SHOPGATE_CHECK = 'shopgate-check';
+    final public const BODY_CSS_CLASS = 'is-sg-app';
     private const XML_PATH_SECTION = 'shopgate_webcheckout';
     private const XML_PATH_SECTION_CHARACTER_LIMIT = self::XML_PATH_SECTION . '/general/custom_css';
 
