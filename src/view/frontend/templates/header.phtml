@@ -1,10 +1,17 @@
 <?php
-/** @var $block Shopgate\WebCheckout\Block\Script */
+/**
+ * @var $block Magento\Framework\View\Element\Template
+ * @var $configurationViewModel Shopgate\WebCheckout\ViewModel\Configuration
+ * @var $jsConfigurationViewModel Shopgate\WebCheckout\ViewModel\JavaScriptConfiguration
+ * */
 ?>
+<?php if ($customCss = $configurationViewModel->getCustomCss()): ?>
+    <style>.<?= Shopgate\WebCheckout\Model\Config::BODY_CSS_CLASS ?> { <?= $customCss ?> }</style>
+<?php endif; ?>
 <script type="text/x-magento-init">
 {
     "*": {
-        "Shopgate_WebCheckout/js/init": <?= $block->getInitData(); ?>
+        "Shopgate_WebCheckout/js/init": <?= $jsConfigurationViewModel->getInitData(); ?>
     }
 }
 </script>
