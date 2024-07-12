@@ -57,6 +57,7 @@ class Login implements HttpGetActionInterface
             try {
                 $this->loginCustomer($customerId);
             } catch (NoSuchEntityException|LocalizedException) {
+                // todo: some logging will be helpful
                 $this->redirect->setPath($closeInAppRoute);
                 return $this->redirect;
             }
@@ -64,6 +65,7 @@ class Login implements HttpGetActionInterface
             try {
                 $this->loginGuest($maskedQuoteId);
             } catch (NoSuchEntityException) {
+                // todo: log these cases
                 $this->redirect->setPath($closeInAppRoute);
                 return $this->redirect;
             }
