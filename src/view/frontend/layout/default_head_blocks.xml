@@ -6,10 +6,10 @@
     </head>
     <body>
         <referenceBlock name="head.additional">
-            <block class="Magento\Framework\View\Element\Template" name="shopgate.webcheckout.script" template="Shopgate_WebCheckout::header.phtml" >
+            <block class="Magento\Framework\View\Element\Template" name="shopgate.webcheckout.head" template="Shopgate_WebCheckout::header.phtml" >
                 <arguments>
-                    <argument name="configuration_view_model" xsi:type="object">Shopgate\WebCheckout\ViewModel\Configuration</argument>
-                    <argument name="js_configuration_view_model" xsi:type="object">Shopgate\WebCheckout\ViewModel\JavaScriptConfiguration</argument>
+                    <argument name="config" xsi:type="object">Shopgate\WebCheckout\ViewModel\Configuration</argument>
+                    <argument name="jsConfig" xsi:type="object">Shopgate\WebCheckout\ViewModel\JavaScriptConfiguration</argument>
                 </arguments>
             </block>
         </referenceBlock>
