@@ -1,13 +1,13 @@
 define(
     ['Shopgate_WebCheckout/js/eventManager'],
     /**
-     * @param {Function} manager
+     * @param {Class} EventManager
      * @return {(function(*): void)|*}
      */
-    function (manager) {
+    function (EventManager) {
         class SgWebcheckoutAppPlugin {
             constructor (controllerName, actionName, env, properties, isSgWebView) {
-                this.eventManager = manager(controllerName, actionName, env, properties)
+                this.eventManager = new EventManager(controllerName, actionName, env, properties)
                 this.devMode = isSgWebView;
             }
 
@@ -82,7 +82,7 @@ define(
                 }
 
                 this.eventManager.registerDefaultEvents();
-                // this.eventManager.executeEvents();
+                this.eventManager.executeEvents();
 
                 // close loading spinner after 3 seconds, in case something goes wrong
                 setTimeout(function () {
@@ -254,7 +254,6 @@ define(
         }
 
         return function(config) {
-            console.log('passedConfig', config)
             const plugin = new SgWebcheckoutAppPlugin(...Object.values(config))
             plugin.initialize()
         }

@@ -1,6 +1,6 @@
 define(
-    [],
-    function () {
+    ['Shopgate_WebCheckout/js/events/loginEvent'],
+    function (LoginEvent) {
         class EventManager {
             constructor(controllerName, actionName, env, properties) {
                 this.controllerName = controllerName;
@@ -16,14 +16,13 @@ define(
             registerDefaultEvents() {
                 console.log('haha!')
                 // this.registerEvent(CloseBrowserEvent);
-                // this.registerEvent(LoginEvent);
+                this.registerEvent(LoginEvent);
                 // this.registerEvent(PurchaseEvent);
                 // this.registerEvent(TokenSyncEvent);
             }
-/*
-            /!**
-             * @param { AbstractEvent } Event
-             *!/
+            /**
+             * @param {Class} Event
+             */
             registerEvent(Event) {
                 this.events.push(new Event(this.isDev));
             }
@@ -42,10 +41,8 @@ define(
                 this.events.forEach(event => {
                     event.disable();
                 });
-            }*/
+            }
         }
-        return function (properties) {
-            return new EventManager(...Object.values(properties))
-        }
+        return EventManager
     }
 )
