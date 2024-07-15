@@ -1,5 +1,4 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Shopgate\WebCheckout\Observer;
 
@@ -24,7 +23,8 @@ class AddBodyTagClass implements ObserverInterface
         private readonly PageConfig $pageConfig,
         private readonly RequestInterface $request,
         private readonly CheckoutSession $checkoutSession
-    ) {}
+    ) {
+    }
 
     /**
      * @param Observer $observer

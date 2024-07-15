@@ -1,16 +1,15 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Shopgate\WebCheckout\Model;
 
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException;
 use Magento\Framework\Stdlib\Cookie\FailureToSendException;
-use Shopgate\WebCheckout\Api\ShopgateCookieManagementInterface;
-use Magento\Framework\Session\SessionManagerInterface;
-use Magento\Framework\Stdlib\CookieManagerInterface as StdlibCookieManagerInterface;
-use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
+use Magento\Framework\Stdlib\CookieManagerInterface as StdlibCookieManagerInterface;
+use Shopgate\WebCheckout\Api\ShopgateCookieManagementInterface;
 
 class ShopgateCookieManagement implements ShopgateCookieManagementInterface
 {
@@ -23,7 +22,8 @@ class ShopgateCookieManagement implements ShopgateCookieManagementInterface
         private readonly SessionManagerInterface $sessionManager,
         private readonly StdlibCookieManagerInterface $cookieManager,
         private readonly CookieMetadataFactory $cookieMetadataFactory
-    ) {}
+    ) {
+    }
 
     /**
      * @param string $value
