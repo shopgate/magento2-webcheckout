@@ -12,6 +12,7 @@
     .nav-sections,
     .page-header,
     .page-footer,
+    #store.menu,
     .copyright {
         display: none!important;
     }

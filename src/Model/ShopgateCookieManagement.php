@@ -39,6 +39,14 @@ class ShopgateCookieManagement implements ShopgateCookieManagementInterface
     }
 
     /**
+     * @return string|null
+     */
+    public function getCookie(): ?string
+    {
+        return $this->cookieManager->getCookie(self::COOKIE_NAME);
+    }
+
+    /**
      * @return void
      * @throws FailureToSendException
      * @throws InputException

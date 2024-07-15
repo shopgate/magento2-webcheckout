@@ -24,13 +24,19 @@ trait ShopgateDetect
      *
      * @return bool
      */
-    private function handleDevelopmentCookie(RequestInterface $request, SessionManagerInterface $session): bool
+    private function handleDevelopmentMode(RequestInterface $request, SessionManagerInterface $session): bool
     {
         $sgCookie = $request->getCookie(ShopgateCookieManagementInterface::COOKIE_NAME, false);
-        if ($sgCookie === '0' && $session->isSessionExists()) {
+        $sgParam = $request->has(ShopgateCookieManagementInterface::COOKIE_NAME);
+        if ($sgParam
+            || ($sgCookie !== false && $session->isSessionExists())
+        ) {
             $session->getData(ShopgateCookieManagementInterface::COOKIE_NAME, true);
+
+            return true;
         }
-        return (bool) $sgCookie;
+
+        return false;
     }
 
     /**
@@ -41,11 +47,11 @@ trait ShopgateDetect
      */
     private function isShopgate(RequestInterface $request, SessionManagerInterface $session): bool
     {
-        $sgCookie = $this->handleDevelopmentCookie($request, $session);
+        $sgDevMode = $this->handleDevelopmentMode($request, $session);
         $sgAgent = str_contains((string) $request->getHeader('User-Agent'), 'libshopgate');
         $hasSession = $session->isSessionExists();
         $sgSession = $hasSession && $session->getData(ShopgateCookieManagementInterface::COOKIE_NAME);
 
-        return $sgAgent || $sgSession || $sgCookie;
+        return $sgAgent || $sgSession || $sgDevMode;
     }
 }

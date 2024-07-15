@@ -18,4 +18,9 @@ interface ShopgateCookieManagementInterface
      * @return void
      */
     public function deleteCookie(): void;
+
+    /**
+     * @return string|null
+     */
+    public function getCookie(): ?string;
 }
