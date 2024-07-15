@@ -1,0 +1,15 @@
+{
+    "shopgate_webcheckout_order": {
+        "column": {
+            "entity_id": true,
+            "order_id": true,
+            "user_agent": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SHOPGATE_WEBCHECKOUT_ORDER_ORDER_ID_SALES_ORDER_ENTITY_ID": true
+        }
+    }
+}
