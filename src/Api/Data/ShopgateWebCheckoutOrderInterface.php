@@ -9,7 +9,7 @@ interface ShopgateWebCheckoutOrderInterface
     public final const USER_AGENT = 'user_agent';
     public final const CREATED_AT = 'created_at';
     public final const UPDATED_AT = 'updated_at';
-    
+
     /**
      * Get entity id
      *
