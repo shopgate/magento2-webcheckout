@@ -2,10 +2,8 @@
 /**
  * @var $block Magento\Framework\View\Element\Template
  * @var $config Shopgate\WebCheckout\ViewModel\Configuration
- * @var $jsConfig Shopgate\WebCheckout\ViewModel\JavaScriptConfiguration
  */
 $config = $block->getData('config');
-$jsConfig = $block->getData('jsConfig');
 ?>
 <?php if ($customCss = $config->getCustomCss()): ?>
     <style>.<?= Shopgate\WebCheckout\Model\Config::BODY_CSS_CLASS ?> {
@@ -13,10 +11,3 @@ $jsConfig = $block->getData('jsConfig');
         }
     </style>
 <?php endif; ?>
-<script type="text/x-magento-init">
-    {
-        "*": {
-            "Shopgate_WebCheckout/js/init": <?= $jsConfig->getInitData(); ?>
-    }
-}
-</script>

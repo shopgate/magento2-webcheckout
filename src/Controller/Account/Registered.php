@@ -8,7 +8,6 @@ use Magento\Framework\View\Result\PageFactory;
 
 class Registered implements HttpGetActionInterface
 {
-
     public function __construct(private readonly PageFactory $resultPageFactory)
     {
     }
