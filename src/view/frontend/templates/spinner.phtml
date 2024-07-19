@@ -2,8 +2,20 @@
 /**
  * @var \Magento\Framework\View\Element\Template $block
  * @var \Magento\Framework\Escaper $escaper
+ * @var \Shopgate\WebCheckout\ViewModel\JavaScriptConfiguration $jsConfig
+ * @var \Shopgate\WebCheckout\ViewModel\CustomerData $customer
  */
+$jsConfig = $block->getData('jsConfig');
+$customer = $block->getData('customer');
+$jsConfig->addProperty('token', $customer->getAuthToken());
 ?>
+<script type='text/x-magento-init'>
+    {
+        "*": {
+            "Shopgate_WebCheckout/js/init": <?= $jsConfig->toJson() ?>
+    }
+}
+</script>
 <script>
     require([
         'jquery',

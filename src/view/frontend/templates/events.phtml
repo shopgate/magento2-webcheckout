@@ -8,7 +8,7 @@ $jsConfig = $block->getData('jsConfig');
 <script type="text/x-magento-init">
     {
         "*": {
-            "Shopgate_WebCheckout/js/init": <?= $jsConfig->getInitData(); ?>
+            "Shopgate_WebCheckout/js/init": <?= $jsConfig->toJson(); ?>
     }
 }
 </script>

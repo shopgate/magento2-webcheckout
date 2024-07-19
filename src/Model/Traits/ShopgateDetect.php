@@ -27,6 +27,9 @@ trait ShopgateDetect
     {
         $sgCookie = $request->getCookie(ShopgateCookieManagementInterface::COOKIE_NAME, false);
         $sgParam = $request->has(ShopgateCookieManagementInterface::COOKIE_NAME);
+        // todo: 1. current logic does not seem to clear cookie
+        //  2. clear only when cookie is set to 0
+        //  3. When sgWebView=0 return false
         if ($sgParam
             || ($sgCookie !== false && $session->isSessionExists())
         ) {

@@ -4,26 +4,30 @@ namespace Shopgate\WebCheckout\ViewModel;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\State;
-use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\DataObject;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
-class JavaScriptConfiguration implements ArgumentInterface
+class JavaScriptConfiguration extends DataObject implements ArgumentInterface
 {
-    public function __construct(
-        private readonly Json $json,
-        private readonly RequestInterface $request,
-        private readonly State $state
-    ) {
-    }
-
-    public function getInitData(): string
+    public function __construct(RequestInterface $request, State $state)
     {
-        return $this->json->serialize([
-            'controller' => $this->request->getModuleName(),
-            'action' => $this->request->getActionName(),
-            'env' => $this->state->getMode(), // MAGE_MODE
+        parent::__construct([
+            'controller' => $request->getModuleName(),
+            'action' => $request->getActionName(),
+            'env' => $state->getMode(), // MAGE_MODE
             'properties' => [],
             'isSgWebView' => true // cookie check
         ]);
+    }
+
+    public function addProperty(string $key, mixed $value): self
+    {
+        if ($value === null) {
+            return $this;
+        }
+        $props = $this->getDataByKey('properties');
+        $this->setData('properties', array_merge($props, [$key => $value]));
+
+        return $this;
     }
 }
