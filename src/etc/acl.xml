@@ -1,9 +1,19 @@
 <?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
     <acl>
         <resources>
-            <resource id="Magento_Backend::admin">
-                <resource id="Shopgate_WebCheckout::general_configuration" title="Shopgate WebCheckout General Configuration" sortOrder="5" />
+            <resource id="Magento_Backend::admin" title="Admin">
+                <resource id="Magento_Backend::stores" title="Stores">
+                    <resource id="Magento_Backend::stores_settings" title="Settings">
+                        <resource id="Magento_Config::config" title="Config">
+                            <resource id="Magento_Config::shopgate" title="Shopgate" sortOrder="100">
+                                <resource id="Shopgate_WebCheckout::general_configuration"
+                                          title="WebCheckout General Configuration" sortOrder="50"/>
+                            </resource>
+                        </resource>
+                    </resource>
+                </resource>
             </resource>
         </resources>
     </acl>
