@@ -2,6 +2,9 @@
 <page layout="empty" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
+        <!-- todo: speed optimization, but check that no error if Base module is not installed -->
+        <referenceBlock name="shopgate.redirect" remove="true" />
+        <referenceBlock name="copyright" remove="true" />
         <referenceContainer name="main.content">
             <block class="Magento\Framework\View\Element\Template" name="shopgate.webcheckout.spinner"
                    template="Shopgate_WebCheckout::spinner.phtml"/>
