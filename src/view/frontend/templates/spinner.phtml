@@ -12,21 +12,10 @@ $jsConfig->addProperty('token', $customer->getAuthToken());
 <script type='text/x-magento-init'>
     {
         "*": {
-            "Shopgate_WebCheckout/js/init": <?= $jsConfig->toJson() ?>
+            "Shopgate_WebCheckout/js/init": <?= $jsConfig->toJson() ?>,
+            "Shopgate_WebCheckout/js/spinner": {
+              "icon": "<?= $escaper->escapeUrl($block->getViewFileUrl('images/loader-1.gif')); ?>"
+            }
     }
 }
-</script>
-<script>
-    require([
-        'jquery',
-        'loader',
-    ], function ($) {
-        $('body').append($('<div id="loader"/>'));
-
-        const $loader = $('#loader').loader({
-            icon: "<?= $escaper->escapeUrl($block->getViewFileUrl('images/loader-1.gif')); ?>"
-        });
-
-        $loader.loader('show');
-    });
 </script>
