@@ -63,6 +63,7 @@ class Login implements HttpGetActionInterface
             }
         } elseif ($maskedQuoteId) {
             try {
+                $this->logoutCustomer();
                 $this->loginGuest($maskedQuoteId);
             } catch (NoSuchEntityException) {
                 // todo: log these cases
@@ -71,6 +72,7 @@ class Login implements HttpGetActionInterface
             }
         }
 
+        // todo: discuss the need for this cookie (supposedly the "User-Agent: libshopgate" handles this)
         $this->shopgateCookieManagement->saveCookie('1');
 
         return $this->redirect->setUrl($this->getRedirectUrl());
@@ -86,6 +88,15 @@ class Login implements HttpGetActionInterface
         $this->customerSession->setCustomerId($customerId);
         // this will prompt a cart load via `customer_login` observer
         $this->customerSession->setCustomerDataAsLoggedIn($customer);
+    }
+
+    /**
+     * There could be cases where a customer is already logged in inApp,
+     * but wants to register a second user account from the App
+     */
+    private function logoutCustomer(): void
+    {
+        $this->customerSession->isLoggedIn() && $this->customerSession->logout();
     }
 
     private function getRedirectUrl(): string
