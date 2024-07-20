@@ -7,7 +7,7 @@
         <referenceBlock name="copyright" remove="true" />
         <referenceBlock name="shopgate.webcheckout.events" remove="true" />
         <referenceContainer name="main.content">
-            <block class="Magento\Framework\View\Element\Template" name="shopgate.webcheckout.spinner" template="Shopgate_WebCheckout::spinner.phtml">
+            <block cacheable="false" class="Magento\Framework\View\Element\Template" name="shopgate.webcheckout.spinner" template="Shopgate_WebCheckout::spinner.phtml">
                 <arguments>
                     <argument name="jsConfig" xsi:type="object">Shopgate\WebCheckout\ViewModel\JavaScriptConfiguration</argument>
                     <argument name="customer" xsi:type="object">Shopgate\WebCheckout\ViewModel\CustomerData</argument>

@@ -354,6 +354,57 @@
 					"response": []
 				},
 				{
+					"name": "FE: check registered token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load the HTML response to $",
+									"const pkg = require('cheerio')",
+									"const $ = pkg.load(pm.response.text());",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check controller\", function () {",
+									"    const bodyClass = $('body.sgwebcheckout-account-registered');",
+									"    pm.expect(bodyClass).to.be.lengthOf(1);",
+									"});",
+									"pm.test(\"Check registered token\", function () {",
+									"    const script = $('script[type=\"text/x-magento-init\"]:contains(\"Shopgate_WebCheckout\")');",
+									"    pm.expect(script).to.be.lengthOf(1);",
+									"",
+									"    // data test",
+									"    pm.expect(script[0].children[0].data).to.be.a('string');",
+									"    const data = JSON.parse(script[0].children[0].data);",
+									"    const definition = data['*']['Shopgate_WebCheckout/js/init'];",
+									"    pm.expect(definition.properties.token).to.be.a('string', 'no token in property export');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{m2_endpoint_fe_sgwebc}}/account/registered",
+							"host": [
+								"{{m2_endpoint_fe_sgwebc}}"
+							],
+							"path": [
+								"account",
+								"registered"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "FE: unset cookie",
 					"event": [
 						{
