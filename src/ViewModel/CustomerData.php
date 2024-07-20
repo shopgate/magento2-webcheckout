@@ -2,10 +2,14 @@
 
 namespace Shopgate\WebCheckout\ViewModel;
 
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Magento\Integration\Api\UserTokenIssuerInterface;
+use Magento\Integration\Model\CustomUserContext;
+use Magento\Integration\Model\UserToken\UserTokenParametersFactory;
 use Shopgate\WebCheckout\Model\Traits\ShopgateDetect;
 
 class CustomerData implements ArgumentInterface
@@ -15,7 +19,9 @@ class CustomerData implements ArgumentInterface
     public function __construct(
         private readonly RequestInterface $request,
         private readonly CustomerSession $customerSession,
-        private readonly CheckoutSession $checkoutSession
+        private readonly CheckoutSession $checkoutSession,
+        private readonly UserTokenParametersFactory $userTokenParametersFactory,
+        private readonly UserTokenIssuerInterface $tokenIssuer
     ) {
     }
 
@@ -24,9 +30,13 @@ class CustomerData implements ArgumentInterface
         if (!$this->isLoggedIn()) {
             return null;
         }
-        $customerId = (string)$this->customerSession->getCustomer()->getId();
-        // todo: get authToken instead
-        return $customerId;
+        $params = $this->userTokenParametersFactory->create();
+        $context = new CustomUserContext(
+            (int)$this->customerSession->getCustomer()->getId(),
+            UserContextInterface::USER_TYPE_CUSTOMER
+        );
+
+        return $this->tokenIssuer->create($context, $params);
     }
 
     private function isLoggedIn(): bool
