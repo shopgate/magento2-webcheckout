@@ -20,13 +20,10 @@ class JavaScriptConfiguration extends DataObject implements ArgumentInterface
         ]);
     }
 
-    public function addProperty(string $key, mixed $value): self
+    public function addProperties(array $properties): self
     {
-        if ($value === null) {
-            return $this;
-        }
         $props = $this->getDataByKey('properties');
-        $this->setData('properties', array_merge($props, [$key => $value]));
+        $this->setData('properties', array_merge($props, $properties));
 
         return $this;
     }

@@ -1,6 +1,8 @@
-define(
-    ['Shopgate_WebCheckout/js/events/loginEvent'],
-    function (LoginEvent) {
+define([
+    'Shopgate_WebCheckout/js/events/loginEvent',
+    'Shopgate_WebCheckout/js/events/orderEvent'
+    ],
+    function (LoginEvent, OrderEvent) {
         class EventManager {
             constructor(controllerName, actionName, env, properties) {
                 this.controllerName = controllerName;
@@ -14,10 +16,9 @@ define(
             }
 
             registerDefaultEvents() {
-                console.log('haha!')
                 // this.registerEvent(CloseBrowserEvent);
                 this.registerEvent(LoginEvent);
-                // this.registerEvent(PurchaseEvent);
+                this.registerEvent(OrderEvent);
                 // this.registerEvent(TokenSyncEvent);
             }
             /**

@@ -52,13 +52,13 @@ class Token implements TokenInterface
     /**
      * This is an unauthenticated route, need to be extra careful with inc data
      *
-     * @param string $cartId
-     * @return TokenResultInterface
      * @throws BuildException
      * @throws EncodeException
      */
     public function getGuestToken(string $cartId): TokenResultInterface
     {
+        // todo: check the $cartId against Mage validation for proper maskedQuoteId (32 chars?)
+        // todo: throw error if it's not, .e.g this does not fail if we call with ":cartId"
         return $this->tokenManager->createToken(
             $this->keys[$this->keyVersion],
             $cartId,
