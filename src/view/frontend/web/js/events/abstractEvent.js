@@ -2,13 +2,12 @@ define(
     [],
     function () {
         class AbstractEvent {
+            active = true
+            pluginName = 'Shopgate Webcheckout Plugin'
+            isDev = false
 
-            active = true;
-            pluginName = 'Shopgate Webcheckout Plugin';
-            isDev = false;
-
-            constructor(env) {
-                this.isDev = env;
+            constructor (env) {
+                this.isDev = env
             }
 
             /**
@@ -19,25 +18,25 @@ define(
              * @returns {boolean}
              */
             supports (module, controller, action, properties) {
-                console.warn(`[${this.pluginName}] Method \'supports\' was not overridden by "` + this.constructor.name + '". Default return set to false.');
-                return false;
+                console.warn(`[${this.pluginName}] Method \'supports\' was not overridden by "` + this.constructor.name + '". Default return set to false.')
+                return false
             }
 
-            execute() {
-                console.warn(`[${this.pluginName}] Method \'execute\' was not overridden by "` + this.constructor.name + '".');
+            execute () {
+                console.warn(`[${this.pluginName}] Method \'execute\' was not overridden by "` + this.constructor.name + '".')
             }
 
-            disable() {
-                this.active = false;
+            disable () {
+                this.active = false
             }
 
-            log(message) {
+            log (message) {
                 if (this.isDev) {
-                    console.warn(this.pluginName + ': ' + message);
+                    console.warn(this.pluginName + ': ' + message)
                 }
             }
         }
 
-        return AbstractEvent;
+        return AbstractEvent
     }
 )

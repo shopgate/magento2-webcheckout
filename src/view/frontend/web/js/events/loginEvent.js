@@ -14,9 +14,9 @@ define(
             /**
              * @param {SGTokenParams} parameters
              */
-            execute(parameters) {
+            execute (parameters) {
                 if (!parameters.token) {
-                    this.log('Login success, but no auth token is passed from template file');
+                    this.log('Login success, but no auth token is passed from template file')
                     return
                 }
                 window.SGAppConnector.sendPipelineRequest(
@@ -24,20 +24,21 @@ define(
                     true,
                     {
                         'strategy': 'auth_code',
-                        'parameters': {'code': parameters.token}
+                        'parameters': { 'code': parameters.token }
                     },
                     function () {
                         window.SGAppConnector.sendAppCommands([
                             {
                                 'c': 'broadcastEvent',
-                                'p': {'event': 'userLoggedIn'}
+                                'p': { 'event': 'userLoggedIn' }
                             }
-                        ]);
+                        ])
                     },
                     []
-                );
+                )
             }
         }
+
         return LoginEvent
     }
 )

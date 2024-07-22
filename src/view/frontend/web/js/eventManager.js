@@ -1,5 +1,5 @@
 define([
-    'Shopgate_WebCheckout/js/events/loginEvent',
+        'Shopgate_WebCheckout/js/events/loginEvent',
         'Shopgate_WebCheckout/js/events/orderEvent',
         'Shopgate_WebCheckout/js/events/closeEvent'
     ],
@@ -9,43 +9,44 @@ define([
                 this.module = module
                 this.controller = controller
                 this.action = action
-                this.isDev = env === 'developer';
-                this.properties = properties;
+                this.isDev = env === 'developer'
+                this.properties = properties
                 /**
                  * @type {AbstractEvent[]}
                  */
-                this.events = [];
+                this.events = []
             }
 
-            registerDefaultEvents() {
+            registerDefaultEvents () {
                 this.registerEvent(CloseEvent)
-                this.registerEvent(LoginEvent);
-                this.registerEvent(OrderEvent);
-                // this.registerEvent(TokenSyncEvent);
+                this.registerEvent(LoginEvent)
+                this.registerEvent(OrderEvent)
             }
+
             /**
              * @param {Class} Event
              */
-            registerEvent(Event) {
-                this.events.push(new Event(this.isDev));
+            registerEvent (Event) {
+                this.events.push(new Event(this.isDev))
             }
 
-            executeEvents() {
+            executeEvents () {
                 this.events.forEach(event => {
                     if (!event.supports(this.module, this.controller, this.action, this.properties) || !event.active) {
-                        return;
+                        return
                     }
-                    event.log('Executing event > ' + event.constructor.name); // works on non-minified
-                    event.execute(this.properties);
-                });
+                    event.log('Executing event > ' + event.constructor.name) // works on non-minified
+                    event.execute(this.properties)
+                })
             }
 
-            disableEvents() {
+            disableEvents () {
                 this.events.forEach(event => {
-                    event.disable();
-                });
+                    event.disable()
+                })
             }
         }
+
         return EventManager
     }
 )

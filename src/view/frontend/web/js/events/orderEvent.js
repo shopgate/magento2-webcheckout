@@ -12,7 +12,7 @@ define(
              */
             execute (parameters) {
                 if (!parameters) {
-                    this.log('Checkout success, but order parameters are empty');
+                    this.log('Checkout success, but order parameters are empty')
                 }
                 window.SGAppConnector.sendAppCommands(
                     [
@@ -32,9 +32,10 @@ define(
                             }
                         }
                     ]
-                );
+                )
             }
         }
+
         return OrderEvent
     }
 )
