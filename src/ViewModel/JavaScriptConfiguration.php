@@ -12,7 +12,8 @@ class JavaScriptConfiguration extends DataObject implements ArgumentInterface
     public function __construct(RequestInterface $request, State $state)
     {
         parent::__construct([
-            'controller' => $request->getModuleName(),
+            'module' => $request->getModuleName(),
+            'controller' => method_exists($request, 'getControllerName') ? $request->getControllerName() : '',
             'action' => $request->getActionName(),
             'env' => $state->getMode(), // MAGE_MODE
             'properties' => [],

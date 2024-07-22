@@ -7,7 +7,7 @@
  */
 $jsConfig = $block->getData('jsConfig');
 $customer = $block->getData('customer');
-$jsConfig->addProperties(['token' => $customer->getAuthToken()]);
+$jsConfig->addProperties(['token' => $customer?->getAuthToken()]);
 ?>
 <script type='text/x-magento-init'>
     {

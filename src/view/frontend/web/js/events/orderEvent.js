@@ -2,9 +2,8 @@ define(
     ['Shopgate_WebCheckout/js/events/abstractEvent'],
     function (AbstractEvent) {
         class OrderEvent extends AbstractEvent {
-            supports (controllerName, actionName) {
-                // login user after registration
-                return controllerName === 'checkout' && actionName === 'success';
+            supports (module, controller, action) {
+                return module === 'checkout' && controller === 'onepage' && action === 'success'
             }
 
             /**

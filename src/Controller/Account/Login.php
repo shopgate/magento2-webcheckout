@@ -41,7 +41,7 @@ class Login implements HttpGetActionInterface
      */
     public function execute(): Page|ResultInterface|ResponseInterface
     {
-        $closeInAppRoute = ''; // todo: create a route that closes inApp & shows spinner
+        $closeInAppRoute = 'sgwebcheckout/close';
         // identifies "checkout" button registrations
         $isSGCheckout = $this->request->getParam('sgcloud_checkout', 0);
 

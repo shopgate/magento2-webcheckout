@@ -27,12 +27,12 @@ class CustomerData implements ArgumentInterface
 
     public function getAuthToken(): ?string
     {
-        if (!$this->isLoggedIn()) {
+        if (!$this->isLoggedIn() || !($userId = (int)$this->customerSession->getCustomer()->getId())) {
             return null;
         }
         $params = $this->userTokenParametersFactory->create();
         $context = new CustomUserContext(
-            (int)$this->customerSession->getCustomer()->getId(),
+            $userId,
             UserContextInterface::USER_TYPE_CUSTOMER
         );
 

@@ -6,8 +6,8 @@ define(
      */
     function (EventManager) {
         class SgWebcheckoutAppPlugin {
-            constructor (controllerName, actionName, env, properties, isSgWebView) {
-                this.eventManager = new EventManager(controllerName, actionName, env, properties)
+            constructor (module, controller, action, env, properties, isSgWebView) {
+                this.eventManager = new EventManager(module, controller, action, env, properties)
                 this.devMode = isSgWebView;
             }
 

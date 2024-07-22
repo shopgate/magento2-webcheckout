@@ -1,12 +1,14 @@
 define([
     'Shopgate_WebCheckout/js/events/loginEvent',
-    'Shopgate_WebCheckout/js/events/orderEvent'
+        'Shopgate_WebCheckout/js/events/orderEvent',
+        'Shopgate_WebCheckout/js/events/closeEvent'
     ],
-    function (LoginEvent, OrderEvent) {
+    function (LoginEvent, OrderEvent, CloseEvent) {
         class EventManager {
-            constructor(controllerName, actionName, env, properties) {
-                this.controllerName = controllerName;
-                this.actionName = actionName;
+            constructor (module, controller, action, env, properties) {
+                this.module = module
+                this.controller = controller
+                this.action = action
                 this.isDev = env === 'developer';
                 this.properties = properties;
                 /**
@@ -16,7 +18,7 @@ define([
             }
 
             registerDefaultEvents() {
-                // this.registerEvent(CloseBrowserEvent);
+                this.registerEvent(CloseEvent)
                 this.registerEvent(LoginEvent);
                 this.registerEvent(OrderEvent);
                 // this.registerEvent(TokenSyncEvent);
@@ -30,7 +32,7 @@ define([
 
             executeEvents() {
                 this.events.forEach(event => {
-                    if (!event.supports(this.controllerName, this.actionName, this.properties) || !event.active) {
+                    if (!event.supports(this.module, this.controller, this.action, this.properties) || !event.active) {
                         return;
                     }
                     event.log('Executing event > ' + event.constructor.name); // works on non-minified
