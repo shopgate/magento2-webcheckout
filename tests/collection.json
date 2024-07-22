@@ -457,6 +457,28 @@
 					},
 					"response": []
 				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
 			]
 		},
 		{
@@ -933,7 +955,7 @@
 									"const $ = pkg.load(pm.response.text());",
 									"",
 									"pm.test(\"Check page\", function () {",
-									"    const input = $('body.customer-account-create]');",
+									"    const input = $('body.is-sg-app.customer-account-create');",
 									"    pm.expect(input).to.be.lengthOf(1);",
 									"});"
 								],
@@ -1058,6 +1080,64 @@
 							"path": [
 								"checkout",
 								"cart"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Errors",
+			"item": [
+				{
+					"name": "M2: token w/o cartId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {",
+									"    pm.response.to.have.status(500);",
+									"});",
+									"",
+									"pm.test(\"Has error\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.message).to.be.a('string')",
+									"    pm.expect(jsonData.code).to.eq(400);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{m2_endpoint_api_sgwebc}}/:cartId/token",
+							"host": [
+								"{{m2_endpoint_api_sgwebc}}"
+							],
+							"path": [
+								":cartId",
+								"token"
+							],
+							"variable": [
+								{
+									"key": "cartId",
+									"value": ""
+								}
 							]
 						}
 					},

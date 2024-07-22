@@ -47,19 +47,18 @@ class Login implements HttpGetActionInterface
 
         $token = $this->request->getParam('token', '');
         if (!$this->tokenManager->validateToken($token)) {
-            $this->redirect->setPath($closeInAppRoute);
-            return $this->redirect;
+            // todo: some logging will be helpful
+            return $this->redirect->setPath($closeInAppRoute);
         }
 
         $customerId = $this->tokenManager->getCustomerId($token);
-        $maskedQuoteId = $this->tokenManager->getContextToken($token);
+        $maskedQuoteId = $this->tokenManager->getCartId($token);
         if ($customerId) {
             try {
                 $this->loginCustomer($customerId);
             } catch (NoSuchEntityException|LocalizedException) {
                 // todo: some logging will be helpful
-                $this->redirect->setPath($closeInAppRoute);
-                return $this->redirect;
+                return $this->redirect->setPath($closeInAppRoute);
             }
         } elseif ($maskedQuoteId) {
             try {
@@ -67,8 +66,7 @@ class Login implements HttpGetActionInterface
                 $this->loginGuest($maskedQuoteId);
             } catch (NoSuchEntityException) {
                 // todo: log these cases
-                $this->redirect->setPath($closeInAppRoute);
-                return $this->redirect;
+                return $this->redirect->setPath($closeInAppRoute);
             }
         }
 
@@ -101,7 +99,7 @@ class Login implements HttpGetActionInterface
 
     private function getRedirectUrl(): string
     {
-        $redirectTo = $this->request->getParam('redirectTo', 'checkout');
+        $redirectTo = $this->request->getParam('redirectTo', 'checkout/cart');
         $url = $this->urlInterface->getUrl($redirectTo);
 
         return $this->urlInterface->getRedirectUrl($url);

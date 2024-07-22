@@ -2,6 +2,7 @@
 
 namespace Shopgate\WebCheckout\Model;
 
+use InvalidArgumentException;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Encryption\Encryptor;
@@ -41,9 +42,8 @@ class Token implements TokenInterface
      */
     public function getCustomerToken(int $customerId): TokenResultInterface
     {
-        return $this->tokenManager->createToken(
+        return $this->tokenManager->createCustomerToken(
             $this->keys[$this->keyVersion],
-            '',
             $this->request->getHttpHost(),
             $customerId
         );
@@ -57,13 +57,14 @@ class Token implements TokenInterface
      */
     public function getGuestToken(string $cartId): TokenResultInterface
     {
-        // todo: check the $cartId against Mage validation for proper maskedQuoteId (32 chars?)
-        // todo: throw error if it's not, .e.g this does not fail if we call with ":cartId"
-        return $this->tokenManager->createToken(
+        if (strlen($cartId) !== 32) {
+            throw new InvalidArgumentException("Incorrect cart ID supplied: '$cartId'", 400);
+        }
+
+        return $this->tokenManager->createGuestToken(
             $this->keys[$this->keyVersion],
-            $cartId,
             $this->request->getHttpHost(),
-            null
+            $cartId
         );
     }
 }

@@ -10,7 +10,7 @@ use Shopgate\WebCheckout\Model\TokenResult;
 class TokenManager
 {
     public final const USER_ID_KEY = 'user_id';
-    public final const CONTEXT_KEY = 'context_key';
+    public final const CART_ID = 'cart_id';
 
     public function __construct(
         private readonly TokenBuilder $tokens,
@@ -28,27 +28,37 @@ class TokenManager
         return $this->tokens->getPayload($token)[self::USER_ID_KEY] ?? null;
     }
 
-    public function getContextToken(string $token): ?string
+    public function getCartId(string $token): ?string
     {
-        return $this->tokens->getPayload($token)[self::CONTEXT_KEY] ?? null;
+        return $this->tokens->getPayload($token)[self::CART_ID] ?? null;
     }
 
     /**
      * @throws BuildException|EncodeException
      */
-    public function createToken(
+    public function createGuestToken(string $secret, string $domain, string $cartId): TokenResultInterface
+    {
+        return $this->createToken($secret, $domain, [self::CART_ID => $cartId]);
+    }
+    /**
+     * @throws BuildException|EncodeException
+     */
+    public function createCustomerToken(string $secret, string $domain, int $customerId): TokenResultInterface
+    {
+        return $this->createToken($secret, $domain, [self::USER_ID_KEY => $customerId]);
+    }
+
+    /**
+     * @throws BuildException|EncodeException
+     */
+    private function createToken(
         string $secret,
-        string $contextToken,
         string $domain,
-        ?int $customerId
+        array $payload
     ): TokenResultInterface {
         $expiration = time() + $this->expiration;
         return (new TokenResult())->setToken(
-            $this->tokens->createCustomPayload($secret, $expiration, $domain, [
-                self::USER_ID_KEY => $customerId,
-                self::CONTEXT_KEY => $contextToken
-            ])->getToken()
-        )
-            ->setExpiration($expiration);
+            $this->tokens->createCustomPayload($secret, $expiration, $domain, $payload)->getToken()
+        )->setExpiration($expiration);
     }
 }
