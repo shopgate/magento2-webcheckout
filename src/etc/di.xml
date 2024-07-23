@@ -3,4 +3,18 @@
     <preference for="Shopgate\WebCheckout\Api\TokenInterface" type="Shopgate\WebCheckout\Model\Token"/>
     <preference for="Shopgate\WebCheckout\Api\TokenResultInterface" type="Shopgate\WebCheckout\Model\TokenResult"/>
     <preference for="Shopgate\WebCheckout\Api\ShopgateCookieManagementInterface" type="Shopgate\WebCheckout\Model\ShopgateCookieManagement"/>
+    <virtualType name="Shopgate\WebCheckout\Logger\DebugHandler" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/shopgate/webcheckout_debug.log</argument>
+        </arguments>
+    </virtualType>
+    <type name="Shopgate\WebCheckout\Services\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">shopgate_webc</argument>
+            <argument name="handlers" xsi:type="array">
+                <!--suppress InvalidDiTypeInspection -->
+                <item name="webc_log" xsi:type="object">Shopgate\WebCheckout\Logger\DebugHandler</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

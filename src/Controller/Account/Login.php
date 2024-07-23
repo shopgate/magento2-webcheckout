@@ -15,6 +15,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Result\Page;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
+use Psr\Log\LoggerInterface;
 use Shopgate\WebCheckout\Api\ShopgateCookieManagementInterface;
 use Shopgate\WebCheckout\Services\TokenManager;
 
@@ -31,7 +32,10 @@ class Login implements HttpGetActionInterface
         private readonly CheckoutSession $checkoutSession,
         private readonly UrlInterface $urlInterface,
         private readonly MaskedQuoteIdToQuoteIdInterface $maskedQuoteToQuote,
-        private readonly ShopgateCookieManagementInterface $shopgateCookieManagement
+        private readonly ShopgateCookieManagementInterface $shopgateCookieManagement,
+        private readonly LoggerInterface $logger,
+        private readonly LoggerInterface $secondLogger,
+
     ) {
         $this->redirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
     }
@@ -47,7 +51,7 @@ class Login implements HttpGetActionInterface
 
         $token = $this->request->getParam('token', '');
         if (!$this->tokenManager->validateToken($token)) {
-            // todo: some logging will be helpful
+            $this->logger->debug('Invalid token received');
             return $this->redirect->setPath($closeInAppRoute);
         }
 
@@ -56,8 +60,8 @@ class Login implements HttpGetActionInterface
         if ($customerId) {
             try {
                 $this->loginCustomer($customerId);
-            } catch (NoSuchEntityException|LocalizedException) {
-                // todo: some logging will be helpful
+            } catch (NoSuchEntityException|LocalizedException $e) {
+                $this->logger->error("Couldn't log in customer by ID: '$customerId', Error: " . $e->getMessage());
                 return $this->redirect->setPath($closeInAppRoute);
             }
         } elseif ($maskedQuoteId) {
@@ -65,7 +69,7 @@ class Login implements HttpGetActionInterface
                 $this->logoutCustomer();
                 $this->loginGuest($maskedQuoteId);
             } catch (NoSuchEntityException) {
-                // todo: log these cases
+                $this->logger->error("Could not locate masked quote ID: '$maskedQuoteId'");
                 return $this->redirect->setPath($closeInAppRoute);
             }
         }

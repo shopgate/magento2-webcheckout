@@ -12,24 +12,24 @@ class Config
     private const XML_PATH_SECTION = 'shopgate_webcheckout';
     private const XML_PATH_SECTION_CHARACTER_LIMIT = self::XML_PATH_SECTION . '/general/custom_css';
 
-    /**
-     * @param ScopeConfigInterface $scopeConfig
-     */
-    public function __construct(
-        private readonly ScopeConfigInterface $scopeConfig
-    ) {
+    public function __construct(private readonly ScopeConfigInterface $scopeConfig)
+    {
     }
 
-    /**
-     * @return string
-     */
     public function getCustomCss(): string
     {
+        // todo: do we need to specify store?
         $customCss = $this->scopeConfig->getValue(
             self::XML_PATH_SECTION_CHARACTER_LIMIT,
             ScopeInterface::SCOPE_STORE
         );
 
         return $customCss ?? '';
+    }
+
+    public function isLoggingEnabled(): bool
+    {
+        //todo: finalize
+        return true || $this->scopeConfig->isSetFlag('');
     }
 }
