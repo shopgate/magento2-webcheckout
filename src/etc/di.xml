@@ -1,13 +1,21 @@
 <?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Shopgate\WebCheckout\Api\TokenInterface" type="Shopgate\WebCheckout\Model\Token"/>
-    <preference for="Shopgate\WebCheckout\Api\TokenResultInterface" type="Shopgate\WebCheckout\Model\TokenResult"/>
-    <preference for="Shopgate\WebCheckout\Api\ShopgateCookieManagementInterface" type="Shopgate\WebCheckout\Model\ShopgateCookieManagement"/>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Shopgate\WebCheckout\Api\TokenInterface" type="Shopgate\WebCheckout\Model\Api\Token"/>
+    <preference for="Shopgate\WebCheckout\Api\TokenResultInterface" type="Shopgate\WebCheckout\Model\Api\TokenResult"/>
+    <preference for="Shopgate\WebCheckout\Api\LogReaderInterface" type="Shopgate\WebCheckout\Model\Api\LogReader"/>
+    <preference for="Shopgate\WebCheckout\Api\ShopgateCookieManagementInterface"
+                type="Shopgate\WebCheckout\Model\ShopgateCookieManagement"/>
     <virtualType name="Shopgate\WebCheckout\Logger\DebugHandler" type="Magento\Framework\Logger\Handler\Base">
         <arguments>
             <argument name="fileName" xsi:type="string">/var/log/shopgate/webcheckout_debug.log</argument>
         </arguments>
     </virtualType>
+    <type name="Shopgate\WebCheckout\Model\Api\LogReader">
+        <arguments>
+            <argument name="logFilePath" xsi:type="string">/var/log/shopgate/webcheckout_debug.log</argument>
+        </arguments>
+    </type>
     <type name="Shopgate\WebCheckout\Services\Logger">
         <arguments>
             <argument name="name" xsi:type="string">shopgate_webc</argument>

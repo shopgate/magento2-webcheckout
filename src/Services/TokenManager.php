@@ -5,7 +5,7 @@ namespace Shopgate\WebCheckout\Services;
 use ReallySimpleJWT\Exception\BuildException;
 use ReallySimpleJWT\Exception\EncodeException;
 use Shopgate\WebCheckout\Api\TokenResultInterface;
-use Shopgate\WebCheckout\Model\TokenResult;
+use Shopgate\WebCheckout\Model\Api\TokenResult;
 
 class TokenManager
 {

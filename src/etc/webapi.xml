@@ -16,4 +16,14 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
+    <route url="/V1/sgwebcheckout/log" method="GET">
+        <service class="Shopgate\WebCheckout\Api\LogReaderInterface" method="getPaginatedLogLines"/>
+        <resources>
+            <resource ref="Magento_Backend::admin"/>
+        </resources>
+        <data>
+            <parameter name="page"/>
+            <parameter name="lines"/>
+        </data>
+    </route>
 </routes>

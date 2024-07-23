@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Shopgate\WebCheckout\Model;
+namespace Shopgate\WebCheckout\Model\Api;
 
 use InvalidArgumentException;
 use Magento\Framework\App\DeploymentConfig;

@@ -7,6 +7,218 @@
 	},
 	"item": [
 		{
+      "name": "Setup",
+      "item": [
+        {
+          "name": "M2: admin login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Body is a string\", function () {",
+                  "    const token = pm.response.text().replace(/['\"]+/g, '');",
+                  "    pm.expect(token).to.be.a('string');",
+                  "    pm.environment.set('gen_adminToken', token);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{m2_admin}}\",\n  \"password\": \"{{m2_pass}}\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{m2_endpoint_api}}/integration/admin/token",
+              "host": [
+                "{{m2_endpoint_api}}"
+              ],
+              "path": [
+                "integration",
+                "admin",
+                "token"
+              ]
+            },
+            "description": "Create access token for admin given the customer credentials."
+          },
+          "response": [
+            {
+              "name": "200 Success.",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/V1/integration/customer/token",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "V1",
+                    "integration",
+                    "customer",
+                    "token"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "<string>"
+            },
+            {
+              "name": "400 Bad Request",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/V1/integration/customer/token",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "V1",
+                    "integration",
+                    "customer",
+                    "token"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"<string>\",\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"code\": \"<integer>\",\n  \"parameters\": [\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    },\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    }\n  ],\n  \"trace\": \"<string>\"\n}"
+            },
+            {
+              "name": "Unexpected error",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/V1/integration/customer/token",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "V1",
+                    "integration",
+                    "customer",
+                    "token"
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"<string>\",\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"code\": \"<integer>\",\n  \"parameters\": [\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    },\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    }\n  ],\n  \"trace\": \"<string>\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
 			"name": "Customer",
 			"item": [
 				{
@@ -1091,6 +1303,184 @@
 			"name": "Errors",
 			"item": [
 				{
+          "name": "Bad Cart ID",
+          "item": [
+            {
+              "name": "M2: Guest Token API",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Has token\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.token).to.be.a('string')",
+                      "    pm.environment.set(\"gen_bad_guest_sgToken\", jsonData.token);",
+                      "    pm.expect(jsonData.expiration).to.be.a('number');",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{m2_endpoint_api_sgwebc}}/:cartId/token",
+                  "host": [
+                    "{{m2_endpoint_api_sgwebc}}"
+                  ],
+                  "path": [
+                    ":cartId",
+                    "token"
+                  ],
+                  "variable": [
+                    {
+                      "key": "cartId",
+                      "value": "11111111111111111111111111111111"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "FE: bad masked cart id",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "// Load the HTML response to $",
+                      "const pkg = require('cheerio')",
+                      "const $ = pkg.load(pm.response.text());",
+                      "",
+                      "pm.test(\"Check redirected to app close event\", function () {",
+                      "    const input = $('body.sgwebcheckout-close-index');",
+                      "    pm.expect(input).to.be.lengthOf(1);",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{m2_endpoint_fe_sgwebc}}/account/login?token={{gen_bad_guest_sgToken}}",
+                  "host": [
+                    "{{m2_endpoint_fe_sgwebc}}"
+                  ],
+                  "path": [
+                    "account",
+                    "login"
+                  ],
+                  "query": [
+                    {
+                      "key": "redirectTo",
+                      "value": "registered",
+                      "disabled": true
+                    },
+                    {
+                      "key": "token",
+                      "value": "{{gen_bad_guest_sgToken}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "M2A: read log",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Has log\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.log).to.not.be.undefined;",
+                      "    jsonData.log.pop(); // empty line skip",
+                      "    const lastLine = jsonData.log.pop();",
+                      "    pm.expect(lastLine).to.contain('Could not locate masked quote ID');",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{gen_adminToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{m2_endpoint_api_sgwebc}}/log?page=1&lines=5",
+                  "host": [
+                    "{{m2_endpoint_api_sgwebc}}"
+                  ],
+                  "path": [
+                    "log"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "lines",
+                      "value": "5"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
           "name": "FE: expired token",
           "event": [
             {
@@ -1151,19 +1541,22 @@
           "response": []
         },
         {
-          "name": "FE: bad masked cart id",
+          "name": "M2A: read log",
           "event": [
             {
               "listen": "test",
               "script": {
                 "exec": [
-                  "// Load the HTML response to $",
-                  "const pkg = require('cheerio')",
-                  "const $ = pkg.load(pm.response.text());",
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
                   "",
-                  "pm.test(\"Check redirected to app close event\", function () {",
-                  "    const input = $('body.sgwebcheckout-close-index');",
-                  "    pm.expect(input).to.be.lengthOf(1);",
+                  "pm.test(\"Has log\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.log).to.not.be.undefined;",
+                  "    jsonData.log.pop(); // empty line skip",
+                  "    const lastLine = jsonData.log.pop();",
+                  "    pm.expect(lastLine).to.contain('Invalid token received');",
                   "});"
                 ],
                 "type": "text/javascript",
@@ -1171,99 +1564,35 @@
               }
             }
           ],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
           "request": {
-            "method": "GET",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{m2_endpoint_fe_sgwebc}}/account/login?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjE2ODYwMTQsImlzcyI6IjE5Mi4xNjguMi4xMzUiLCJpYXQiOjE3MjE2ODU5NTQsImNhcnRfaWQiOiIxMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMSJ9.6aOT-YgC4KEIeIte075enTY9rbDOto2BTRHlQILzc0s",
-              "host": [
-                "{{m2_endpoint_fe_sgwebc}}"
-              ],
-              "path": [
-                "account",
-                "login"
-              ],
-              "query": [
-                {
-                  "key": "redirectTo",
-                  "value": "registered",
-                  "disabled": true
-                },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
                 {
                   "key": "token",
-                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjE2ODYwMTQsImlzcyI6IjE5Mi4xNjguMi4xMzUiLCJpYXQiOjE3MjE2ODU5NTQsImNhcnRfaWQiOiIxMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMSJ9.6aOT-YgC4KEIeIte075enTY9rbDOto2BTRHlQILzc0s"
+                  "value": "{{gen_adminToken}}",
+                  "type": "string"
                 }
               ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "FE: bad customer id",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "// Load the HTML response to $",
-                  "const pkg = require('cheerio')",
-                  "const $ = pkg.load(pm.response.text());",
-                  "",
-                  "pm.test(\"Check redirected to app close event\", function () {",
-                  "    const input = $('body.sgwebcheckout-close-index');",
-                  "    pm.expect(input).to.be.lengthOf(1);",
-                  "});"
-                ],
-                "type": "text/javascript",
-                "packages": {}
-              }
-            }
-          ],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
-          "request": {
+            },
             "method": "GET",
             "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
             "url": {
-              "raw": "{{m2_endpoint_fe_sgwebc}}/account/login?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjE2ODYxMjksImlzcyI6IjE5Mi4xNjguMi4xMzUiLCJpYXQiOjE3MjE2ODYwNjksInVzZXJfaWQiOjk5OTl9.13-ig7tTcq7r6EimlitvjRvRsLp3indvUC8awQ1kD_A",
+              "raw": "{{m2_endpoint_api_sgwebc}}/log?page=1&lines=5",
               "host": [
-                "{{m2_endpoint_fe_sgwebc}}"
+                "{{m2_endpoint_api_sgwebc}}"
               ],
               "path": [
-                "account",
-                "login"
+                "log"
               ],
               "query": [
                 {
-                  "key": "redirectTo",
-                  "value": "registered",
-                  "disabled": true
+                  "key": "page",
+                  "value": "1"
                 },
                 {
-                  "key": "token",
-                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjE2ODYxMjksImlzcyI6IjE5Mi4xNjguMi4xMzUiLCJpYXQiOjE3MjE2ODYwNjksInVzZXJfaWQiOjk5OTl9.13-ig7tTcq7r6EimlitvjRvRsLp3indvUC8awQ1kD_A"
+                  "key": "lines",
+                  "value": "5"
                 }
               ]
             }
@@ -1321,6 +1650,47 @@
 							]
 						}
 					},
+          "response": []
+        },
+        {
+          "name": "M2A: log unauthorized",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 401\", function () {",
+                  "    pm.response.to.have.status(401);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{m2_endpoint_api_sgwebc}}/log?page=1&lines=5",
+              "host": [
+                "{{m2_endpoint_api_sgwebc}}"
+              ],
+              "path": [
+                "log"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "lines",
+                  "value": "5"
+                }
+              ]
+            }
+          },
 					"response": []
 				}
 			]
