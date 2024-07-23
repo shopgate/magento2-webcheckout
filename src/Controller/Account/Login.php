@@ -33,8 +33,7 @@ class Login implements HttpGetActionInterface
         private readonly UrlInterface $urlInterface,
         private readonly MaskedQuoteIdToQuoteIdInterface $maskedQuoteToQuote,
         private readonly ShopgateCookieManagementInterface $shopgateCookieManagement,
-        private readonly LoggerInterface $logger,
-        private readonly LoggerInterface $secondLogger,
+        private readonly LoggerInterface $logger
 
     ) {
         $this->redirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
