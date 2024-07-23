@@ -5,6 +5,9 @@
             <general>
                 <custom_css><![CDATA[]]></custom_css>
             </general>
+            <development>
+                <enable_logging>0</enable_logging>
+            </development>
         </shopgate_webcheckout>
     </default>
 </config>
