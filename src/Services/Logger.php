@@ -3,6 +3,7 @@
 namespace Shopgate\WebCheckout\Services;
 
 use DateTimeZone;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Shopgate\WebCheckout\Model\Config;
 
 /**
@@ -10,6 +11,9 @@ use Shopgate\WebCheckout\Model\Config;
  */
 class Logger extends \Monolog\Logger
 {
+    /**
+     * @throws NoSuchEntityException
+     */
     public function __construct(
         string $name,
         Config $config,

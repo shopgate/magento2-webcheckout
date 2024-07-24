@@ -2,7 +2,9 @@
 
 namespace Shopgate\WebCheckout\Model;
 
+use Exception;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -17,7 +19,9 @@ class Config
     public function __construct(
         private readonly ScopeConfigInterface $scopeConfig,
         private readonly StoreManagerInterface $storeManager
-    ) {}
+    )
+    {
+    }
 
     public function getCustomCss(): string
     {
@@ -29,16 +33,20 @@ class Config
             );
 
             return $customCss ?? '';
-        } catch (\Exception $exception) {
+        } catch (Exception) {
             return '';
         }
     }
 
+    /**
+     * @throws NoSuchEntityException
+     */
     public function isLoggingEnabled(): bool
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_SECTION_DEVELOP_LOGGING,
-            ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE,
+            $this->storeManager->getStore()->getId()
         );
     }
 }
