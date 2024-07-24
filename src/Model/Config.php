@@ -4,6 +4,7 @@ namespace Shopgate\WebCheckout\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class Config
 {
@@ -13,19 +14,24 @@ class Config
     private const XML_PATH_SECTION_GENERAL_CSS = self::XML_PATH_SECTION . '/general/custom_css';
     private const XML_PATH_SECTION_DEVELOP_LOGGING = self::XML_PATH_SECTION . '/development/enable_logging';
 
-    public function __construct(private readonly ScopeConfigInterface $scopeConfig)
-    {
-    }
+    public function __construct(
+        private readonly ScopeConfigInterface $scopeConfig,
+        private readonly StoreManagerInterface $storeManager
+    ) {}
 
     public function getCustomCss(): string
     {
-        // todo: do we need to specify store?
-        $customCss = $this->scopeConfig->getValue(
-            self::XML_PATH_SECTION_GENERAL_CSS,
-            ScopeInterface::SCOPE_STORE
-        );
+        try {
+            $customCss = $this->scopeConfig->getValue(
+                self::XML_PATH_SECTION_GENERAL_CSS,
+                ScopeInterface::SCOPE_STORE,
+                $this->storeManager->getStore()->getId()
+            );
 
-        return $customCss ?? '';
+            return $customCss ?? '';
+        } catch (\Exception $exception) {
+            return '';
+        }
     }
 
     public function isLoggingEnabled(): bool
