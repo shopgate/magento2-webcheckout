@@ -1606,14 +1606,15 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 500\", function () {",
-									"    pm.response.to.have.status(500);",
+                  "pm.test(\"Status code is 400\", function () {",
+                  "    pm.response.to.have.status(400);",
 									"});",
 									"",
 									"pm.test(\"Has error\", function () {",
 									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.message).to.be.a('string')",
-									"    pm.expect(jsonData.code).to.eq(400);",
+                  "    pm.expect(jsonData.message).to.be.a('string').to.contain('Invalid value');",
+                  "    pm.expect(jsonData.parameters.fieldName).to.eq('cartId');",
+                  "    pm.expect(jsonData.parameters.value).to.eq(':cartId');",
 									"});"
 								],
 								"type": "text/javascript",

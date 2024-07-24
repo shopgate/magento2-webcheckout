@@ -18,6 +18,9 @@ composer config repositories.sym '{"type": "path", "url": "plugins/*", "options"
 composer require shopgate/webcheckout-magento2:*
 bin/magento module:e Shopgate_WebCheckout
 bin/magento setup:upgrade
+
+bin/magento config:set shopgate_webcheckout/development/enable_logging 1
+bin/magento cache:flush
 ```
 
 ### Run Postman tests

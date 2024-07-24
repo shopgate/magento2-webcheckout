@@ -2,11 +2,11 @@
 
 namespace Shopgate\WebCheckout\Model\Api;
 
-use InvalidArgumentException;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\RuntimeException;
 use ReallySimpleJWT\Exception\BuildException;
 use ReallySimpleJWT\Exception\EncodeException;
@@ -52,13 +52,12 @@ class Token implements TokenInterface
     /**
      * This is an unauthenticated route, need to be extra careful with inc data
      *
-     * @throws BuildException
-     * @throws EncodeException
+     * @throws BuildException|EncodeException|InputException
      */
     public function getGuestToken(string $cartId): TokenResultInterface
     {
         if (strlen($cartId) !== 32) {
-            throw new InvalidArgumentException("Incorrect cart ID supplied: '$cartId'", 400);
+            throw InputException::invalidFieldValue('cartId', $cartId);
         }
 
         return $this->tokenManager->createGuestToken(
