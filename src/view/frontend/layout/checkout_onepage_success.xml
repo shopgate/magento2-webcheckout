@@ -2,6 +2,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
+        <!-- this page is set to be not-cachable by parent layout, otherwise we are in trouble -->
         <referenceBlock name="shopgate.webcheckout.events">
             <action method="setTemplate">
                 <argument name="template" xsi:type="string">Shopgate_WebCheckout::order.phtml</argument>

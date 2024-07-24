@@ -2,6 +2,7 @@
 	"info": {
 		"_postman_id": "62552bba-e617-437a-9c15-db16de64aa8e",
 		"name": "M2 SG WebCheckout",
+    "description": "M2 - guest or customer API calls\n\nM2A - admin API calls\n\nFE - frontend page calls (e.g. cart page)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "5289226"
 	},
@@ -222,6 +223,619 @@
 			"name": "Customer",
 			"item": [
 				{
+          "name": "FPC / auto-logout",
+          "item": [
+            {
+              "name": "M2: create customer",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Save ID\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.id).to.be.a('number');",
+                      "    pm.environment.set(\"gen_customer_1_id\", jsonData.id);",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"password\": \"{{created_customer_1_pass}}\",\n    \"customer\": {\n        \"email\": \"{{created_customer_1_email}}\",\n        \"group_id\": 1,\n        \"default_billing\": \"1\",\n        \"default_shipping\": \"1\",\n        \"created_at\": \"2024-07-24 19:25:51\",\n        \"updated_at\": \"2024-07-24 21:55:41\",\n        \"created_in\": \"Default Store View\",\n        \"dob\": \"1975-10-19\",\n        \"firstname\": \"Test\",\n        \"lastname\": \"Tester\",\n        \"gender\": 1,\n        \"store_id\": 1,\n        \"website_id\": 1,\n        \"middlename\": \"Muramana\",\n        \"prefix\": \"DR\",\n        \"addresses\": [\n            {\n                \"region_id\": 33,\n                \"country_id\": \"US\",\n                \"street\": [\n                    \"6146 Honey Bluff Parkway\"\n                ],\n                \"telephone\": \"(555) 229-1111\",\n                \"postcode\": \"49629-1111\",\n                \"city\": \"Calder\",\n                \"firstname\": \"Test\",\n                \"lastname\": \"Tester\",\n                \"default_shipping\": true,\n                \"default_billing\": true\n            }\n        ]\n    }\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{m2_endpoint_api}}/customers",
+                  "host": [
+                    "{{m2_endpoint_api}}"
+                  ],
+                  "path": [
+                    "customers"
+                  ]
+                },
+                "description": "Create customer account. Perform necessary business operations like sending email."
+              },
+              "response": [
+                {
+                  "name": "200 Success.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"customer\": {\n    \"email\": \"<string>\",\n    \"firstname\": \"<string>\",\n    \"lastname\": \"<string>\",\n    \"id\": \"<integer>\",\n    \"group_id\": \"<integer>\",\n    \"default_billing\": \"<string>\",\n    \"default_shipping\": \"<string>\",\n    \"confirmation\": \"<string>\",\n    \"created_at\": \"<string>\",\n    \"updated_at\": \"<string>\",\n    \"created_in\": \"<string>\",\n    \"dob\": \"<string>\",\n    \"middlename\": \"<string>\",\n    \"prefix\": \"<string>\",\n    \"suffix\": \"<string>\",\n    \"gender\": \"<integer>\",\n    \"store_id\": \"<integer>\",\n    \"taxvat\": \"<string>\",\n    \"website_id\": \"<integer>\",\n    \"addresses\": [\n      {\n        \"id\": \"<integer>\",\n        \"customer_id\": \"<integer>\",\n        \"region\": {\n          \"region_code\": \"<string>\",\n          \"region\": \"<string>\",\n          \"region_id\": \"<integer>\",\n          \"extension_attributes\": {}\n        },\n        \"region_id\": \"<integer>\",\n        \"country_id\": \"<string>\",\n        \"street\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"company\": \"<string>\",\n        \"telephone\": \"<string>\",\n        \"fax\": \"<string>\",\n        \"postcode\": \"<string>\",\n        \"city\": \"<string>\",\n        \"firstname\": \"<string>\",\n        \"lastname\": \"<string>\",\n        \"middlename\": \"<string>\",\n        \"prefix\": \"<string>\",\n        \"suffix\": \"<string>\",\n        \"vat_id\": \"<string>\",\n        \"default_shipping\": \"<boolean>\",\n        \"default_billing\": \"<boolean>\",\n        \"extension_attributes\": {},\n        \"custom_attributes\": [\n          {\n            \"attribute_code\": \"<string>\",\n            \"value\": \"<string>\"\n          },\n          {\n            \"attribute_code\": \"<string>\",\n            \"value\": \"<string>\"\n          }\n        ]\n      },\n      {\n        \"id\": \"<integer>\",\n        \"customer_id\": \"<integer>\",\n        \"region\": {\n          \"region_code\": \"<string>\",\n          \"region\": \"<string>\",\n          \"region_id\": \"<integer>\",\n          \"extension_attributes\": {}\n        },\n        \"region_id\": \"<integer>\",\n        \"country_id\": \"<string>\",\n        \"street\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"company\": \"<string>\",\n        \"telephone\": \"<string>\",\n        \"fax\": \"<string>\",\n        \"postcode\": \"<string>\",\n        \"city\": \"<string>\",\n        \"firstname\": \"<string>\",\n        \"lastname\": \"<string>\",\n        \"middlename\": \"<string>\",\n        \"prefix\": \"<string>\",\n        \"suffix\": \"<string>\",\n        \"vat_id\": \"<string>\",\n        \"default_shipping\": \"<boolean>\",\n        \"default_billing\": \"<boolean>\",\n        \"extension_attributes\": {},\n        \"custom_attributes\": [\n          {\n            \"attribute_code\": \"<string>\",\n            \"value\": \"<string>\"\n          },\n          {\n            \"attribute_code\": \"<string>\",\n            \"value\": \"<string>\"\n          }\n        ]\n      }\n    ],\n    \"disable_auto_group_change\": \"<integer>\",\n    \"extension_attributes\": {\n      \"assistance_allowed\": \"<integer>\",\n      \"is_subscribed\": \"<boolean>\"\n    },\n    \"custom_attributes\": [\n      {\n        \"attribute_code\": \"<string>\",\n        \"value\": \"<string>\"\n      },\n      {\n        \"attribute_code\": \"<string>\",\n        \"value\": \"<string>\"\n      }\n    ]\n  },\n  \"password\": \"<string>\",\n  \"redirectUrl\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/V1/customers",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "V1",
+                        "customers"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n  \"email\": \"<string>\",\n  \"firstname\": \"<string>\",\n  \"lastname\": \"<string>\",\n  \"id\": \"<integer>\",\n  \"group_id\": \"<integer>\",\n  \"default_billing\": \"<string>\",\n  \"default_shipping\": \"<string>\",\n  \"confirmation\": \"<string>\",\n  \"created_at\": \"<string>\",\n  \"updated_at\": \"<string>\",\n  \"created_in\": \"<string>\",\n  \"dob\": \"<string>\",\n  \"middlename\": \"<string>\",\n  \"prefix\": \"<string>\",\n  \"suffix\": \"<string>\",\n  \"gender\": \"<integer>\",\n  \"store_id\": \"<integer>\",\n  \"taxvat\": \"<string>\",\n  \"website_id\": \"<integer>\",\n  \"addresses\": [\n    {\n      \"id\": \"<integer>\",\n      \"customer_id\": \"<integer>\",\n      \"region\": {\n        \"region_code\": \"<string>\",\n        \"region\": \"<string>\",\n        \"region_id\": \"<integer>\",\n        \"extension_attributes\": {}\n      },\n      \"region_id\": \"<integer>\",\n      \"country_id\": \"<string>\",\n      \"street\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"company\": \"<string>\",\n      \"telephone\": \"<string>\",\n      \"fax\": \"<string>\",\n      \"postcode\": \"<string>\",\n      \"city\": \"<string>\",\n      \"firstname\": \"<string>\",\n      \"lastname\": \"<string>\",\n      \"middlename\": \"<string>\",\n      \"prefix\": \"<string>\",\n      \"suffix\": \"<string>\",\n      \"vat_id\": \"<string>\",\n      \"default_shipping\": \"<boolean>\",\n      \"default_billing\": \"<boolean>\",\n      \"extension_attributes\": {},\n      \"custom_attributes\": [\n        {\n          \"attribute_code\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        {\n          \"attribute_code\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"id\": \"<integer>\",\n      \"customer_id\": \"<integer>\",\n      \"region\": {\n        \"region_code\": \"<string>\",\n        \"region\": \"<string>\",\n        \"region_id\": \"<integer>\",\n        \"extension_attributes\": {}\n      },\n      \"region_id\": \"<integer>\",\n      \"country_id\": \"<string>\",\n      \"street\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"company\": \"<string>\",\n      \"telephone\": \"<string>\",\n      \"fax\": \"<string>\",\n      \"postcode\": \"<string>\",\n      \"city\": \"<string>\",\n      \"firstname\": \"<string>\",\n      \"lastname\": \"<string>\",\n      \"middlename\": \"<string>\",\n      \"prefix\": \"<string>\",\n      \"suffix\": \"<string>\",\n      \"vat_id\": \"<string>\",\n      \"default_shipping\": \"<boolean>\",\n      \"default_billing\": \"<boolean>\",\n      \"extension_attributes\": {},\n      \"custom_attributes\": [\n        {\n          \"attribute_code\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        {\n          \"attribute_code\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"disable_auto_group_change\": \"<integer>\",\n  \"extension_attributes\": {\n    \"assistance_allowed\": \"<integer>\",\n    \"is_subscribed\": \"<boolean>\"\n  },\n  \"custom_attributes\": [\n    {\n      \"attribute_code\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"attribute_code\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  ]\n}"
+                },
+                {
+                  "name": "Internal Server error",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"customer\": {\n    \"email\": \"<string>\",\n    \"firstname\": \"<string>\",\n    \"lastname\": \"<string>\",\n    \"id\": \"<integer>\",\n    \"group_id\": \"<integer>\",\n    \"default_billing\": \"<string>\",\n    \"default_shipping\": \"<string>\",\n    \"confirmation\": \"<string>\",\n    \"created_at\": \"<string>\",\n    \"updated_at\": \"<string>\",\n    \"created_in\": \"<string>\",\n    \"dob\": \"<string>\",\n    \"middlename\": \"<string>\",\n    \"prefix\": \"<string>\",\n    \"suffix\": \"<string>\",\n    \"gender\": \"<integer>\",\n    \"store_id\": \"<integer>\",\n    \"taxvat\": \"<string>\",\n    \"website_id\": \"<integer>\",\n    \"addresses\": [\n      {\n        \"id\": \"<integer>\",\n        \"customer_id\": \"<integer>\",\n        \"region\": {\n          \"region_code\": \"<string>\",\n          \"region\": \"<string>\",\n          \"region_id\": \"<integer>\",\n          \"extension_attributes\": {}\n        },\n        \"region_id\": \"<integer>\",\n        \"country_id\": \"<string>\",\n        \"street\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"company\": \"<string>\",\n        \"telephone\": \"<string>\",\n        \"fax\": \"<string>\",\n        \"postcode\": \"<string>\",\n        \"city\": \"<string>\",\n        \"firstname\": \"<string>\",\n        \"lastname\": \"<string>\",\n        \"middlename\": \"<string>\",\n        \"prefix\": \"<string>\",\n        \"suffix\": \"<string>\",\n        \"vat_id\": \"<string>\",\n        \"default_shipping\": \"<boolean>\",\n        \"default_billing\": \"<boolean>\",\n        \"extension_attributes\": {},\n        \"custom_attributes\": [\n          {\n            \"attribute_code\": \"<string>\",\n            \"value\": \"<string>\"\n          },\n          {\n            \"attribute_code\": \"<string>\",\n            \"value\": \"<string>\"\n          }\n        ]\n      },\n      {\n        \"id\": \"<integer>\",\n        \"customer_id\": \"<integer>\",\n        \"region\": {\n          \"region_code\": \"<string>\",\n          \"region\": \"<string>\",\n          \"region_id\": \"<integer>\",\n          \"extension_attributes\": {}\n        },\n        \"region_id\": \"<integer>\",\n        \"country_id\": \"<string>\",\n        \"street\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"company\": \"<string>\",\n        \"telephone\": \"<string>\",\n        \"fax\": \"<string>\",\n        \"postcode\": \"<string>\",\n        \"city\": \"<string>\",\n        \"firstname\": \"<string>\",\n        \"lastname\": \"<string>\",\n        \"middlename\": \"<string>\",\n        \"prefix\": \"<string>\",\n        \"suffix\": \"<string>\",\n        \"vat_id\": \"<string>\",\n        \"default_shipping\": \"<boolean>\",\n        \"default_billing\": \"<boolean>\",\n        \"extension_attributes\": {},\n        \"custom_attributes\": [\n          {\n            \"attribute_code\": \"<string>\",\n            \"value\": \"<string>\"\n          },\n          {\n            \"attribute_code\": \"<string>\",\n            \"value\": \"<string>\"\n          }\n        ]\n      }\n    ],\n    \"disable_auto_group_change\": \"<integer>\",\n    \"extension_attributes\": {\n      \"assistance_allowed\": \"<integer>\",\n      \"is_subscribed\": \"<boolean>\"\n    },\n    \"custom_attributes\": [\n      {\n        \"attribute_code\": \"<string>\",\n        \"value\": \"<string>\"\n      },\n      {\n        \"attribute_code\": \"<string>\",\n        \"value\": \"<string>\"\n      }\n    ]\n  },\n  \"password\": \"<string>\",\n  \"redirectUrl\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/V1/customers",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "V1",
+                        "customers"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n  \"message\": \"<string>\",\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"code\": \"<integer>\",\n  \"parameters\": [\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    },\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    }\n  ],\n  \"trace\": \"<string>\"\n}"
+                },
+                {
+                  "name": "Unexpected error",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"customer\": {\n    \"email\": \"<string>\",\n    \"firstname\": \"<string>\",\n    \"lastname\": \"<string>\",\n    \"id\": \"<integer>\",\n    \"group_id\": \"<integer>\",\n    \"default_billing\": \"<string>\",\n    \"default_shipping\": \"<string>\",\n    \"confirmation\": \"<string>\",\n    \"created_at\": \"<string>\",\n    \"updated_at\": \"<string>\",\n    \"created_in\": \"<string>\",\n    \"dob\": \"<string>\",\n    \"middlename\": \"<string>\",\n    \"prefix\": \"<string>\",\n    \"suffix\": \"<string>\",\n    \"gender\": \"<integer>\",\n    \"store_id\": \"<integer>\",\n    \"taxvat\": \"<string>\",\n    \"website_id\": \"<integer>\",\n    \"addresses\": [\n      {\n        \"id\": \"<integer>\",\n        \"customer_id\": \"<integer>\",\n        \"region\": {\n          \"region_code\": \"<string>\",\n          \"region\": \"<string>\",\n          \"region_id\": \"<integer>\",\n          \"extension_attributes\": {}\n        },\n        \"region_id\": \"<integer>\",\n        \"country_id\": \"<string>\",\n        \"street\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"company\": \"<string>\",\n        \"telephone\": \"<string>\",\n        \"fax\": \"<string>\",\n        \"postcode\": \"<string>\",\n        \"city\": \"<string>\",\n        \"firstname\": \"<string>\",\n        \"lastname\": \"<string>\",\n        \"middlename\": \"<string>\",\n        \"prefix\": \"<string>\",\n        \"suffix\": \"<string>\",\n        \"vat_id\": \"<string>\",\n        \"default_shipping\": \"<boolean>\",\n        \"default_billing\": \"<boolean>\",\n        \"extension_attributes\": {},\n        \"custom_attributes\": [\n          {\n            \"attribute_code\": \"<string>\",\n            \"value\": \"<string>\"\n          },\n          {\n            \"attribute_code\": \"<string>\",\n            \"value\": \"<string>\"\n          }\n        ]\n      },\n      {\n        \"id\": \"<integer>\",\n        \"customer_id\": \"<integer>\",\n        \"region\": {\n          \"region_code\": \"<string>\",\n          \"region\": \"<string>\",\n          \"region_id\": \"<integer>\",\n          \"extension_attributes\": {}\n        },\n        \"region_id\": \"<integer>\",\n        \"country_id\": \"<string>\",\n        \"street\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"company\": \"<string>\",\n        \"telephone\": \"<string>\",\n        \"fax\": \"<string>\",\n        \"postcode\": \"<string>\",\n        \"city\": \"<string>\",\n        \"firstname\": \"<string>\",\n        \"lastname\": \"<string>\",\n        \"middlename\": \"<string>\",\n        \"prefix\": \"<string>\",\n        \"suffix\": \"<string>\",\n        \"vat_id\": \"<string>\",\n        \"default_shipping\": \"<boolean>\",\n        \"default_billing\": \"<boolean>\",\n        \"extension_attributes\": {},\n        \"custom_attributes\": [\n          {\n            \"attribute_code\": \"<string>\",\n            \"value\": \"<string>\"\n          },\n          {\n            \"attribute_code\": \"<string>\",\n            \"value\": \"<string>\"\n          }\n        ]\n      }\n    ],\n    \"disable_auto_group_change\": \"<integer>\",\n    \"extension_attributes\": {\n      \"assistance_allowed\": \"<integer>\",\n      \"is_subscribed\": \"<boolean>\"\n    },\n    \"custom_attributes\": [\n      {\n        \"attribute_code\": \"<string>\",\n        \"value\": \"<string>\"\n      },\n      {\n        \"attribute_code\": \"<string>\",\n        \"value\": \"<string>\"\n      }\n    ]\n  },\n  \"password\": \"<string>\",\n  \"redirectUrl\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/V1/customers",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "V1",
+                        "customers"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n  \"message\": \"<string>\",\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"code\": \"<integer>\",\n  \"parameters\": [\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    },\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    }\n  ],\n  \"trace\": \"<string>\"\n}"
+                }
+              ]
+            },
+            {
+              "name": "M2: user login",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Body is a string\", function () {",
+                      "    const token = pm.response.text().replace(/['\"]+/g, '');",
+                      "    pm.expect(token).to.be.a('string');",
+                      "    pm.environment.set('gen_customerToken', token);",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"{{created_customer_1_email}}\",\n  \"password\": \"{{created_customer_1_pass}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{m2_endpoint_api}}/integration/customer/token",
+                  "host": [
+                    "{{m2_endpoint_api}}"
+                  ],
+                  "path": [
+                    "integration",
+                    "customer",
+                    "token"
+                  ]
+                },
+                "description": "Create access token for admin given the customer credentials."
+              },
+              "response": [
+                {
+                  "name": "200 Success.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/V1/integration/customer/token",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "V1",
+                        "integration",
+                        "customer",
+                        "token"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "<string>"
+                },
+                {
+                  "name": "400 Bad Request",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/V1/integration/customer/token",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "V1",
+                        "integration",
+                        "customer",
+                        "token"
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n  \"message\": \"<string>\",\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"code\": \"<integer>\",\n  \"parameters\": [\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    },\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    }\n  ],\n  \"trace\": \"<string>\"\n}"
+                },
+                {
+                  "name": "Unexpected error",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/V1/integration/customer/token",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "V1",
+                        "integration",
+                        "customer",
+                        "token"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n  \"message\": \"<string>\",\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"code\": \"<integer>\",\n  \"parameters\": [\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    },\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    }\n  ],\n  \"trace\": \"<string>\"\n}"
+                }
+              ]
+            },
+            {
+              "name": "M2: Token API",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Has token\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.token).to.be.a('string')",
+                      "    pm.environment.set(\"gen_sgToken\", jsonData.token);",
+                      "    pm.expect(jsonData.expiration).to.be.a('number');",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{gen_customerToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{m2_endpoint_api_sgwebc}}/me/token",
+                  "host": [
+                    "{{m2_endpoint_api_sgwebc}}"
+                  ],
+                  "path": [
+                    "me",
+                    "token"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "FE: auto-login",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "// Load the HTML response to $",
+                      "const pkg = require('cheerio')",
+                      "const $ = pkg.load(pm.response.text());",
+                      "",
+                      "pm.test(\"Check login status\", function () {",
+                      "    const bodyClass = $('body.customer-account-index');",
+                      "    pm.expect(bodyClass).to.be.lengthOf(1);",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{m2_endpoint_fe_sgwebc}}/account/login?token={{gen_sgToken}}&redirectTo=customer/account&sgcloud_checkout=1",
+                  "host": [
+                    "{{m2_endpoint_fe_sgwebc}}"
+                  ],
+                  "path": [
+                    "account",
+                    "login"
+                  ],
+                  "query": [
+                    {
+                      "key": "token",
+                      "value": "{{gen_sgToken}}"
+                    },
+                    {
+                      "key": "redirectTo",
+                      "value": "customer/account"
+                    },
+                    {
+                      "key": "sgcloud_checkout",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "FE: save authToken",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "// Load the HTML response to $",
+                      "const pkg = require('cheerio')",
+                      "const $ = pkg.load(pm.response.text());",
+                      "",
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Check controller\", function () {",
+                      "    const bodyClass = $('body.sgwebcheckout-account-registered');",
+                      "    pm.expect(bodyClass).to.be.lengthOf(1);",
+                      "});",
+                      "pm.test(\"Check registered token\", function () {",
+                      "    const script = $('script[type=\"text/x-magento-init\"]:contains(\"Shopgate_WebCheckout\")');",
+                      "    pm.expect(script).to.be.lengthOf(1);",
+                      "",
+                      "    // data test",
+                      "    pm.expect(script[0].children[0].data).to.be.a('string');",
+                      "    const data = JSON.parse(script[0].children[0].data);",
+                      "    const definition = data['*']['Shopgate_WebCheckout/js/init'];",
+                      "    pm.expect(definition.properties.token).to.be.a('string', 'no token in property export');",
+                      "    // save token to test FPC & auto-logout later",
+                      "    pm.environment.set(\"gen_customer_1_authToken\", definition.properties.token);",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{m2_endpoint_fe_sgwebc}}/account/registered",
+                  "host": [
+                    "{{m2_endpoint_fe_sgwebc}}"
+                  ],
+                  "path": [
+                    "account",
+                    "registered"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "M2A: delete customer",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{gen_adminToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{m2_endpoint_api}}/customers/:id",
+                  "host": [
+                    "{{m2_endpoint_api}}"
+                  ],
+                  "path": [
+                    "customers",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{gen_customer_1_id}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "description": "Testing customer controller FPC. Making sure the parts that shouldn't be cached are not cached (e.g. pipeline authToken calls)\n\nAlso not clearing session after created customer, thus checking if auto-logout is happening.\n\nUnfortunately, I cannot test the \"checkout success\" page & whether it gets cached. Supposedly it shouldn't as the default M2 sets it to be non-cachable, but maybe one day..."
+        },
+        {
 					"name": "M2: user login",
 					"event": [
 						{
@@ -593,6 +1207,12 @@
 									"    const data = JSON.parse(script[0].children[0].data);",
 									"    const definition = data['*']['Shopgate_WebCheckout/js/init'];",
 									"    pm.expect(definition.properties.token).to.be.a('string', 'no token in property export');",
+                  "",
+                  "    // check that FPC did not cache previous customer token",
+                  "    pm.expect(definition.properties.token).to.not.eql(",
+                  "        pm.environment.get('gen_customer_1_authToken'),",
+                  "        'FPC cached previius customer authToken'",
+                  "    );",
 									"});"
 								],
 								"type": "text/javascript",
@@ -697,7 +1317,7 @@
 			"name": "Guest",
 			"item": [
 				{
-					"name": "m2: create guest cart",
+          "name": "M2: create guest cart",
 					"event": [
 						{
 							"listen": "test",
@@ -840,7 +1460,7 @@
 					]
 				},
 				{
-					"name": "m2: add prod 1",
+          "name": "M2: add prod 1",
 					"request": {
 						"method": "POST",
 						"header": [
