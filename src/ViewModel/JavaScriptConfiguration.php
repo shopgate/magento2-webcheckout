@@ -6,10 +6,11 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\DataObject;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Shopgate\WebCheckout\Services\ShopgateDetector;
 
 class JavaScriptConfiguration extends DataObject implements ArgumentInterface
 {
-    public function __construct(RequestInterface $request, State $state)
+    public function __construct(RequestInterface $request, ShopgateDetector $shopgateDetector, State $state)
     {
         parent::__construct([
             'module' => $request->getModuleName(),
@@ -17,7 +18,7 @@ class JavaScriptConfiguration extends DataObject implements ArgumentInterface
             'action' => $request->getActionName(),
             'env' => $state->getMode(), // MAGE_MODE
             'properties' => [],
-            'isSgWebView' => true // todo: cookie check
+            'isSgWebView' => $shopgateDetector->isShopgate()
         ]);
     }
 

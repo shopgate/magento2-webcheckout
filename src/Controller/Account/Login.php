@@ -16,6 +16,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Result\Page;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Psr\Log\LoggerInterface;
+use Shopgate\WebCheckout\Api\ShopgateCookieManagementInterface;
 use Shopgate\WebCheckout\Services\TokenManager;
 
 class Login implements HttpGetActionInterface
@@ -49,7 +50,7 @@ class Login implements HttpGetActionInterface
         $token = $this->request->getParam('token', '');
         if (!$this->tokenManager->validateToken($token)) {
             $this->logger->debug('Invalid token received');
-            return $this->redirect->setPath($closeInAppRoute);
+            return $this->redirect->setUrl($this->getRedirectUrl($closeInAppRoute));
         }
 
         $customerId = $this->tokenManager->getCustomerId($token);
@@ -60,7 +61,7 @@ class Login implements HttpGetActionInterface
                 $this->loginCustomer($customerId);
             } catch (NoSuchEntityException|LocalizedException $e) {
                 $this->logger->error("Couldn't log in customer by ID: '$customerId', Error: " . $e->getMessage());
-                return $this->redirect->setPath($closeInAppRoute);
+                return $this->redirect->setUrl($this->getRedirectUrl($closeInAppRoute));
             }
         } elseif ($maskedQuoteId) {
             try {
@@ -68,7 +69,7 @@ class Login implements HttpGetActionInterface
                 $this->loginGuest($maskedQuoteId);
             } catch (NoSuchEntityException) {
                 $this->logger->error("Could not locate masked quote ID: '$maskedQuoteId'");
-                return $this->redirect->setPath($closeInAppRoute);
+                return $this->redirect->setUrl($this->getRedirectUrl($closeInAppRoute));
             }
         }
 
@@ -96,10 +97,16 @@ class Login implements HttpGetActionInterface
         $this->customerSession->isLoggedIn() && $this->customerSession->logout();
     }
 
-    private function getRedirectUrl(): string
+    /**
+     * We need to forward the sgWebView GET param for developer mode checks
+     */
+    private function getRedirectUrl(string $redirectPath = null): string
     {
-        $redirectTo = $this->request->getParam('redirectTo', 'checkout/cart');
-        $url = $this->urlInterface->getUrl($redirectTo);
+        $isWebView = $this->request->getParam(ShopgateCookieManagementInterface::COOKIE_NAME);
+        $params = $isWebView ? [ShopgateCookieManagementInterface::COOKIE_NAME => $isWebView] : null;
+
+        $redirectTo = $redirectPath ?: $this->request->getParam('redirectTo', 'checkout/cart');
+        $url = $this->urlInterface->getUrl($redirectTo, $params);
 
         return $this->urlInterface->getRedirectUrl($url);
     }

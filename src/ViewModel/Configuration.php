@@ -2,28 +2,21 @@
 
 namespace Shopgate\WebCheckout\ViewModel;
 
-use Magento\Checkout\Model\Session as CheckoutSession;
-use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
-use Shopgate\WebCheckout\Api\ShopgateCookieManagementInterface;
 use Shopgate\WebCheckout\Model\Config;
-use Shopgate\WebCheckout\Model\Traits\ShopgateDetect;
+use Shopgate\WebCheckout\Services\ShopgateDetector;
 
 class Configuration implements ArgumentInterface
 {
-    use ShopgateDetect;
-
     public function __construct(
         private readonly Config $config,
-        private readonly RequestInterface $request,
-        private readonly CheckoutSession $checkoutSession,
-        private readonly ShopgateCookieManagementInterface $shopgateCookieManagement
+        private readonly ShopgateDetector $shopgateDetector
     ) {
     }
 
     public function getCustomCss(): ?string
     {
-        if (!$this->isShopgate($this->request, $this->checkoutSession, $this->shopgateCookieManagement)) {
+        if (!$this->shopgateDetector->isShopgate()) {
             return null;
         }
 

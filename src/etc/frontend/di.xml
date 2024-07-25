@@ -7,28 +7,17 @@
             <argument name="logger" xsi:type="object">Shopgate\WebCheckout\Services\Logger</argument>
         </arguments>
     </type>
-    <type name="Shopgate\WebCheckout\ViewModel\Configuration">
-        <arguments>
-            <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
-        </arguments>
-    </type>
     <type name="Shopgate\WebCheckout\ViewModel\CustomerData">
         <arguments>
             <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
-            <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Shopgate\WebCheckout\Services\ShopgateDetector">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
         </arguments>
     </type>
     <type name="Shopgate\WebCheckout\ViewModel\OrderData">
-        <arguments>
-            <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
-        </arguments>
-    </type>
-    <type name="Shopgate\WebCheckout\Observer\AddBodyTagClass">
-        <arguments>
-            <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
-        </arguments>
-    </type>
-    <type name="Shopgate\WebCheckout\Observer\AddRegisterRedirect">
         <arguments>
             <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
         </arguments>
