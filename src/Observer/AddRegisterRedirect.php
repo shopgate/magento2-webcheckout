@@ -10,8 +10,8 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Url\EncoderInterface;
 use Magento\Framework\UrlInterface;
+use Shopgate\WebCheckout\Api\ShopgateCookieManagementInterface;
 use Shopgate\WebCheckout\Model\Traits\ShopgateDetect;
-
 class AddRegisterRedirect implements ObserverInterface
 {
     use ShopgateDetect;
@@ -21,6 +21,7 @@ class AddRegisterRedirect implements ObserverInterface
         private readonly CheckoutSession $checkoutSession,
         private readonly UrlInterface $urlInterface,
         private readonly RequestInterface $request,
+        private readonly ShopgateCookieManagementInterface $shopgateCookieManagement
     ) {
     }
 
@@ -31,7 +32,7 @@ class AddRegisterRedirect implements ObserverInterface
      */
     public function execute(Observer $observer): void
     {
-        if (!$this->isShopgate($this->request, $this->checkoutSession)) {
+        if (!$this->isShopgate($this->request, $this->checkoutSession, $this->shopgateCookieManagement)) {
             return;
         }
 

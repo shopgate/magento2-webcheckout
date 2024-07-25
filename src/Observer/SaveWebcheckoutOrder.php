@@ -7,6 +7,7 @@ use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Shopgate\WebCheckout\Api\ShopgateCookieManagementInterface;
 use Shopgate\WebCheckout\Model\ShopgateWebCheckoutOrderFactory as ModelFactory;
 use Shopgate\WebCheckout\Model\ResourceModel\ShopgateWebCheckoutOrderFactory;
 use Shopgate\WebCheckout\Model\Traits\ShopgateDetect;
@@ -16,18 +17,13 @@ class SaveWebcheckoutOrder implements ObserverInterface
 {
     use ShopgateDetect;
 
-    /**
-     * @param RequestInterface                $request
-     * @param CheckoutSession                 $checkoutSession
-     * @param ShopgateWebCheckoutOrderFactory $shopgateWebCheckoutOrderFactory
-     * @param LoggerInterface                 $logger
-     */
     public function __construct(
         private readonly RequestInterface $request,
         private readonly CheckoutSession $checkoutSession,
         private readonly ShopgateWebCheckoutOrderFactory $shopgateWebCheckoutOrderFactory,
         private readonly ModelFactory $modelFactory,
-        private readonly LoggerInterface $logger
+        private readonly LoggerInterface $logger,
+        private readonly ShopgateCookieManagementInterface $shopgateCookieManagement
     ) {}
 
     /**
@@ -37,7 +33,7 @@ class SaveWebcheckoutOrder implements ObserverInterface
      */
     public function execute(Observer $observer): void
     {
-        if (!$this->isShopgate($this->request, $this->checkoutSession)) {
+        if (!$this->isShopgate($this->request, $this->checkoutSession, $this->shopgateCookieManagement)) {
             return;
         }
 

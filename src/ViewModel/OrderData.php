@@ -7,6 +7,7 @@ use Magento\Customer\Model\Context as CustomerContext;
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Shopgate\WebCheckout\Api\ShopgateCookieManagementInterface;
 use Shopgate\WebCheckout\Model\Traits\ShopgateDetect;
 
 class OrderData implements ArgumentInterface
@@ -16,13 +17,14 @@ class OrderData implements ArgumentInterface
     public function __construct(
         private readonly RequestInterface $request,
         private readonly CheckoutSession $checkoutSession,
-        private readonly Context $httpContext
+        private readonly Context $httpContext,
+        private readonly ShopgateCookieManagementInterface $shopgateCookieManagement
     ) {
     }
 
     public function getSuccessPageData(): array
     {
-        if (!$this->isShopgate($this->request, $this->checkoutSession)) {
+        if (!$this->isShopgate($this->request, $this->checkoutSession, $this->shopgateCookieManagement)) {
             return [];
         }
 

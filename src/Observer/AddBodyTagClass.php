@@ -8,21 +8,18 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\View\Page\Config as PageConfig;
 use Shopgate\WebCheckout\Model\Config;
+use Shopgate\WebCheckout\Api\ShopgateCookieManagementInterface;
 use Shopgate\WebCheckout\Model\Traits\ShopgateDetect;
 
 class AddBodyTagClass implements ObserverInterface
 {
     use ShopgateDetect;
 
-    /**
-     * @param PageConfig       $pageConfig
-     * @param RequestInterface $request
-     * @param CheckoutSession  $checkoutSession
-     */
     public function __construct(
         private readonly PageConfig $pageConfig,
         private readonly RequestInterface $request,
-        private readonly CheckoutSession $checkoutSession
+        private readonly CheckoutSession $checkoutSession,
+        private readonly ShopgateCookieManagementInterface $shopgateCookieManagement
     ) {
     }
 
@@ -33,7 +30,7 @@ class AddBodyTagClass implements ObserverInterface
      */
     public function execute(Observer $observer): void
     {
-        if (!$this->isShopgate($this->request, $this->checkoutSession)) {
+        if (!$this->isShopgate($this->request, $this->checkoutSession, $this->shopgateCookieManagement)) {
             return;
         }
 

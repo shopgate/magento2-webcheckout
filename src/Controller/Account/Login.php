@@ -72,10 +72,7 @@ class Login implements HttpGetActionInterface
                 return $this->redirect->setPath($closeInAppRoute);
             }
         }
-
-        // todo: discuss the need for this cookie (supposedly the "User-Agent: libshopgate" handles this)
-        $this->shopgateCookieManagement->saveCookie('1');
-
+        
         return $this->redirect->setUrl($this->getRedirectUrl());
     }
 
