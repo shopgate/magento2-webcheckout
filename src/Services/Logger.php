@@ -7,7 +7,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Shopgate\WebCheckout\Model\Config;
 
 /**
- * Rewritten logger to write only when logging config is enabled
+ * Rewritten logger to write only when logging config is enabled.
+ * Also, it writes to only our log file
  */
 class Logger extends \Monolog\Logger
 {

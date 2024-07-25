@@ -10,7 +10,6 @@ use Magento\Store\Model\StoreManagerInterface;
 
 class Config
 {
-    final public const IS_SHOPGATE_CHECK = 'shopgate-check';
     final public const BODY_CSS_CLASS = 'is-sg-app';
     private const XML_PATH_SECTION = 'shopgate_webcheckout';
     private const XML_PATH_SECTION_GENERAL_CSS = self::XML_PATH_SECTION . '/general/custom_css';
@@ -19,8 +18,7 @@ class Config
     public function __construct(
         private readonly ScopeConfigInterface $scopeConfig,
         private readonly StoreManagerInterface $storeManager
-    )
-    {
+    ) {
     }
 
     public function getCustomCss(): string

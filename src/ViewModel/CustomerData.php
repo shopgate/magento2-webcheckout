@@ -33,6 +33,7 @@ class CustomerData implements ArgumentInterface
             return null;
         }
         $params = $this->userTokenParametersFactory->create();
+        // todo: use factory
         $context = new CustomUserContext(
             $userId,
             UserContextInterface::USER_TYPE_CUSTOMER

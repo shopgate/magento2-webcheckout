@@ -27,6 +27,7 @@ class LogReader implements LogReaderInterface
     public function getPaginatedLogLines(int $page = 1, int $lines = 20): LogResultInterface
     {
         $basePath = $this->directoryList->getPath('base');
+        // todo: use factory
         $this->file = new SplFileObject($basePath . $this->logFilePath);
         $totalLines = $this->countLines();
         $totalPages = ceil($totalLines / $lines);

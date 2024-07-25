@@ -23,11 +23,6 @@ class AddBodyTagClass implements ObserverInterface
     ) {
     }
 
-    /**
-     * @param Observer $observer
-     *
-     * @return void
-     */
     public function execute(Observer $observer): void
     {
         if (!$this->isShopgate($this->request, $this->checkoutSession, $this->shopgateCookieManagement)) {

@@ -16,6 +16,7 @@ class TokenBuilder extends Tokens
      */
     public function builder(string $secret): Build
     {
+        // todo: use factories
         return new Build(
             'JWT',
             new Validator(),

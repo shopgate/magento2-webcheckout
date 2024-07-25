@@ -57,6 +57,7 @@ class TokenManager
         array $payload
     ): TokenResultInterface {
         $expiration = time() + $this->expiration;
+        // todo: use factory
         return (new TokenResult())->setToken(
             $this->tokens->createCustomPayload($secret, $expiration, $domain, $payload)->getToken()
         )->setExpiration($expiration);

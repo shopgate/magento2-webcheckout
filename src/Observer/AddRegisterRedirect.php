@@ -12,6 +12,7 @@ use Magento\Framework\Url\EncoderInterface;
 use Magento\Framework\UrlInterface;
 use Shopgate\WebCheckout\Api\ShopgateCookieManagementInterface;
 use Shopgate\WebCheckout\Model\Traits\ShopgateDetect;
+
 class AddRegisterRedirect implements ObserverInterface
 {
     use ShopgateDetect;

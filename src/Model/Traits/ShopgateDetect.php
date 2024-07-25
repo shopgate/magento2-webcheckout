@@ -5,25 +5,9 @@ namespace Shopgate\WebCheckout\Model\Traits;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Session\SessionManagerInterface;
 use Shopgate\WebCheckout\Api\ShopgateCookieManagementInterface;
-use Shopgate\WebCheckout\Model\Config;
 
 trait ShopgateDetect
 {
-    public function isShopgateApiCall(RequestInterface $request): bool
-    {
-        // todo: check headers for magento2 api calls from shopgate
-        return $request->headers->has(Config::IS_SHOPGATE_CHECK) &&
-            $request->headers->has('sw-context-token') &&
-            $request->headers->has('sw-access-key');
-    }
-
-    /**
-     * @param RequestInterface                  $request
-     * @param SessionManagerInterface           $session
-     * @param ShopgateCookieManagementInterface $shopgateCookieManagement
-     *
-     * @return bool
-     */
     private function handleDevelopmentMode(
         RequestInterface $request,
         SessionManagerInterface $session,
@@ -46,13 +30,6 @@ trait ShopgateDetect
         return false;
     }
 
-    /**
-     * @param RequestInterface                  $request
-     * @param SessionManagerInterface           $session
-     * @param ShopgateCookieManagementInterface $shopgateCookieManagement
-     *
-     * @return bool
-     */
     private function isShopgate(
         RequestInterface $request,
         SessionManagerInterface $session,

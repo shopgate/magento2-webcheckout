@@ -13,11 +13,6 @@ use Shopgate\WebCheckout\Api\ShopgateCookieManagementInterface;
 
 class ShopgateCookieManagement implements ShopgateCookieManagementInterface
 {
-    /**
-     * @param SessionManagerInterface      $sessionManager
-     * @param StdlibCookieManagerInterface $cookieManager
-     * @param CookieMetadataFactory        $cookieMetadataFactory
-     */
     public function __construct(
         private readonly SessionManagerInterface $sessionManager,
         private readonly StdlibCookieManagerInterface $cookieManager,
@@ -26,9 +21,6 @@ class ShopgateCookieManagement implements ShopgateCookieManagementInterface
     }
 
     /**
-     * @param string $value
-     *
-     * @return void
      * @throws CookieSizeLimitReachedException
      * @throws FailureToSendException
      * @throws InputException
@@ -38,16 +30,12 @@ class ShopgateCookieManagement implements ShopgateCookieManagementInterface
         $this->cookieManager->setPublicCookie(self::COOKIE_NAME, $value, $this->getCookieMetadata());
     }
 
-    /**
-     * @return string|null
-     */
     public function getCookie(): ?string
     {
         return $this->cookieManager->getCookie(self::COOKIE_NAME);
     }
 
     /**
-     * @return void
      * @throws FailureToSendException
      * @throws InputException
      */
@@ -56,9 +44,6 @@ class ShopgateCookieManagement implements ShopgateCookieManagementInterface
         $this->cookieManager->deleteCookie(self::COOKIE_NAME, $this->getCookieMetadata());
     }
 
-    /**
-     * @return PublicCookieMetadata
-     */
     private function getCookieMetadata(): PublicCookieMetadata
     {
         return $this->cookieMetadataFactory->createPublicCookieMetadata()

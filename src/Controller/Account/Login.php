@@ -16,7 +16,6 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Result\Page;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Psr\Log\LoggerInterface;
-use Shopgate\WebCheckout\Api\ShopgateCookieManagementInterface;
 use Shopgate\WebCheckout\Services\TokenManager;
 
 class Login implements HttpGetActionInterface
@@ -32,7 +31,6 @@ class Login implements HttpGetActionInterface
         private readonly CheckoutSession $checkoutSession,
         private readonly UrlInterface $urlInterface,
         private readonly MaskedQuoteIdToQuoteIdInterface $maskedQuoteToQuote,
-        private readonly ShopgateCookieManagementInterface $shopgateCookieManagement,
         private readonly LoggerInterface $logger
 
     ) {
@@ -56,6 +54,7 @@ class Login implements HttpGetActionInterface
 
         $customerId = $this->tokenManager->getCustomerId($token);
         $maskedQuoteId = $this->tokenManager->getCartId($token);
+        // todo: move to service class that handles User stuff
         if ($customerId) {
             try {
                 $this->loginCustomer($customerId);
@@ -72,7 +71,7 @@ class Login implements HttpGetActionInterface
                 return $this->redirect->setPath($closeInAppRoute);
             }
         }
-        
+
         return $this->redirect->setUrl($this->getRedirectUrl());
     }
 

@@ -1,5 +1,4 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Shopgate\WebCheckout\Model\ResourceModel;
 
@@ -10,7 +9,7 @@ class ShopgateWebCheckoutOrder extends AbstractDb
 {
     public final const TABLE_NAME = 'shopgate_webcheckout_order';
 
-    protected function _construct()
+    protected function _construct(): void
     {
         $this->_init(self::TABLE_NAME, ShopgateWebCheckoutOrderInterface::ENTITY_ID);
     }

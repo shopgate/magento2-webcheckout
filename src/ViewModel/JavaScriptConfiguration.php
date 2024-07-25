@@ -17,7 +17,7 @@ class JavaScriptConfiguration extends DataObject implements ArgumentInterface
             'action' => $request->getActionName(),
             'env' => $state->getMode(), // MAGE_MODE
             'properties' => [],
-            'isSgWebView' => true // cookie check
+            'isSgWebView' => true // todo: cookie check
         ]);
     }
 
