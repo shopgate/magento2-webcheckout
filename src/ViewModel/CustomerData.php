@@ -10,6 +10,7 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Integration\Api\UserTokenIssuerInterface;
 use Magento\Integration\Model\CustomUserContext;
 use Magento\Integration\Model\UserToken\UserTokenParametersFactory;
+use Shopgate\WebCheckout\Api\ShopgateCookieManagementInterface;
 use Shopgate\WebCheckout\Model\Traits\ShopgateDetect;
 
 class CustomerData implements ArgumentInterface
@@ -21,7 +22,8 @@ class CustomerData implements ArgumentInterface
         private readonly CustomerSession $customerSession,
         private readonly CheckoutSession $checkoutSession,
         private readonly UserTokenParametersFactory $userTokenParametersFactory,
-        private readonly UserTokenIssuerInterface $tokenIssuer
+        private readonly UserTokenIssuerInterface $tokenIssuer,
+        private readonly ShopgateCookieManagementInterface $shopgateCookieManagement
     ) {
     }
 
@@ -41,6 +43,6 @@ class CustomerData implements ArgumentInterface
 
     private function isLoggedIn(): bool
     {
-        return $this->isShopgate($this->request, $this->checkoutSession);
+        return $this->isShopgate($this->request, $this->checkoutSession, $this->shopgateCookieManagement);
     }
 }
