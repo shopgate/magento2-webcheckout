@@ -5,7 +5,7 @@ namespace Shopgate\WebCheckout\Services;
 use ReallySimpleJWT\Exception\BuildException;
 use ReallySimpleJWT\Exception\EncodeException;
 use Shopgate\WebCheckout\Api\TokenResultInterface;
-use Shopgate\WebCheckout\Model\Api\TokenResult;
+use Shopgate\WebCheckout\Model\Api\TokenResultFactory;
 
 class TokenManager
 {
@@ -13,24 +13,25 @@ class TokenManager
     public final const CART_ID = 'cart_id';
 
     public function __construct(
-        private readonly TokenBuilder $tokens,
+        private readonly TokenBuilder $tokenBuilder,
+        private readonly TokenResultFactory $tokenResultFactory,
         private readonly int $expiration = 60
     ) {
     }
 
     public function validateToken(string $token): bool
     {
-        return $this->tokens->validateExpiration($token);
+        return $this->tokenBuilder->validateExpiration($token);
     }
 
     public function getCustomerId(string $token): ?int
     {
-        return $this->tokens->getPayload($token)[self::USER_ID_KEY] ?? null;
+        return $this->tokenBuilder->getPayload($token)[self::USER_ID_KEY] ?? null;
     }
 
     public function getCartId(string $token): ?string
     {
-        return $this->tokens->getPayload($token)[self::CART_ID] ?? null;
+        return $this->tokenBuilder->getPayload($token)[self::CART_ID] ?? null;
     }
 
     /**
@@ -40,6 +41,7 @@ class TokenManager
     {
         return $this->createToken($secret, $domain, [self::CART_ID => $cartId]);
     }
+
     /**
      * @throws BuildException|EncodeException
      */
@@ -51,15 +53,11 @@ class TokenManager
     /**
      * @throws BuildException|EncodeException
      */
-    private function createToken(
-        string $secret,
-        string $domain,
-        array $payload
-    ): TokenResultInterface {
+    private function createToken(string $secret, string $domain, array $payload): TokenResultInterface
+    {
         $expiration = time() + $this->expiration;
-        // todo: use factory
-        return (new TokenResult())->setToken(
-            $this->tokens->createCustomPayload($secret, $expiration, $domain, $payload)->getToken()
-        )->setExpiration($expiration);
+        $token = $this->tokenBuilder->createCustomPayload($secret, $expiration, $domain, $payload)->getToken();
+
+        return $this->tokenResultFactory->create()->setToken($token)->setExpiration($expiration);
     }
 }

@@ -25,8 +25,8 @@ class CustomerData implements ArgumentInterface
         if (!$this->isLoggedIn() || !($userId = (int)$this->customerSession->getCustomer()->getId())) {
             return null;
         }
+
         $params = $this->userTokenParametersFactory->create();
-        // todo: use factory
         $context = new CustomUserContext(
             $userId,
             UserContextInterface::USER_TYPE_CUSTOMER
