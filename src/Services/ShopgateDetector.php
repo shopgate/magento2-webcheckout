@@ -24,7 +24,7 @@ class ShopgateDetector
     private function handleDevelopmentMode(): bool
     {
         $cookieName = ShopgateCookieManagementInterface::COOKIE_NAME;
-        $sgParam = $this->request->getParam($cookieName, '0');
+        $sgParam = $this->request->getParam($cookieName);
 
         // GET ?sgWebView=0
         if ($sgParam === '0') {

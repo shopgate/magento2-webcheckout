@@ -103,7 +103,7 @@ class Login implements HttpGetActionInterface
     private function getRedirectUrl(string $redirectPath = null): string
     {
         $isWebView = $this->request->getParam(ShopgateCookieManagementInterface::COOKIE_NAME);
-        $params = $isWebView ? [ShopgateCookieManagementInterface::COOKIE_NAME => $isWebView] : null;
+        $params = $isWebView === null ? null : [ShopgateCookieManagementInterface::COOKIE_NAME => $isWebView];
 
         $redirectTo = $redirectPath ?: $this->request->getParam('redirectTo', 'checkout/cart');
         $url = $this->urlInterface->getUrl($redirectTo, $params);
