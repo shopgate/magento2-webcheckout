@@ -15,7 +15,7 @@ allow you to work with CSS and see our JavaScript logic as if you loaded the pag
 by setting `?sgWebView=0`.
 
 Our logic, (at the time of writing only `sgwebcheckout/account/login` controller) has logging for easier debugging,
-however, you will need to enable it in the Admin > Config area. 
+however, you will need to enable it in the `Admin > Config > Shopgate WebCheckout` area **or** with command line:
 ```shell
 bin/magento config:set shopgate_webcheckout/development/enable_logging 1
 bin/magento cache:clear

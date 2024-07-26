@@ -25,4 +25,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\JwtUserToken\Api\ConfigReaderInterface">
+        <plugin name="sg_webc_token_time_extend" type="Shopgate\WebCheckout\Model\TokenTtlPlugin" sortOrder="50"/>
+    </type>
 </config>

@@ -1284,12 +1284,13 @@
 										"method": "POST",
 										"header": [
 											{
-												"key": "Content-Type",
+												"key": "Accept",
 												"value": "application/json"
 											},
 											{
-												"key": "Accept",
-												"value": "application/json"
+												"key": "shopgate-check",
+												"value": "true",
+												"type": "text"
 											}
 										],
 										"body": {

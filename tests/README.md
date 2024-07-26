@@ -30,3 +30,10 @@ cd plugins/shopgate-webcheckout/tests
 npm i
 npm run local
 ```
+
+### Developer nice to have
+```shell
+bin/magento config:set webapi/jwtauth/admin_expiration 9999
+bin/magento config:set admin/security/session_lifetime 31536000
+bin/magento cache:flush
+```
