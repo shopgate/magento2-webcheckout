@@ -2,9 +2,6 @@
 
 namespace Shopgate\WebCheckout\Controller\Account;
 
-use Magento\Checkout\Model\Session as CheckoutSession;
-use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
@@ -14,24 +11,21 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Result\Page;
-use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Psr\Log\LoggerInterface;
 use Shopgate\WebCheckout\Api\ShopgateCookieManagementInterface;
 use Shopgate\WebCheckout\Services\TokenManager;
+use Shopgate\WebCheckout\Services\UserAccess;
 
 class Login implements HttpGetActionInterface
 {
     private ResultInterface $redirect;
 
     public function __construct(
-        private readonly CustomerRepositoryInterface $customerRepository,
+        private readonly UserAccess $userAccess,
         private readonly RequestInterface $request,
         private readonly ResultFactory $resultFactory,
         private readonly TokenManager $tokenManager,
-        private readonly CustomerSession $customerSession,
-        private readonly CheckoutSession $checkoutSession,
         private readonly UrlInterface $urlInterface,
-        private readonly MaskedQuoteIdToQuoteIdInterface $maskedQuoteToQuote,
         private readonly LoggerInterface $logger
 
     ) {
@@ -53,48 +47,27 @@ class Login implements HttpGetActionInterface
             return $this->redirect->setUrl($this->getRedirectUrl($closeInAppRoute));
         }
 
-        $customerId = $this->tokenManager->getCustomerId($token);
-        $maskedQuoteId = $this->tokenManager->getCartId($token);
-        // todo: move to service class that handles User stuff
-        if ($customerId) {
+        if ($customerId = $this->tokenManager->getCustomerId($token)) {
             try {
-                $this->loginCustomer($customerId);
+                $this->userAccess->loginCustomer($customerId);
             } catch (NoSuchEntityException|LocalizedException $e) {
                 $this->logger->error("Couldn't log in customer by ID: '$customerId', Error: " . $e->getMessage());
                 return $this->redirect->setUrl($this->getRedirectUrl($closeInAppRoute));
             }
-        } elseif ($maskedQuoteId) {
+        } elseif ($maskedQuoteId = $this->tokenManager->getCartId($token)) {
             try {
-                $this->logoutCustomer();
-                $this->loginGuest($maskedQuoteId);
+                $this->userAccess->logoutCustomer();
+                $this->userAccess->loginGuest($maskedQuoteId);
             } catch (NoSuchEntityException) {
                 $this->logger->error("Could not locate masked quote ID: '$maskedQuoteId'");
                 return $this->redirect->setUrl($this->getRedirectUrl($closeInAppRoute));
             }
+        } else {
+            $this->logger->error('Neither guest cartId or customer authToken provided');
+            return $this->redirect->setUrl($this->getRedirectUrl($closeInAppRoute));
         }
 
         return $this->redirect->setUrl($this->getRedirectUrl());
-    }
-
-    /**
-     * @throws NoSuchEntityException
-     * @throws LocalizedException
-     */
-    private function loginCustomer(int $customerId): void
-    {
-        $customer = $this->customerRepository->getById($customerId);
-        $this->customerSession->setCustomerId($customerId);
-        // this will prompt a cart load via `customer_login` observer
-        $this->customerSession->setCustomerDataAsLoggedIn($customer);
-    }
-
-    /**
-     * There could be cases where a customer is already logged in inApp,
-     * but wants to register a second user account from the App
-     */
-    private function logoutCustomer(): void
-    {
-        $this->customerSession->isLoggedIn() && $this->customerSession->logout();
     }
 
     /**
@@ -111,12 +84,4 @@ class Login implements HttpGetActionInterface
         return $this->urlInterface->getRedirectUrl($url);
     }
 
-    /**
-     * @throws NoSuchEntityException
-     */
-    private function loginGuest(string $maskedQuoteId): void
-    {
-        $quoteId = $this->maskedQuoteToQuote->execute($maskedQuoteId);
-        $this->checkoutSession->setQuoteId($quoteId);
-    }
 }
