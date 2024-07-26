@@ -38,10 +38,8 @@ class Login implements HttpGetActionInterface
     public function execute(): Page|ResultInterface|ResponseInterface
     {
         $closeInAppRoute = 'sgwebcheckout/close';
-        // identifies "checkout" button registrations
-        $isSGCheckout = $this->request->getParam('sgcloud_checkout', 0);
-
         $token = $this->request->getParam('token', '');
+
         if (!$this->tokenManager->validateToken($token)) {
             $this->logger->debug('Invalid token received');
             return $this->redirect->setUrl($this->getRedirectUrl($closeInAppRoute));
@@ -83,5 +81,4 @@ class Login implements HttpGetActionInterface
 
         return $this->urlInterface->getRedirectUrl($url);
     }
-
 }
