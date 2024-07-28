@@ -3095,6 +3095,10 @@
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData.products).to.be.a('array');",
 									"    pm.expect(jsonData.products).to.be.lengthOf(3);",
+									"",
+									"    const child = jsonData.products.find(item => item.sku === pm.environment.get('gen_config_child_product1_sku'));",
+									"    pm.expect(child).not.be.undefined;",
+									"    pm.expect(child.parent_sku).to.eq(pm.environment.get('gen_config_parent_product1_sku'));",
 									"});"
 								],
 								"type": "text/javascript",
@@ -3252,6 +3256,10 @@
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData.products).to.be.a('array');",
 									"    pm.expect(jsonData.products).to.be.lengthOf(3);",
+									"",
+									"    const child = jsonData.products.find(item => item.sku === pm.environment.get('gen_config_child_product1_sku'));",
+									"    pm.expect(child).not.be.undefined;",
+									"    pm.expect(child.parent_sku).to.eq(pm.environment.get('gen_config_parent_product1_sku'));",
 									"});"
 								],
 								"type": "text/javascript",

@@ -5,6 +5,18 @@ namespace Shopgate\WebCheckout\Api;
 interface ProductInstanceInterface
 {
     /**
+     * @param null|string $sku
+     *
+     * @return ProductInstanceInterface
+     */
+    public function setParentSku(?string $sku): ProductInstanceInterface;
+
+    /**
+     * @return null|string
+     */
+    public function getParentSku(): ?string;
+
+    /**
      * @param string $sku
      *
      * @return ProductInstanceInterface

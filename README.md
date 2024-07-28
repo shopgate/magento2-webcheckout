@@ -26,6 +26,7 @@ Result:
             "id": "44"
         },
         {
+            "parent_sku": "WSH12",
             "sku": "WSH12-31-Green",
             "id": "2034"
         },
