@@ -15,11 +15,11 @@ class TokenTtlPlugin
     }
 
     /** @noinspection UnusedFormalParameterInspection */
-    public function aroundGetCustomerTtl(ConfigReaderInterface $subject, callable $proceed): int
+    public function afterGetCustomerTtl(ConfigReaderInterface $subject, int $result): int
     {
         if ($this->request->getHeader('Shopgate-Check') === 'true') {
             return 525600; // year
         }
-        return $proceed();
+        return $result;
     }
 }

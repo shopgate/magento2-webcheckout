@@ -16,6 +16,15 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
+    <route url="/V1/sgwebcheckout/products" method="GET">
+        <service class="Shopgate\WebCheckout\Api\ProductInterface" method="getProducts"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+        <data>
+            <parameter name="ids"/>
+        </data>
+    </route>
     <route url="/V1/sgwebcheckout/log" method="GET">
         <service class="Shopgate\WebCheckout\Api\LogReaderInterface" method="getPaginatedLogLines"/>
         <resources>

@@ -1781,6 +1781,12 @@
 							{
 								"key": "Accept",
 								"value": "application/json"
+							},
+							{
+								"key": "Shopgate-Check",
+								"value": "true",
+								"description": "allows to set token expiration to a year",
+								"type": "text"
 							}
 						],
 						"body": {
@@ -2915,6 +2921,385 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "ID to SKU",
+			"item": [
+				{
+					"name": "Setup",
+					"item": [
+						{
+							"name": "M2: get simple prod (watch)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Get data\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.id).to.be.a('number');",
+											"    pm.environment.set(\"gen_simple_product1_id\", jsonData.id);",
+											"    pm.expect(jsonData.sku).to.be.a('string').to.not.be.empty;",
+											"    pm.environment.set(\"gen_simple_product1_sku\", jsonData.sku);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{gen_adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{m2_endpoint_api}}/products/24-WG02",
+									"host": [
+										"{{m2_endpoint_api}}"
+									],
+									"path": [
+										"products",
+										"24-WG02"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "M2: get configurable product parent 1  (shorts)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Get data\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.id).to.be.a('number');",
+											"    pm.environment.set(\"gen_config_parent_product1_id\", jsonData.id);",
+											"    pm.expect(jsonData.sku).to.be.a('string').to.not.be.empty;",
+											"    pm.environment.set(\"gen_config_parent_product1_sku\", jsonData.sku);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{gen_adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{m2_endpoint_api}}/products/WSH12",
+									"host": [
+										"{{m2_endpoint_api}}"
+									],
+									"path": [
+										"products",
+										"WSH12"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "M2: get configurable product child 1  (shorts)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Get data\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.id).to.be.a('number');",
+											"    pm.environment.set(\"gen_config_child_product1_id\", jsonData.id);",
+											"    pm.expect(jsonData.sku).to.be.a('string').to.not.be.empty;",
+											"    pm.environment.set(\"gen_config_child_product1_sku\", jsonData.sku);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{gen_adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{m2_endpoint_api}}/products/WSH12-31-Green",
+									"host": [
+										"{{m2_endpoint_api}}"
+									],
+									"path": [
+										"products",
+										"WSH12-31-Green"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "M2: get product SKUs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Has elements\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.products).to.be.a('array');",
+									"    pm.expect(jsonData.products).to.be.lengthOf(3);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{m2_endpoint_api_sgwebc}}/products?ids[]={{gen_simple_product1_id}}&ids[]={{gen_config_child_product1_id}}&ids[]={{gen_config_parent_product1_id}}",
+							"host": [
+								"{{m2_endpoint_api_sgwebc}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "ids[]",
+									"value": "{{gen_simple_product1_id}}"
+								},
+								{
+									"key": "ids[]",
+									"value": "{{gen_config_child_product1_id}}"
+								},
+								{
+									"key": "ids[]",
+									"value": "{{gen_config_parent_product1_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "M2: get non-existing ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Has elements\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.products).to.be.a('array');",
+									"    pm.expect(jsonData.products).to.be.lengthOf(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{m2_endpoint_api_sgwebc}}/products?ids[]={{gen_simple_product1_id}}&ids[]=99999",
+							"host": [
+								"{{m2_endpoint_api_sgwebc}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "ids[]",
+									"value": "{{gen_simple_product1_id}}"
+								},
+								{
+									"key": "ids[]",
+									"value": "99999"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "M2A: read log",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Has log\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.log).to.not.be.undefined;",
+									"    jsonData.log.pop(); // empty line skip",
+									"    const lastLine = jsonData.log.pop();",
+									"    pm.expect(lastLine).to.contain('Could not find products by IDs: 99999');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{gen_adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{m2_endpoint_api_sgwebc}}/log?page=1&lines=2",
+							"host": [
+								"{{m2_endpoint_api_sgwebc}}"
+							],
+							"path": [
+								"log"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "lines",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "M2: get product SKUs (customer)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Has elements\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.products).to.be.a('array');",
+									"    pm.expect(jsonData.products).to.be.lengthOf(3);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{gen_customerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{m2_endpoint_api_sgwebc}}/products?ids[]={{gen_simple_product1_id}}&ids[]={{gen_config_child_product1_id}}&ids[]={{gen_config_parent_product1_id}}",
+							"host": [
+								"{{m2_endpoint_api_sgwebc}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "ids[]",
+									"value": "{{gen_simple_product1_id}}"
+								},
+								{
+									"key": "ids[]",
+									"value": "{{gen_config_child_product1_id}}"
+								},
+								{
+									"key": "ids[]",
+									"value": "{{gen_config_parent_product1_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Tests custom endpoint converting ID's to SKU's"
 		},
 		{
 			"name": "Errors",

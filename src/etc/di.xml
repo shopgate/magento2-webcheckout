@@ -4,6 +4,8 @@
     <preference for="Shopgate\WebCheckout\Api\TokenInterface" type="Shopgate\WebCheckout\Model\Api\Token"/>
     <preference for="Shopgate\WebCheckout\Api\TokenResultInterface" type="Shopgate\WebCheckout\Model\Api\TokenResult"/>
     <preference for="Shopgate\WebCheckout\Api\LogReaderInterface" type="Shopgate\WebCheckout\Model\Api\LogReader"/>
+    <preference for="Shopgate\WebCheckout\Api\ProductInterface" type="Shopgate\WebCheckout\Model\Api\Product"/>
+    <preference for="Shopgate\WebCheckout\Api\ProductInstanceInterface" type="Shopgate\WebCheckout\Model\Api\ProductInstance"/>
     <preference for="Shopgate\WebCheckout\Api\ShopgateCookieManagementInterface"
                 type="Shopgate\WebCheckout\Model\ShopgateCookieManagement"/>
     <virtualType name="Shopgate\WebCheckout\Logger\DebugHandler" type="Magento\Framework\Logger\Handler\Base">
@@ -27,5 +29,10 @@
     </type>
     <type name="Magento\JwtUserToken\Api\ConfigReaderInterface">
         <plugin name="sg_webc_token_time_extend" type="Shopgate\WebCheckout\Model\TokenTtlPlugin" sortOrder="50"/>
+    </type>
+    <type name="Shopgate\WebCheckout\Model\Api\Product">
+        <arguments>
+            <argument name="logger" xsi:type="object">Shopgate\WebCheckout\Services\Logger</argument>
+        </arguments>
     </type>
 </config>
