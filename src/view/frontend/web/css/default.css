@@ -2,19 +2,23 @@
  * Global
  */
 .is-sg-app {
+
+    .item-info .item a,
+    .product-item-name a,
     .header-logo-main-link {
         pointer-events: none;
-        cursor: default;
+        cursor: not-allowed;
     }
 
     header,
     footer,
     .nav-sections,
+    .sidebar,
     .page-header,
     .page-footer,
     #store.menu,
     .copyright {
-        display: none!important;
+        display: none;
     }
 
     .offcanvas {
@@ -48,7 +52,16 @@
  * Checkout / Finish pages
  */
 .is-sg-app {
-    .cart-container .crosssell{
+    .checkout-success .action.continue,
+    .cart-container .crosssell,
+    .item-actions a.towishlist,
+    #form-validate .cart.main.actions,
+    .item .item-actions a.action-edit {
         display: none;
+    }
+
+    .checkout-success .order-number {
+        pointer-events: none;
+        cursor: not-allowed;
     }
 }

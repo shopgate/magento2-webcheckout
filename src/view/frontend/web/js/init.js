@@ -14,6 +14,7 @@ define(
             initialize () {
                 this.enableShopgateAppEvents()
                 this.initSGBridge(this.devMode)
+                this.setViewport()
                 this.executeWithRetry(40, 3000, this.initShopgateApp.bind(this))
             }
 
@@ -35,6 +36,25 @@ define(
                 // add a "src" property (not an attribute, because of the iOS app not receiving it otherwise)
                 metaTag.src = libshopgate
                 document.getElementsByTagName('head').item(0).appendChild(metaTag)
+            }
+
+            /**
+             * So that the mobile version does not have a "zoom" navigation
+             */
+            setViewport () {
+                if (!window.SGJavascriptBridge && !this.devMode) {
+                    return
+                }
+                const content = 'user-scalable=no, width=device-width'
+                let metaTag = document.querySelector('meta[name="viewport"]');
+                if (metaTag) {
+                    metaTag.setAttribute('content', content);
+                } else {
+                    metaTag = document.createElement('meta');
+                    metaTag.setAttribute('name', 'viewport');
+                    metaTag.setAttribute('content', content);
+                    document.getElementsByTagName('head').item(0).appendChild(metaTag);
+                }
             }
 
             /**
