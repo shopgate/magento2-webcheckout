@@ -2,7 +2,6 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
-        <meta name="viewport" content="user-scalable=no, width=device-width"/><!-- todo: might need to use JS -->
         <css src="Shopgate_WebCheckout::css/default.css" />
     </head>
     <body>
