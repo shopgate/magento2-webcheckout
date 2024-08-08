@@ -7,7 +7,7 @@ use Shopgate\WebCheckout\Api\ProductResultInterface;
 
 class ProductResult implements ProductResultInterface
 {
-    private array $products;
+    private array $products = [];
 
     public function addProduct(ProductInstanceInterface $product): ProductResultInterface
     {
