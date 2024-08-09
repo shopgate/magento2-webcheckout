@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/sgwebcheckout/me/token" method="POST">
+        <service class="Shopgate\WebCheckout\Api\TokenInterface" method="getCustomerToken"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <!-- force overrides passed request body params -->
+            <parameter name="customerId" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/sgwebcheckout/:cartId/token" method="POST">
+        <service class="Shopgate\WebCheckout\Api\TokenInterface" method="getGuestToken"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route url="/V1/sgwebcheckout/products" method="GET">
+        <service class="Shopgate\WebCheckout\Api\ProductInterface" method="getProducts"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+        <data>
+            <parameter name="ids"/>
+        </data>
+    </route>
+    <route url="/V1/sgwebcheckout/log" method="GET">
+        <service class="Shopgate\WebCheckout\Api\LogReaderInterface" method="getPaginatedLogLines"/>
+        <resources>
+            <resource ref="Magento_Backend::admin"/>
+        </resources>
+        <data>
+            <parameter name="page"/>
+            <parameter name="lines"/>
+        </data>
+    </route>
+</routes>

@@ -1,0 +1,17 @@
+{
+  "name": "apite-sgm2-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "local": "node_modules/.bin/newman run ./collection.json -e ./environment.json --color=on --bail",
+    "ci": "node_modules/.bin/newman run -r cli,htmlextra,junitfull ./collection.json -e ./environment.json --color=on --insecure --no-insecure-file-read"
+  },
+  "author": "Konstantin Kiritsenko",
+  "license": "ISC",
+  "dependencies": {
+    "newman": "latest",
+    "newman-reporter-htmlextra": "latest",
+    "newman-reporter-junitfull": "latest"
+  }
+}

@@ -1,0 +1,13 @@
+<?php
+/**
+ * @var $block Magento\Framework\View\Element\Template
+ * @var $config Shopgate\WebCheckout\ViewModel\Configuration
+ */
+$config = $block->getData('config');
+?>
+<?php if ($customCss = $config->getCustomCss()): ?>
+    <style>.<?= Shopgate\WebCheckout\Model\Config::BODY_CSS_CLASS ?> {
+        <?= $customCss ?>
+        }
+    </style>
+<?php endif; ?>

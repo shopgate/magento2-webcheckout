@@ -1,0 +1,17 @@
+<?php
+/**
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Shopgate\WebCheckout\ViewModel\JavaScriptConfiguration $jsConfig
+ * @var \Shopgate\WebCheckout\ViewModel\OrderData $order
+ */
+$jsConfig = $block->getData('jsConfig');
+$order = $block->getData('order');
+$jsConfig->addProperties($order->getSuccessPageData());
+?>
+<script type='text/x-magento-init'>
+    {
+        "*": {
+            "Shopgate_WebCheckout/js/init": <?= $jsConfig->toJson() ?>
+    }
+}
+</script>

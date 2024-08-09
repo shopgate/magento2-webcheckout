@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Shopgate_WebCheckout::css/default.css" />
+    </head>
+    <body>
+        <referenceBlock name="head.additional">
+            <block class="Magento\Framework\View\Element\Template" name="shopgate.webcheckout.css" template="Shopgate_WebCheckout::css.phtml">
+                <arguments>
+                    <argument name="config" xsi:type="object">Shopgate\WebCheckout\ViewModel\Configuration</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Framework\View\Element\Template" name="shopgate.webcheckout.events" template="Shopgate_WebCheckout::events.phtml">
+                <arguments>
+                    <argument name="jsConfig" xsi:type="object">Shopgate\WebCheckout\ViewModel\JavaScriptConfiguration</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>
