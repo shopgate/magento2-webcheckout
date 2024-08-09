@@ -18,5 +18,4 @@ interface LogResultInterface
      * @return LogResultInterface
      */
     public function setLog(array $log): LogResultInterface;
-
 }

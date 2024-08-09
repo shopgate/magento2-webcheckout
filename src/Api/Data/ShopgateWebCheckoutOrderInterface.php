@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 namespace Shopgate\WebCheckout\Api\Data;
+
 interface ShopgateWebCheckoutOrderInterface
 {
     public final const ENTITY_ID = 'entity_id';
@@ -45,5 +46,8 @@ interface ShopgateWebCheckoutOrderInterface
      */
     public function getCreatedAt(): string;
 
+    /**
+     * @return string
+     */
     public function getUpdatedAt(): string;
 }
