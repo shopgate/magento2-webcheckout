@@ -59,6 +59,9 @@ Result
 ```
 
 #### Custom WebCheckout log
+
+Note that you will need to enable the logging in the `Shopgate > WebCheckout` configuration for it to stop throwing 500 errors.
+
 ```http request
 Admin
 

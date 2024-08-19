@@ -251,6 +251,16 @@
 										}
 									],
 									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{gen_adminToken}}",
+													"type": "string"
+												}
+											]
+										},
 										"method": "POST",
 										"header": [
 											{
@@ -2979,7 +2989,223 @@
 							"response": []
 						},
 						{
-							"name": "M2: get configurable product parent 1  (shorts)",
+							"name": "M2A: attr set id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"    var jsonData = pm.response.json();",
+											"    // Stores the attributeSetId in an environment or global variable",
+											"    var attributeSetId = jsonData.items[0].attribute_set_id;",
+											"    pm.environment.set(\"gen_attributeSetId\", attributeSetId);",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{gen_adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{m2_endpoint_api}}/eav/attribute-sets/list?searchCriteria[filter_groups][0][filters][0][field]=attribute_set_name&searchCriteria[filter_groups][0][filters][0][value]=Top&searchCriteria[filter_groups][0][filters][0][condition_type]=eq",
+									"host": [
+										"{{m2_endpoint_api}}"
+									],
+									"path": [
+										"eav",
+										"attribute-sets",
+										"list"
+									],
+									"query": [
+										{
+											"key": "searchCriteria[filter_groups][0][filters][0][field]",
+											"value": "attribute_set_name"
+										},
+										{
+											"key": "searchCriteria[filter_groups][0][filters][0][value]",
+											"value": "Top"
+										},
+										{
+											"key": "searchCriteria[filter_groups][0][filters][0][condition_type]",
+											"value": "eq"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "M2A: attr values",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Get needed values\", function () {",
+											"    ",
+											"    findValue(\"tax_class_id\", \"Taxable Goods\");",
+											"    findValue(\"color\", \"Gray\");",
+											"    findValue(\"visibility\", \"Catalog, Search\");",
+											"    findValue(\"visibility\", \"Not Visible Individually\");",
+											"    findValue(\"material\", \"Hemp\");",
+											"    findValue(\"pattern\", \"Graphic Print\");",
+											"    findValue(\"size\", \"S\");",
+											"    findValue(\"size\", \"M\");",
+											"    findValue(\"size\", \"L\");",
+											"});",
+											"",
+											"function findValue(attributeCode, label) {",
+											"    var response = pm.response.json();",
+											"    // Find the attribute with the specified attributeCode",
+											"    var attribute = response.find(attr => attr.attribute_code === attributeCode);",
+											"",
+											"    pm.expect(attribute, 'attrCode: ' + attributeCode).to.not.be.undefined;",
+											"    pm.environment.set('gen_attr_' + attributeCode + '_id', attribute.attribute_id);",
+											"    var option = attribute.options.find(opt => opt.label === label);",
+											"    pm.expect(option, 'option: ' + label).to.not.be.undefined;",
+											"    pm.expect(option).to.haveOwnProperty('value')",
+											"",
+											"    // Create a dynamic environment variable name",
+											"    var envVarName = `gen_attr_${attributeCode}_${label.toLowerCase().replace(/[\\s,.]/g, '_')}`;",
+											"    pm.environment.set(envVarName, option.value);",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{gen_adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{m2_endpoint_api}}/products/attribute-sets/:attributeSetId/attributes",
+									"host": [
+										"{{m2_endpoint_api}}"
+									],
+									"path": [
+										"products",
+										"attribute-sets",
+										":attributeSetId",
+										"attributes"
+									],
+									"variable": [
+										{
+											"key": "attributeSetId",
+											"value": "{{gen_attributeSetId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "M2A: categories",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"function findChildByName(data, name) {",
+											"    // Check if the current node matches the name",
+											"    if (data.name === name) {",
+											"        return data.id;",
+											"    }",
+											"",
+											"    // Traverse the children_data recursively",
+											"    for (var i = 0; i < data.children_data.length; i++) {",
+											"        var result = findChildByName(data.children_data[i], name);",
+											"        if (result !== null) {",
+											"            return result;",
+											"        }",
+											"    }",
+											"",
+											"    return null;",
+											"}",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Get needed values\", function () {",
+											"    findAndSaveChildId(\"Men\");",
+											"    findAndSaveChildId(\"Tops\");",
+											"    findAndSaveChildId(\"Tees\");",
+											"});",
+											"",
+											"function findAndSaveChildId(name) {",
+											"    var response = pm.response.json();",
+											"    var id = findChildByName(response, name);",
+											"",
+											"    pm.expect(id, 'Child name: ' + name).to.not.be.null;",
+											"",
+											"    // Create a dynamic environment variable name",
+											"    var envVarName = `gen_category_${name.toLowerCase().replace(/[\\s,.]/g, '_')}_id`;",
+											"    pm.environment.set(envVarName, id);",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{gen_adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{m2_endpoint_api}}/categories",
+									"host": [
+										"{{m2_endpoint_api}}"
+									],
+									"path": [
+										"categories"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "M2A: config create",
 							"event": [
 								{
 									"listen": "test",
@@ -2993,8 +3219,6 @@
 											"    var jsonData = pm.response.json();",
 											"    pm.expect(jsonData.id).to.be.a('number');",
 											"    pm.environment.set(\"gen_config_parent_product1_id\", jsonData.id);",
-											"    pm.expect(jsonData.sku).to.be.a('string').to.not.be.empty;",
-											"    pm.environment.set(\"gen_config_parent_product1_sku\", jsonData.sku);",
 											"});"
 										],
 										"type": "text/javascript",
@@ -3013,23 +3237,31 @@
 										}
 									]
 								},
-								"method": "GET",
+								"method": "POST",
 								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n        \"product\": {\n            \"sku\": \"{{created_prod_config_champ_sku}}\",\n            \"name\": \"Champ Tee\",\n            \"attribute_set_id\": {{gen_attributeSetId}},\n            \"status\": 1,\n            \"visibility\": {{gen_attr_visibility_catalog__search}},\n            \"type_id\": \"configurable\",\n            \"weight\": \"0.5\",\n            \"extension_attributes\": {\n                \"category_links\": [\n                    {\n                        \"position\": 0,\n                        \"category_id\": \"{{gen_category_men_id}}\"\n                    },\n                    {\n                        \"position\": 1,\n                        \"category_id\": \"{{gen_category_tees_id}}\"\n                    },\n                    {\n                        \"position\": 2,\n                        \"category_id\": \"{{gen_category_tops_id}}\"\n                    }\n                ]\n            },\n            \"custom_attributes\": [\n                {\n                    \"attribute_code\": \"description\",\n                    \"value\": \"The Champ Tee keeps you cool and dry while you do your thing. Let everyone know who you are by adding your name on the back for only $10.\"\n                },\n                {\n                    \"attribute_code\": \"tax_class_id\",\n                    \"value\": \"{{gen_attr_tax_class_id_taxable_goods}}\"\n                },\n                {\n                    \"attribute_code\": \"material\",\n                    \"value\": \"{{gen_attr_material_hemp}}\"\n                },\n                {\n                    \"attribute_code\": \"pattern\",\n                    \"value\": \"{{gen_attr_pattern_graphic_print}}\"\n                },\n                {\n                    \"attribute_code\": \"color\",\n                    \"value\": \"{{gen_attr_color_gray}}\"\n                }\n            ]\n        }\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
 								"url": {
-									"raw": "{{m2_endpoint_api}}/products/WSH12",
+									"raw": "{{m2_endpoint_api}}/products",
 									"host": [
 										"{{m2_endpoint_api}}"
 									],
 									"path": [
-										"products",
-										"WSH12"
+										"products"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "M2: get configurable product child 1  (shorts)",
+							"name": "M2A: child M create",
 							"event": [
 								{
 									"listen": "test",
@@ -3043,8 +3275,287 @@
 											"    var jsonData = pm.response.json();",
 											"    pm.expect(jsonData.id).to.be.a('number');",
 											"    pm.environment.set(\"gen_config_child_product1_id\", jsonData.id);",
-											"    pm.expect(jsonData.sku).to.be.a('string').to.not.be.empty;",
-											"    pm.environment.set(\"gen_config_child_product1_sku\", jsonData.sku);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{gen_adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n        \"product\": {\n            \"sku\": \"{{created_prod_child_champ_m_sku}}\",\n            \"name\": \"Champ Tee Small\",\n            \"attribute_set_id\": {{gen_attributeSetId}},\n            \"price\": 25,\n            \"status\": 1,\n            \"visibility\": {{gen_attr_visibility_not_visible_individually}},\n            \"type_id\": \"simple\",\n            \"weight\": \"0.5\",\n            \"extension_attributes\": {\n                \"category_links\": [\n                    {\n                        \"position\": 0,\n                        \"category_id\": \"{{gen_category_men_id}}\"\n                    },\n                    {\n                        \"position\": 1,\n                        \"category_id\": \"{{gen_category_tees_id}}\"\n                    },\n                    {\n                        \"position\": 2,\n                        \"category_id\": \"{{gen_category_tops_id}}\"\n                    }\n                ],\n                \"stock_item\": {\n                    \"qty\": \"10\",\n                    \"is_in_stock\": true\n                }\n            },\n            \"custom_attributes\": [\n                {\n                    \"attribute_code\": \"description\",\n                    \"value\": \"The Champ Tee keeps you cool and dry while you do your thing. Let everyone know who you are by adding your name on the back for only $10.\"\n                },\n                {\n                    \"attribute_code\": \"tax_class_id\",\n                    \"value\": \"{{gen_attr_tax_class_id_taxable_goods}}\"\n                },\n                {\n                    \"attribute_code\": \"material\",\n                    \"value\": \"{{gen_attr_material_hemp}}\"\n                },\n                {\n                    \"attribute_code\": \"pattern\",\n                    \"value\": \"{{gen_attr_pattern_graphic_print}}\"\n                },\n                {\n                    \"attribute_code\": \"color\",\n                    \"value\": \"{{gen_attr_color_gray}}\"\n                },\n                {\n                    \"attribute_code\": \"size\",\n                    \"value\": \"{{gen_attr_size_s}}\"\n                }\n            ]\n        }\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{m2_endpoint_api}}/products",
+									"host": [
+										"{{m2_endpoint_api}}"
+									],
+									"path": [
+										"products"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "M2A: link size to parent",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{gen_adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"option\": {\n        \"attribute_id\": \"{{gen_attr_size_id}}\",\n        \"label\": \"Size\",\n        \"position\": 0,\n        \"is_use_default\": true,\n        \"values\": [\n            {\n                \"value_index\": 9\n            }\n        ]\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{m2_endpoint_api}}/configurable-products/:sku/options",
+									"host": [
+										"{{m2_endpoint_api}}"
+									],
+									"path": [
+										"configurable-products",
+										":sku",
+										"options"
+									],
+									"variable": [
+										{
+											"key": "sku",
+											"value": "{{created_prod_config_champ_sku}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "M2A: link child to parent",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{gen_adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"childSku\": \"{{created_prod_child_champ_m_sku}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{m2_endpoint_api}}/configurable-products/:sku/child",
+									"host": [
+										"{{m2_endpoint_api}}"
+									],
+									"path": [
+										"configurable-products",
+										":sku",
+										"child"
+									],
+									"variable": [
+										{
+											"key": "sku",
+											"value": "{{created_prod_config_champ_sku}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Test",
+					"item": [
+						{
+							"name": "M2: get product SKUs",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Has elements\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.products).to.be.a('array');",
+											"    pm.expect(jsonData.products).to.be.lengthOf(3);",
+											"",
+											"    const child = jsonData.products.find(item => item.sku === pm.environment.get('created_prod_child_champ_m_sku'));",
+											"    pm.expect(child).not.be.undefined;",
+											"    pm.expect(child.parent_sku).to.eq(pm.environment.get('created_prod_config_champ_sku'));",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{m2_endpoint_api_sgwebc}}/products?ids[]={{gen_simple_product1_id}}&ids[]={{gen_config_child_product1_id}}&ids[]={{gen_config_parent_product1_id}}",
+									"host": [
+										"{{m2_endpoint_api_sgwebc}}"
+									],
+									"path": [
+										"products"
+									],
+									"query": [
+										{
+											"key": "ids[]",
+											"value": "{{gen_simple_product1_id}}"
+										},
+										{
+											"key": "ids[]",
+											"value": "{{gen_config_child_product1_id}}"
+										},
+										{
+											"key": "ids[]",
+											"value": "{{gen_config_parent_product1_id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "M2: get non-existing ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Has elements\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.products).to.be.a('array');",
+											"    pm.expect(jsonData.products).to.be.lengthOf(1);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{m2_endpoint_api_sgwebc}}/products?ids[]={{gen_simple_product1_id}}&ids[]=99999",
+									"host": [
+										"{{m2_endpoint_api_sgwebc}}"
+									],
+									"path": [
+										"products"
+									],
+									"query": [
+										{
+											"key": "ids[]",
+											"value": "{{gen_simple_product1_id}}"
+										},
+										{
+											"key": "ids[]",
+											"value": "99999"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "M2A: read log",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Has log\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.log).to.not.be.undefined;",
+											"    jsonData.log.pop(); // empty line skip",
+											"    const lastLine = jsonData.log.pop();",
+											"    pm.expect(lastLine).to.contain('Could not find products by IDs: 99999');",
 											"});"
 										],
 										"type": "text/javascript",
@@ -3066,13 +3577,87 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{m2_endpoint_api}}/products/WSH12-31-Green",
+									"raw": "{{m2_endpoint_api_sgwebc}}/log?page=1&lines=2",
 									"host": [
-										"{{m2_endpoint_api}}"
+										"{{m2_endpoint_api_sgwebc}}"
 									],
 									"path": [
-										"products",
-										"WSH12-31-Green"
+										"log"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "lines",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "M2: get product SKUs (customer)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Has elements\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.products).to.be.a('array');",
+											"    pm.expect(jsonData.products).to.be.lengthOf(3);",
+											"",
+											"    const child = jsonData.products.find(item => item.sku === pm.environment.get('created_prod_child_champ_m_sku'));",
+											"    pm.expect(child).not.be.undefined;",
+											"    pm.expect(child.parent_sku).to.eq(pm.environment.get('created_prod_config_champ_sku'));",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{gen_customerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{m2_endpoint_api_sgwebc}}/products?ids[]={{gen_simple_product1_id}}&ids[]={{gen_config_child_product1_id}}&ids[]={{gen_config_parent_product1_id}}",
+									"host": [
+										"{{m2_endpoint_api_sgwebc}}"
+									],
+									"path": [
+										"products"
+									],
+									"query": [
+										{
+											"key": "ids[]",
+											"value": "{{gen_simple_product1_id}}"
+										},
+										{
+											"key": "ids[]",
+											"value": "{{gen_config_child_product1_id}}"
+										},
+										{
+											"key": "ids[]",
+											"value": "{{gen_config_parent_product1_id}}"
+										}
 									]
 								}
 							},
@@ -3081,230 +3666,118 @@
 					]
 				},
 				{
-					"name": "M2: get product SKUs",
-					"event": [
+					"name": "Cleanup",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Has elements\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.products).to.be.a('array');",
-									"    pm.expect(jsonData.products).to.be.lengthOf(3);",
-									"",
-									"    const child = jsonData.products.find(item => item.sku === pm.environment.get('gen_config_child_product1_sku'));",
-									"    pm.expect(child).not.be.undefined;",
-									"    pm.expect(child.parent_sku).to.eq(pm.environment.get('gen_config_parent_product1_sku'));",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{m2_endpoint_api_sgwebc}}/products?ids[]={{gen_simple_product1_id}}&ids[]={{gen_config_child_product1_id}}&ids[]={{gen_config_parent_product1_id}}",
-							"host": [
-								"{{m2_endpoint_api_sgwebc}}"
-							],
-							"path": [
-								"products"
-							],
-							"query": [
+							"name": "M2: del parent",
+							"event": [
 								{
-									"key": "ids[]",
-									"value": "{{gen_simple_product1_id}}"
-								},
-								{
-									"key": "ids[]",
-									"value": "{{gen_config_child_product1_id}}"
-								},
-								{
-									"key": "ids[]",
-									"value": "{{gen_config_parent_product1_id}}"
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
 								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "M2: get non-existing ID",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Has elements\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.products).to.be.a('array');",
-									"    pm.expect(jsonData.products).to.be.lengthOf(1);",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{m2_endpoint_api_sgwebc}}/products?ids[]={{gen_simple_product1_id}}&ids[]=99999",
-							"host": [
-								"{{m2_endpoint_api_sgwebc}}"
 							],
-							"path": [
-								"products"
-							],
-							"query": [
-								{
-									"key": "ids[]",
-									"value": "{{gen_simple_product1_id}}"
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{gen_adminToken}}",
+											"type": "string"
+										}
+									]
 								},
-								{
-									"key": "ids[]",
-									"value": "99999"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "M2A: read log",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Has log\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.log).to.not.be.undefined;",
-									"    jsonData.log.pop(); // empty line skip",
-									"    const lastLine = jsonData.log.pop();",
-									"    pm.expect(lastLine).to.contain('Could not find products by IDs: 99999');",
-									"});"
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
 								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{gen_adminToken}}",
-									"type": "string"
-								}
-							]
+								"url": {
+									"raw": "{{m2_endpoint_api}}/products/:sku",
+									"host": [
+										"{{m2_endpoint_api}}"
+									],
+									"path": [
+										"products",
+										":sku"
+									],
+									"variable": [
+										{
+											"key": "sku",
+											"value": "{{created_prod_config_champ_sku}}"
+										}
+									]
+								},
+								"description": "Enable an customer or guest user to create an empty cart and quote for an anonymous customer."
+							},
+							"response": []
 						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{m2_endpoint_api_sgwebc}}/log?page=1&lines=2",
-							"host": [
-								"{{m2_endpoint_api_sgwebc}}"
-							],
-							"path": [
-								"log"
-							],
-							"query": [
-								{
-									"key": "page",
-									"value": "1"
-								},
-								{
-									"key": "lines",
-									"value": "2"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "M2: get product SKUs (customer)",
-					"event": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Has elements\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.products).to.be.a('array');",
-									"    pm.expect(jsonData.products).to.be.lengthOf(3);",
-									"",
-									"    const child = jsonData.products.find(item => item.sku === pm.environment.get('gen_config_child_product1_sku'));",
-									"    pm.expect(child).not.be.undefined;",
-									"    pm.expect(child.parent_sku).to.eq(pm.environment.get('gen_config_parent_product1_sku'));",
-									"});"
+							"name": "M2: del child M",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{gen_adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
 								],
-								"type": "text/javascript",
-								"packages": {}
-							}
+								"url": {
+									"raw": "{{m2_endpoint_api}}/products/:sku",
+									"host": [
+										"{{m2_endpoint_api}}"
+									],
+									"path": [
+										"products",
+										":sku"
+									],
+									"variable": [
+										{
+											"key": "sku",
+											"value": "{{created_prod_child_champ_m_sku}}"
+										}
+									]
+								},
+								"description": "Enable an customer or guest user to create an empty cart and quote for an anonymous customer."
+							},
+							"response": []
 						}
 					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{gen_customerToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{m2_endpoint_api_sgwebc}}/products?ids[]={{gen_simple_product1_id}}&ids[]={{gen_config_child_product1_id}}&ids[]={{gen_config_parent_product1_id}}",
-							"host": [
-								"{{m2_endpoint_api_sgwebc}}"
-							],
-							"path": [
-								"products"
-							],
-							"query": [
-								{
-									"key": "ids[]",
-									"value": "{{gen_simple_product1_id}}"
-								},
-								{
-									"key": "ids[]",
-									"value": "{{gen_config_child_product1_id}}"
-								},
-								{
-									"key": "ids[]",
-									"value": "{{gen_config_parent_product1_id}}"
-								}
-							]
-						}
-					},
-					"response": []
+					"description": "Cleanup routines to delete created data"
 				}
 			],
 			"description": "Tests custom endpoint converting ID's to SKU's"

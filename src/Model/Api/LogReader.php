@@ -4,6 +4,7 @@ namespace Shopgate\WebCheckout\Model\Api;
 
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Driver\File;
 use Shopgate\WebCheckout\Api\LogReaderInterface;
 use Shopgate\WebCheckout\Api\LogResultInterface;
 use SplFileObject;
@@ -15,7 +16,8 @@ class LogReader implements LogReaderInterface
     public function __construct(
         private readonly string $logFilePath,
         private readonly LogResultFactory $resultFactory,
-        private readonly DirectoryList $directoryList
+        private readonly DirectoryList $directoryList,
+        private readonly File $fileDriver,
     ) {
     }
 
@@ -27,6 +29,9 @@ class LogReader implements LogReaderInterface
     public function getPaginatedLogLines(int $page = 1, int $lines = 20): LogResultInterface
     {
         $basePath = $this->directoryList->getPath('base');
+        if ($this->fileDriver->isExists($basePath. $this->logFilePath) === false) {
+            throw new FileSystemException(__('Log file not found. Enable WebCheckout logging in the configuration.'));
+        }
         $this->file = new SplFileObject($basePath . $this->logFilePath);
         $totalLines = $this->countLines();
         $totalPages = ceil($totalLines / $lines);
