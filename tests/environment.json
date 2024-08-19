@@ -32,6 +32,12 @@
 			"enabled": true
 		},
 		{
+			"key": "m2_endpoint_async",
+			"value": "{{domain}}/rest/{{storeCode}}/async/bulk/V1",
+			"type": "default",
+			"enabled": true
+		},
+		{
 			"key": "m2_endpoint_api_sgwebc",
 			"value": "{{domain}}/rest/{{storeCode}}/V1/sgwebcheckout",
 			"type": "default",
@@ -64,21 +70,33 @@
 			"value": "roni_cost3@example.com",
 			"type": "default",
 			"enabled": true
-    },
-    {
-      "key": "created_customer_1_email",
-      "value": "test@example.com",
-      "type": "default",
-      "enabled": true
-    },
-    {
-      "key": "created_customer_1_pass",
-      "value": "test.123",
-      "type": "default",
-      "enabled": true
+		},
+		{
+			"key": "created_customer_1_email",
+			"value": "test@example.com",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "created_customer_1_pass",
+			"value": "test.123",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "created_prod_config_champ_sku",
+			"value": "MS-Champ",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "created_prod_child_champ_m_sku",
+			"value": "MS-Champ-M",
+			"type": "default",
+			"enabled": true
 		}
 	],
 	"_postman_variable_scope": "environment",
-  "_postman_exported_at": "2024-07-24T13:02:54.402Z",
-  "_postman_exported_using": "Postman/11.5.0"
+	"_postman_exported_at": "2024-08-18T20:04:52.606Z",
+	"_postman_exported_using": "Postman/11.8.1"
 }
