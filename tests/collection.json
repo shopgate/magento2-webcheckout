@@ -2427,6 +2427,11 @@
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Make sure product was added\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.errors, 'item was not added!').to.be.undefined",
 									"});"
 								],
 								"type": "text/javascript",
@@ -2465,7 +2470,7 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation {\n  addSimpleProductsToCart(\n    input: {\n      cart_id: \"{{gen_cartId}}\", \n      cart_items: [{\n        data: {\n          quantity: 1\n          sku: \"{{gen_simple_product1_sku}}\"\n        }\n      }]\n    }) {\n    cart {\n      id\n    }\n  }\n}",
+								"query": "mutation {\n  addSimpleProductsToCart(\n    input: {\n      cart_id: \"{{gen_cartId}}\", \n      cart_items: [{\n        data: {\n          quantity: 1\n          sku: \"24-WG02\"\n        }\n      }]\n    }) {\n    cart {\n      id\n    }\n  }\n}",
 								"variables": ""
 							}
 						},
