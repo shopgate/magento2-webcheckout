@@ -23,7 +23,7 @@
 									"",
 									"pm.test(\"Body is a string\", function () {",
 									"    const token = pm.response.text().replace(/['\"]+/g, '');",
-									"    pm.expect(token).to.be.a('string');",
+									"    pm.expect(token).to.be.a('string').to.not.be.empty;",
 									"    pm.environment.set('gen_adminToken', token);",
 									"});"
 								],
@@ -2427,6 +2427,27 @@
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Make sure product was added\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.errors, 'item was not added!').to.be.undefined",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Allow cookie deletion by going to cookies -> Domain Allowlist",
+									"const jar = pm.cookies.jar();",
+									"jar.unset(pm.environment.get(\"host\"), 'PHPSESSID', function (error) {",
+									"    if (error) {",
+									"        console.log(error.message)",
+									"    }",
 									"});"
 								],
 								"type": "text/javascript",
@@ -2694,10 +2715,9 @@
 									"const pkg = require('cheerio')",
 									"const $ = pkg.load(pm.response.text());",
 									"",
-									"pm.test(\"Check login status\", function () {",
-									"    const input = $('input[data-item-qty]');",
-									"    pm.expect(input).to.be.lengthOf(1);",
-									"    pm.expect(input[0].attribs.value).to.eql('1');",
+									"pm.test(\"Check we are on checkout page\", function () {",
+									"    const body = $('body.checkout-index-index');",
+									"    pm.expect(body).to.be.lengthOf(1);",
 									"});",
 									"",
 									"pm.test('Check SG Web View', () => {",

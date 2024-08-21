@@ -92,3 +92,12 @@ bin/magento cache:clear
 ```
 Afterward, you can see the log in the `var/log/shopgate/webcheckout_debug.log` directory or use our API to query the 
 logs. See postman for an example of how to use it.
+
+### Errors
+- `Token has an invalid structure.` - this error can occur if there is a 302 redirect happening. Let's say you have
+a website test.com, but your `default` storeCode references test.com/en, calling `test.com/sgwebcheckout/login?token=...` 
+will trigger a 302 redirect to `test.com/en/sgwebcheckout/login` without forwarding the token or any other parameter. 
+Token will be empty & you get this error message. Fix - make sure to use `test.com/en` as your domain.
+- `The current user cannot perform operations on cart \"{MASKED_ID}\"` - this is an error that can happen if you are
+trying to addProducts to cart as guest, but a customer session cookie is set, it is called `PHPSESSID`. Fix - make sure
+the Cookie is not set before making API/GraphQL calls.
