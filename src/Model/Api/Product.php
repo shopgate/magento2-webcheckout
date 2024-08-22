@@ -2,6 +2,7 @@
 
 namespace Shopgate\WebCheckout\Model\Api;
 
+use Magento\Catalog\Model\Product as ProductModel;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\App\ResourceConnection;
@@ -31,7 +32,39 @@ class Product implements ProductInterface
             throw InputException::requiredField('uids');
         }
 
-        $collection = $this->getCollection($ids);
+        $collection = $this->getCollection('entity_id', $ids);
+        $result = $this->parseCollection($collection);
+
+        if (count($ids) !== $collection->getSize()) {
+            $diff = array_diff($ids, $collection->getAllIds());
+            $this->logger->error('Could not find products by IDs: ' . implode(',', $diff));
+        }
+
+        return $result;
+    }
+
+    /**
+     * @throws InputException
+     */
+    public function getProductsBySku(array $skus): ProductResultInterface
+    {
+        if (empty($skus)) {
+            throw InputException::requiredField('skus');
+        }
+
+        $collection = $this->getCollection('sku', $skus);
+        $result = $this->parseCollection($collection);
+
+        if (count($skus) !== $collection->getSize()) {
+            $diff = array_diff($skus, array_map(fn (ProductModel $item) => $item->getSku(), $collection->getItems()));
+            $this->logger->error('Could not find products by SKUs: ' . implode(',', $diff));
+        }
+
+        return $result;
+    }
+
+    private function parseCollection(Collection $collection): ProductResultInterface
+    {
         /** @var ProductResultInterface $result */
         $result = $this->resultFactory->create();
         foreach ($collection as $product) {
@@ -45,18 +78,13 @@ class Product implements ProductInterface
             );
         }
 
-        if (count($ids) !== $collection->getSize()) {
-            $diff = array_diff($ids, $collection->getAllIds());
-            $this->logger->error('Could not find products by IDs: ' . implode(',', $diff));
-        }
-
         return $result;
     }
 
-    private function getCollection(array $ids): Collection
+    private function getCollection(string $attribute, array $list): Collection
     {
         $collection = $this->productCollectionFactory->create();
-        $collection->addFieldToFilter('entity_id', ['in' => $ids]);
+        $collection->addFieldToFilter($attribute, ['in' => $list]);
 
         // finds products that have parents, then loads parent SKU
         $collection->getSelect()->joinLeft(

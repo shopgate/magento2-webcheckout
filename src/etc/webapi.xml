@@ -25,6 +25,15 @@
             <parameter name="ids"/>
         </data>
     </route>
+    <route url="/V1/sgwebcheckout/productsBySku" method="GET">
+        <service class="Shopgate\WebCheckout\Api\ProductInterface" method="getProductsBySku"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+        <data>
+            <parameter name="skus"/>
+        </data>
+    </route>
     <route url="/V1/sgwebcheckout/log" method="GET">
         <service class="Shopgate\WebCheckout\Api\LogReaderInterface" method="getPaginatedLogLines"/>
         <resources>

@@ -2953,7 +2953,7 @@
 			]
 		},
 		{
-			"name": "ID to SKU",
+			"name": "ID / SKU endpoints",
 			"item": [
 				{
 					"name": "Setup",
@@ -3455,7 +3455,7 @@
 					]
 				},
 				{
-					"name": "Test",
+					"name": "ID to SKU",
 					"item": [
 						{
 							"name": "M2: get product SKUs",
@@ -3677,6 +3677,237 @@
 										{
 											"key": "ids[]",
 											"value": "{{gen_config_parent_product1_id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "SKU to ID",
+					"item": [
+						{
+							"name": "M2: get product IDs",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Has elements\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.products).to.be.a('array');",
+											"    pm.expect(jsonData.products).to.be.lengthOf(3);",
+											"",
+											"    const child = jsonData.products.find(item => item.id === String(pm.environment.get('gen_config_child_product1_id')));",
+											"    pm.expect(child).not.be.undefined;",
+											"    pm.expect(child.parent_sku).to.eq(pm.environment.get('created_prod_config_champ_sku'));",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{m2_endpoint_api_sgwebc}}/productsBySku?skus[]={{gen_simple_product1_sku}}&skus[]={{created_prod_child_champ_m_sku}}&skus[]={{created_prod_config_champ_sku}}",
+									"host": [
+										"{{m2_endpoint_api_sgwebc}}"
+									],
+									"path": [
+										"productsBySku"
+									],
+									"query": [
+										{
+											"key": "skus[]",
+											"value": "{{gen_simple_product1_sku}}"
+										},
+										{
+											"key": "skus[]",
+											"value": "{{created_prod_child_champ_m_sku}}"
+										},
+										{
+											"key": "skus[]",
+											"value": "{{created_prod_config_champ_sku}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "M2: get non-existing SKU",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Has elements\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.products).to.be.a('array');",
+											"    pm.expect(jsonData.products).to.be.lengthOf(1);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{m2_endpoint_api_sgwebc}}/productsBySku?skus[]={{gen_simple_product1_sku}}&skus[]=NO-SKU",
+									"host": [
+										"{{m2_endpoint_api_sgwebc}}"
+									],
+									"path": [
+										"productsBySku"
+									],
+									"query": [
+										{
+											"key": "skus[]",
+											"value": "{{gen_simple_product1_sku}}"
+										},
+										{
+											"key": "skus[]",
+											"value": "NO-SKU"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "M2A: read log",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Has log\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.log).to.not.be.undefined;",
+											"    jsonData.log.pop(); // empty line skip",
+											"    const lastLine = jsonData.log.pop();",
+											"    pm.expect(lastLine).to.contain('Could not find products by SKUs: NO-SKU');",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{gen_adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{m2_endpoint_api_sgwebc}}/log?page=1&lines=2",
+									"host": [
+										"{{m2_endpoint_api_sgwebc}}"
+									],
+									"path": [
+										"log"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "lines",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "M2: get product SKUs (customer)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Has elements\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.products).to.be.a('array');",
+											"    pm.expect(jsonData.products).to.be.lengthOf(3);",
+											"",
+											"    const child = jsonData.products.find(item => item.id === String(pm.environment.get('gen_config_child_product1_id')));",
+											"    pm.expect(child).not.be.undefined;",
+											"    pm.expect(child.parent_sku).to.eq(pm.environment.get('created_prod_config_champ_sku'));",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{gen_customerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{m2_endpoint_api_sgwebc}}/productsBySku?skus[]={{gen_simple_product1_sku}}&skus[]={{created_prod_child_champ_m_sku}}&skus[]={{created_prod_config_champ_sku}}",
+									"host": [
+										"{{m2_endpoint_api_sgwebc}}"
+									],
+									"path": [
+										"productsBySku"
+									],
+									"query": [
+										{
+											"key": "skus[]",
+											"value": "{{gen_simple_product1_sku}}"
+										},
+										{
+											"key": "skus[]",
+											"value": "{{created_prod_child_champ_m_sku}}"
+										},
+										{
+											"key": "skus[]",
+											"value": "{{created_prod_config_champ_sku}}"
 										}
 									]
 								}
@@ -3988,6 +4219,37 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "M2: get bad SKU/ID map",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{m2_endpoint_api_sgwebc}}/products",
+							"host": [
+								"{{m2_endpoint_api_sgwebc}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
 				},
 				{
 					"name": "FE: expired token",
