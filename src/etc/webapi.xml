@@ -16,6 +16,12 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
+    <route url="/V1/sgwebcheckout/anonymous/token" method="POST">
+        <service class="Shopgate\WebCheckout\Api\TokenInterface" method="getAnonymousToken"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
     <route url="/V1/sgwebcheckout/products" method="GET">
         <service class="Shopgate\WebCheckout\Api\ProductInterface" method="getProducts"/>
         <resources>

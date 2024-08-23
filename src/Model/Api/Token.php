@@ -32,7 +32,7 @@ class Token implements TokenInterface
         private readonly TokenManager $tokenManager
     ) {
         // load all possible keys
-        $this->keys = preg_split('/\s+/s', trim((string)$deploymentConfig->get(Encryptor::PARAM_CRYPT_KEY)));
+        $this->keys = preg_split('/\s+/s', trim((string) $deploymentConfig->get(Encryptor::PARAM_CRYPT_KEY)));
         $this->keyVersion = count($this->keys) - 1;
     }
 
@@ -64,6 +64,19 @@ class Token implements TokenInterface
             $this->keys[$this->keyVersion],
             $this->request->getHttpHost(),
             $cartId
+        );
+    }
+
+    /**
+     * Token for when a guest has no cart yet
+     *
+     * @throws BuildException|EncodeException
+     */
+    public function getAnonymousToken(): TokenResultInterface
+    {
+        return $this->tokenManager->createEmptyPayloadToken(
+            $this->keys[$this->keyVersion],
+            $this->request->getHttpHost()
         );
     }
 }

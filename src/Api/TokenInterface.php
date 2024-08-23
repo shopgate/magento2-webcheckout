@@ -15,4 +15,9 @@ interface TokenInterface
      * @return TokenResultInterface
      */
     public function getGuestToken(string $cartId): TokenResultInterface;
+
+    /**
+     * @return TokenResultInterface
+     */
+    public function getAnonymousToken(): TokenResultInterface;
 }
