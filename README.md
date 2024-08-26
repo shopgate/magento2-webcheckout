@@ -37,6 +37,33 @@ Result:
     ]
 }
 ```
+#### Product SKU to ID mapping
+```http request
+Anonymous & Customer
+
+###
+GET http://localhost/rest/default/V1/sgwebcheckout/productsBySku?skus[]=24-WG02&skus[]=MS-Champ-M&skus[]=MS-Champ
+```
+Result:
+```json
+{
+    "products": [
+        {
+            "sku": "24-WG02",
+            "id": "44"
+        },
+        {
+            "parent_sku": "WSH12",
+            "sku": "WSH12-31-Green",
+            "id": "2034"
+        },
+        {
+            "sku": "WSH12",
+            "id": "2040"
+        }
+    ]
+}
+```
 #### Auto-login token
 ```http request
 Customer

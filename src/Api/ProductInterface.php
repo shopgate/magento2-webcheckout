@@ -10,4 +10,11 @@ interface ProductInterface
      * @return ProductResultInterface
      */
     public function getProducts(array $ids): ProductResultInterface;
+
+    /**
+     * @param string[] $skus
+     *
+     * @return ProductResultInterface
+     */
+    public function getProductsBySku(array $skus): ProductResultInterface;
 }
