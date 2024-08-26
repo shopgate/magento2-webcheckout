@@ -61,6 +61,9 @@ class Login implements HttpGetActionInterface
                 $this->logger->error("Could not locate masked quote ID: '$maskedQuoteId'");
                 return $this->redirect->setUrl($this->getRedirectUrl($closeInAppRoute));
             }
+        } elseif ($this->tokenManager->isAnonymousToken($token)) {
+            $this->userAccess->logoutCustomer();
+            $this->userAccess->expireSession();
         } else {
             $this->logger->error('Neither guest cartId or customer authToken provided');
             return $this->redirect->setUrl($this->getRedirectUrl($closeInAppRoute));

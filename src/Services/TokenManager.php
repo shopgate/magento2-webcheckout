@@ -11,6 +11,7 @@ class TokenManager
 {
     public final const USER_ID_KEY = 'user_id';
     public final const CART_ID = 'cart_id';
+    public final const NO_CART = 'no_cart';
 
     public function __construct(
         private readonly TokenBuilder $tokenBuilder,
@@ -32,6 +33,11 @@ class TokenManager
     public function getCartId(string $token): ?string
     {
         return $this->tokenBuilder->getPayload($token)[self::CART_ID] ?? null;
+    }
+
+    public function isAnonymousToken(string $token): bool
+    {
+        return $this->tokenBuilder->getPayload($token)[self::NO_CART] ?? false;
     }
 
     /**
@@ -59,5 +65,13 @@ class TokenManager
         $token = $this->tokenBuilder->createCustomPayload($secret, $expiration, $domain, $payload)->getToken();
 
         return $this->tokenResultFactory->create()->setToken($token)->setExpiration($expiration);
+    }
+
+    /**
+     * @throws BuildException|EncodeException
+     */
+    public function createEmptyPayloadToken(string $secret, string $domain): TokenResultInterface
+    {
+        return $this->createToken($secret, $domain, [self::NO_CART => true]);
     }
 }

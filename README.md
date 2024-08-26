@@ -72,10 +72,24 @@ Customer
 POST http://localhost/rest/default/V1/sgwebcheckout/me/token
 ```
 ```http request
-Anonymous
+Guest user (with cart)
 
 ###
 POST http://localhost/rest/default/V1/sgwebcheckout/:cartId/token
+```
+Result
+```json
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "expiration": 1722194685
+}
+```
+
+```http request
+Anonymous user (guest without cart)
+
+###
+POST http://localhost/rest/default/V1/sgwebcheckout/anonymous/token
 ```
 Result
 ```json

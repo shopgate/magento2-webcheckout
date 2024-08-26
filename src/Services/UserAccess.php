@@ -48,4 +48,9 @@ class UserAccess
         $quoteId = $this->maskedQuoteToQuote->execute($maskedQuoteId);
         $this->checkoutSession->setQuoteId($quoteId);
     }
+
+    public function expireSession(): void
+    {
+        $this->customerSession->expireSessionCookie();
+    }
 }

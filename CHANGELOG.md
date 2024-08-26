@@ -9,6 +9,7 @@ to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - SKU to ID endpoint
+- Anonymous token endpoint for a guest user that has no cart
 ### Changed
 - Default login redirect route to point to /checkout instead of cart page
 

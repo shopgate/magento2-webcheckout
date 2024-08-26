@@ -1755,6 +1755,458 @@
 								}
 							],
 							"description": "Checking developer GET param"
+						},
+						{
+							"name": "Anonymous logout",
+							"item": [
+								{
+									"name": "M2: user login",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Body is a string\", function () {",
+													"    const token = pm.response.text().replace(/['\"]+/g, '');",
+													"    pm.expect(token).to.be.a('string');",
+													"    pm.environment.set('gen_customerToken', token);",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											},
+											{
+												"key": "Shopgate-Check",
+												"value": "true",
+												"description": "allows to set token expiration to a year",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"username\": \"{{default_customer_email}}\",\n  \"password\": \"{{default_customer_pass}}\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{m2_endpoint_api}}/integration/customer/token",
+											"host": [
+												"{{m2_endpoint_api}}"
+											],
+											"path": [
+												"integration",
+												"customer",
+												"token"
+											]
+										},
+										"description": "Create access token for admin given the customer credentials."
+									},
+									"response": [
+										{
+											"name": "200 Success.",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/V1/integration/customer/token",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"V1",
+														"integration",
+														"customer",
+														"token"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "<string>"
+										},
+										{
+											"name": "400 Bad Request",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/V1/integration/customer/token",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"V1",
+														"integration",
+														"customer",
+														"token"
+													]
+												}
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"message\": \"<string>\",\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"code\": \"<integer>\",\n  \"parameters\": [\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    },\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    }\n  ],\n  \"trace\": \"<string>\"\n}"
+										},
+										{
+											"name": "Unexpected error",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/V1/integration/customer/token",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"V1",
+														"integration",
+														"customer",
+														"token"
+													]
+												}
+											},
+											"status": "Internal Server Error",
+											"code": 500,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"message\": \"<string>\",\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"code\": \"<integer>\",\n  \"parameters\": [\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    },\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    }\n  ],\n  \"trace\": \"<string>\"\n}"
+										}
+									]
+								},
+								{
+									"name": "M2: Token API",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Has token\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.token).to.be.a('string')",
+													"    pm.environment.set(\"gen_sgToken\", jsonData.token);",
+													"    pm.expect(jsonData.expiration).to.be.a('number');",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{gen_customerToken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{m2_endpoint_api_sgwebc}}/me/token",
+											"host": [
+												"{{m2_endpoint_api_sgwebc}}"
+											],
+											"path": [
+												"me",
+												"token"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "FE: check customer accnt page",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"// Load the HTML response to $",
+													"const pkg = require('cheerio')",
+													"const $ = pkg.load(pm.response.text());",
+													"",
+													"pm.test(\"Check login status\", function () {",
+													"    const bodyClass = $('body.customer-account-index');",
+													"    pm.expect(bodyClass).to.be.lengthOf(1);",
+													"});",
+													"",
+													"pm.test('Check SG Web View', () => {",
+													"    const script = $('script[type=\"text/x-magento-init\"]:contains(\"Shopgate_WebCheckout\")');",
+													"    pm.expect(script).to.be.lengthOf(1);",
+													"",
+													"    // data test",
+													"    pm.expect(script[0].children[0].data).to.be.a('string');",
+													"    const data = JSON.parse(script[0].children[0].data);",
+													"    const definition = data['*']['Shopgate_WebCheckout/js/init'];",
+													"    pm.expect(definition.isSgWebView, 'Expected isSgWebView to be true').to.be.true;",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "User-Agent",
+												"value": "PostmanRuntime Mozilla/5.0 (iPhone; CPU iPhone OS 17_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 libshopgate/25.0 (RN Engage 11.0.0-beta.5 Codebase:11.0.0-beta.5) Mozilla/5.0 (Linux; Android 12; Nokia 5.3 Build/SKQ1.211230.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/121.0.6167.143 Mobile Safari/537.36 libshopgate/25.0 (Jagdwelt 24 11.0.2 Codebase:11.0.2)",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{m2_endpoint_fe_sgwebc}}/account/login?token={{gen_sgToken}}&redirectTo=customer/account&sgcloud_checkout=1",
+											"host": [
+												"{{m2_endpoint_fe_sgwebc}}"
+											],
+											"path": [
+												"account",
+												"login"
+											],
+											"query": [
+												{
+													"key": "token",
+													"value": "{{gen_sgToken}}"
+												},
+												{
+													"key": "redirectTo",
+													"value": "customer/account"
+												},
+												{
+													"key": "sgcloud_checkout",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "M2: get anon token",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Has token\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.token).to.be.a('string')",
+													"    pm.environment.set(\"gen_guest_sgToken\", jsonData.token);",
+													"    pm.expect(jsonData.expiration).to.be.a('number');",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{m2_endpoint_api_sgwebc}}/anonymous/token",
+											"host": [
+												"{{m2_endpoint_api_sgwebc}}"
+											],
+											"path": [
+												"anonymous",
+												"token"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "FE: check not logged in",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"// Load the HTML response to $",
+													"const pkg = require('cheerio')",
+													"const $ = pkg.load(pm.response.text());",
+													"",
+													"pm.test(\"Check login status\", function () {",
+													"    const bodyClass = $('body.customer-account-login');",
+													"    pm.expect(bodyClass).to.be.lengthOf(1);",
+													"});",
+													"",
+													"pm.test('Check SG Web View', () => {",
+													"    const script = $('script[type=\"text/x-magento-init\"]:contains(\"Shopgate_WebCheckout\")');",
+													"    pm.expect(script).to.be.lengthOf(1);",
+													"",
+													"    // data test",
+													"    pm.expect(script[0].children[0].data).to.be.a('string');",
+													"    const data = JSON.parse(script[0].children[0].data);",
+													"    const definition = data['*']['Shopgate_WebCheckout/js/init'];",
+													"    pm.expect(definition.isSgWebView, 'Expected isSgWebView to be true').to.be.true;",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "User-Agent",
+												"value": "PostmanRuntime Mozilla/5.0 (iPhone; CPU iPhone OS 17_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 libshopgate/25.0 (RN Engage 11.0.0-beta.5 Codebase:11.0.0-beta.5) Mozilla/5.0 (Linux; Android 12; Nokia 5.3 Build/SKQ1.211230.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/121.0.6167.143 Mobile Safari/537.36 libshopgate/25.0 (Jagdwelt 24 11.0.2 Codebase:11.0.2)",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{m2_endpoint_fe_sgwebc}}/account/login?token={{gen_guest_sgToken}}&redirectTo=customer/account&sgcloud_checkout=1",
+											"host": [
+												"{{m2_endpoint_fe_sgwebc}}"
+											],
+											"path": [
+												"account",
+												"login"
+											],
+											"query": [
+												{
+													"key": "token",
+													"value": "{{gen_guest_sgToken}}"
+												},
+												{
+													"key": "redirectTo",
+													"value": "customer/account"
+												},
+												{
+													"key": "sgcloud_checkout",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"description": "Makes sure that guest without a cart logs out the previous customer from the session"
 						}
 					],
 					"description": "Testing customer controller FPC. Making sure the parts that shouldn't be cached are not cached (e.g. pipeline authToken calls)\n\nUnfortunately, I cannot test the \"checkout success\" page & whether it gets cached. Supposedly it shouldn't as the default M2 sets it to be non-cachable, but maybe one day..."
@@ -2273,7 +2725,7 @@
 			]
 		},
 		{
-			"name": "Guest",
+			"name": "Guest (with cart)",
 			"item": [
 				{
 					"name": "M2: create guest cart",
@@ -2892,6 +3344,250 @@
 							"path": [
 								"checkout",
 								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FE: unset cookie",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load the HTML response to $",
+									"const pkg = require('cheerio')",
+									"const $ = pkg.load(pm.response.text());",
+									"",
+									"pm.test(\"Check login status\", function () {",
+									"    const input = $('.cart-empty');",
+									"    pm.expect(input).to.be.lengthOf(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Allow cookie deletion by going to cookies -> Domain Allowlist",
+									"const jar = pm.cookies.jar();",
+									"jar.unset(pm.environment.get(\"host\"), 'PHPSESSID', function (error) {",
+									"    if (error) {",
+									"        console.log(error.message)",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/checkout/cart",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"checkout",
+								"cart"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Anon | Guest (no cart)",
+			"item": [
+				{
+					"name": "M2: Guest Token API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Has token\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.token).to.be.a('string')",
+									"    pm.environment.set(\"gen_guest_sgToken\", jsonData.token);",
+									"    pm.expect(jsonData.expiration).to.be.a('number');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{m2_endpoint_api_sgwebc}}/anonymous/token",
+							"host": [
+								"{{m2_endpoint_api_sgwebc}}"
+							],
+							"path": [
+								"anonymous",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FE: auto-login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load the HTML response to $",
+									"const pkg = require('cheerio')",
+									"const $ = pkg.load(pm.response.text());",
+									"",
+									"pm.test(\"Check we are on empty cart page\", function () {",
+									"    const body = $('body.checkout-cart-index');",
+									"    pm.expect(body).to.be.lengthOf(1);",
+									"});",
+									"",
+									"pm.test('Check SG Web View', () => {",
+									"    const script = $('script[type=\"text/x-magento-init\"]:contains(\"Shopgate_WebCheckout\")');",
+									"    pm.expect(script).to.be.lengthOf(1);",
+									"",
+									"    // data test",
+									"    pm.expect(script[0].children[0].data).to.be.a('string');",
+									"    const data = JSON.parse(script[0].children[0].data);",
+									"    const definition = data['*']['Shopgate_WebCheckout/js/init'];",
+									"    pm.expect(definition.isSgWebView, 'Expected isSgWebView to be true').to.be.true;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "User-Agent",
+								"value": "PostmanRuntime Mozilla/5.0 (iPhone; CPU iPhone OS 17_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 libshopgate/25.0 (RN Engage 11.0.0-beta.5 Codebase:11.0.0-beta.5) Mozilla/5.0 (Linux; Android 12; Nokia 5.3 Build/SKQ1.211230.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/121.0.6167.143 Mobile Safari/537.36 libshopgate/25.0 (Jagdwelt 24 11.0.2 Codebase:11.0.2)",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{m2_endpoint_fe_sgwebc}}/account/login?sgcloud_checkout=1&token={{gen_guest_sgToken}}",
+							"host": [
+								"{{m2_endpoint_fe_sgwebc}}"
+							],
+							"path": [
+								"account",
+								"login"
+							],
+							"query": [
+								{
+									"key": "sgcloud_checkout",
+									"value": "1"
+								},
+								{
+									"key": "redirectTo",
+									"value": "registered",
+									"disabled": true
+								},
+								{
+									"key": "token",
+									"value": "{{gen_guest_sgToken}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FE:  check register page",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load the HTML response to $",
+									"const pkg = require('cheerio')",
+									"const $ = pkg.load(pm.response.text());",
+									"",
+									"pm.test(\"Check page\", function () {",
+									"    const input = $('body.is-sg-app.customer-account-create');",
+									"    pm.expect(input).to.be.lengthOf(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "User-Agent",
+								"value": "PostmanRuntime Mozilla/5.0 (iPhone; CPU iPhone OS 17_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 libshopgate/25.0 (RN Engage 11.0.0-beta.5 Codebase:11.0.0-beta.5) Mozilla/5.0 (Linux; Android 12; Nokia 5.3 Build/SKQ1.211230.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/121.0.6167.143 Mobile Safari/537.36 libshopgate/25.0 (Jagdwelt 24 11.0.2 Codebase:11.0.2)",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{m2_endpoint_fe_sgwebc}}/account/login?sgcloud_checkout=1&redirectTo={{domain}}/customer/account/create&token={{gen_guest_sgToken}}",
+							"host": [
+								"{{m2_endpoint_fe_sgwebc}}"
+							],
+							"path": [
+								"account",
+								"login"
+							],
+							"query": [
+								{
+									"key": "sgcloud_checkout",
+									"value": "1"
+								},
+								{
+									"key": "redirectTo",
+									"value": "{{domain}}/customer/account/create"
+								},
+								{
+									"key": "token",
+									"value": "{{gen_guest_sgToken}}"
+								}
 							]
 						}
 					},
