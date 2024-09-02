@@ -3,7 +3,8 @@ define(
     function (AbstractEvent) {
         class CloseEvent extends AbstractEvent {
             supports (module, controller, action) {
-                return module === 'sgwebcheckout' && controller === 'close' && action === 'index'
+                return (module === 'sgwebcheckout' && controller === 'close' && action === 'index')
+                || (module === 'sgwebcheckout' && controller === 'account' && action === 'registered')
             }
 
             execute () {

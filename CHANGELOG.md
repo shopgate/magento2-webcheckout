@@ -12,6 +12,8 @@ to [Semantic Versioning](http://semver.org/).
 - Anonymous token endpoint for a guest user that has no cart
 ### Changed
 - Default login redirect route to point to /checkout instead of cart page
+### Fixed
+- Support for Safari inApp browser on IOS devices
 
 ## 0.1.0
 
