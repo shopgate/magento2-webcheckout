@@ -36,6 +36,16 @@ define(
                     },
                     []
                 )
+
+                setTimeout(() => {
+                    window.SGAppConnector.sendAppCommands([
+                        {
+                            'c': 'broadcastEvent',
+                            'p': {'event': 'userLoggedIn'}
+                        }
+                    ]);
+                }, 3000);
+
             }
         }
 
