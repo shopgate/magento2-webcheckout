@@ -95,7 +95,7 @@ class Product implements ProductInterface
             ['cpe' => $this->resourceConnection->getTableName('catalog_product_entity')],
             'cpsl.parent_id = cpe.entity_id',
             ['parent_sku' => 'sku']
-        );
+        )->group('e.entity_id');
 
         return $collection;
     }
