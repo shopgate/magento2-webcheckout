@@ -30,7 +30,7 @@ class SaveWebcheckoutOrder implements ObserverInterface
 
         try {
             $orderModel = $this->orderFactory->create();
-            $orderModel->setOrderId((int)$observer->getOrder()->getRealOrderId());
+            $orderModel->setOrderId((int)$observer->getOrder()->getId());
             $orderModel->setUserAgent($this->request->getHeader('User-Agent'));
 
             $this->shopgateWebCheckoutOrderFactory->create()->save($orderModel);

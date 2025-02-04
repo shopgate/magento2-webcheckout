@@ -1,8 +1,5 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
-    <event name="sales_model_service_quote_submit_success">
-        <observer name="shopgate_webcheckout_quote_submitted" instance="Shopgate\WebCheckout\Observer\SaveWebcheckoutOrder" />
-    </event>
     <event name="layout_load_before">
         <observer name="shopgate_webcheckout_add_body_class" instance="Shopgate\WebCheckout\Observer\AddBodyTagClass" />
     </event>
