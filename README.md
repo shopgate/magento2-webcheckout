@@ -119,6 +119,49 @@ Result:
 }
 ```
 
+#### Shopgate WebCheckout orders
+
+```http request
+Backend User / Integration
+
+###
+GET http://localhost/rest/default/V1/sgwebcheckout/orders?searchCriteria[currentPage]=1&searchCriteria[pageSize]=10&searchCriteria[filter_groups][0][filters][0][field]=increment_id&searchCriteria[filter_groups][0][filters][0][value]=000000051&searchCriteria[filter_groups][0][filters][0][condition_type]=eq
+```
+Result:
+```json
+{
+    "items": [
+        {
+            ...
+            "entity_id": 51,
+            "increment_id": "000000051",
+            "items": [
+                {
+                    ...
+                }
+            ]
+            ...
+        }
+    ],
+    "search_criteria": {
+        "filter_groups": [
+            {
+                "filters": [
+                    {
+                        "field": "increment_id",
+                        "value": "000000051",
+                        "condition_type": "eq"
+                    }
+                ]
+            }
+        ],
+        "page_size": 10,
+        "current_page": 1
+    },
+    "total_count": 1
+}
+```
+
 ### Developer mode
 
 When working with the frontend and trying to mimic the inApp, just append `?sgWebView=1` and load the page. This will
