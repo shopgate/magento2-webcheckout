@@ -8,6 +8,11 @@ bin/magento module:enable Shopgate_WebCheckout
 bib/magento setup:upgrade
 ```
 
+### Configurations:
+
+We suggest updating the `Services > Mage Web API > JWT Auth > Customer JWT Expires in` to a longer timeframe,
+otherwise the customer will be logged out every 60 minutes by default. This is not very user friendly.
+
 ### Endpoints
 
 #### Product ID to SKU mapping
