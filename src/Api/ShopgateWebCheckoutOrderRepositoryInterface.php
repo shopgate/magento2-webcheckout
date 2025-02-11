@@ -1,14 +1,16 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Shopgate\WebCheckout\Api;
+
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Sales\Api\Data\OrderSearchResultInterface;
 
 interface ShopgateWebCheckoutOrderRepositoryInterface
 {
     /**
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @param SearchCriteriaInterface $searchCriteria
      *
-     * @return \Magento\Sales\Api\Data\OrderSearchResultInterface
+     * @return OrderSearchResultInterface
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria): \Magento\Sales\Api\Data\OrderSearchResultInterface;
+    public function getList(SearchCriteriaInterface $searchCriteria): OrderSearchResultInterface;
 }

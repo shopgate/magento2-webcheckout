@@ -1,29 +1,28 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Shopgate\WebCheckout\Model;
 
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
-use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\DB\Select;
-use Magento\Sales\Api\Data\OrderSearchResultInterface;
-use Shopgate\WebCheckout\Api\ShopgateWebCheckoutOrderRepositoryInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Sales\Api\Data\OrderSearchResultInterface;
 use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFactory;
+use Shopgate\WebCheckout\Api\ShopgateWebCheckoutOrderRepositoryInterface;
 use Shopgate\WebCheckout\Model\ResourceModel\ShopgateWebCheckoutOrder as WebCheckoutOrder;
 
 class ShopgateWebCheckoutOrderRepository implements ShopgateWebCheckoutOrderRepositoryInterface
 {
     /**
      * @param CollectionProcessorInterface $collectionProcessor
-     * @param SearchResultFactory          $searchResultFactory
-     * @param JoinProcessorInterface       $extensionAttributesJoinProcessor
+     * @param SearchResultFactory $searchResultFactory
+     * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      */
     public function __construct(
         private readonly CollectionProcessorInterface $collectionProcessor,
         private readonly SearchResultFactory $searchResultFactory,
         private readonly JoinProcessorInterface $extensionAttributesJoinProcessor
-    ) {}
+    ) {
+    }
 
     /**
      * @param SearchCriteriaInterface $searchCriteria

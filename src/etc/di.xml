@@ -5,8 +5,10 @@
     <preference for="Shopgate\WebCheckout\Api\TokenResultInterface" type="Shopgate\WebCheckout\Model\Api\TokenResult"/>
     <preference for="Shopgate\WebCheckout\Api\LogReaderInterface" type="Shopgate\WebCheckout\Model\Api\LogReader"/>
     <preference for="Shopgate\WebCheckout\Api\ProductInterface" type="Shopgate\WebCheckout\Model\Api\Product"/>
-    <preference for="Shopgate\WebCheckout\Api\ProductInstanceInterface" type="Shopgate\WebCheckout\Model\Api\ProductInstance"/>
-    <preference for="Shopgate\WebCheckout\Api\ShopgateWebCheckoutOrderRepositoryInterface" type="Shopgate\WebCheckout\Model\ShopgateWebCheckoutOrderRepository"/>
+    <preference for="Shopgate\WebCheckout\Api\ProductInstanceInterface"
+                type="Shopgate\WebCheckout\Model\Api\ProductInstance"/>
+    <preference for="Shopgate\WebCheckout\Api\ShopgateWebCheckoutOrderRepositoryInterface"
+                type="Shopgate\WebCheckout\Model\ShopgateWebCheckoutOrderRepository"/>
     <preference for="Shopgate\WebCheckout\Api\ShopgateCookieManagementInterface"
                 type="Shopgate\WebCheckout\Model\ShopgateCookieManagement"/>
 
