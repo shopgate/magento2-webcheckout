@@ -50,4 +50,10 @@
             <parameter name="lines"/>
         </data>
     </route>
+    <route url="/V1/sgwebcheckout/orders" method="GET">
+        <service class="Shopgate\WebCheckout\Api\ShopgateWebCheckoutOrderRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Sales::actions_view" />
+        </resources>
+    </route>
 </routes>
