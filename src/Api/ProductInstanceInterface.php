@@ -39,4 +39,28 @@ interface ProductInstanceInterface
      * @return string
      */
     public function getId(): string;
+
+    /**
+     * @param string|null $options
+     *
+     * @return ProductInstanceInterface
+     */
+    public function setEnteredOptions(?string $options): ProductInstanceInterface;
+
+    /**
+     * @return string|null
+     */
+    public function getEnteredOptions(): ?string;
+
+    /**
+     * @param string|null $options
+     *
+     * @return ProductInstanceInterface
+     */
+    public function setSelectedOptions(?string $options): ProductInstanceInterface;
+
+    /**
+     * @return string|null
+     */
+    public function getSelectedOptions(): ?string;
 }

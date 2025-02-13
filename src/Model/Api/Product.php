@@ -73,6 +73,8 @@ class Product implements ProductInterface
             $result->addProduct(
                 $instance
                     ->setParentSku($product->getData('parent_sku'))
+                    ->setEnteredOptions(null)
+                    ->setSelectedOptions(null)
                     ->setSku($product->getSku())
                     ->setId($product->getId())
             );

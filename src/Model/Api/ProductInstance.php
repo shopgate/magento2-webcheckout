@@ -9,6 +9,8 @@ class ProductInstance implements ProductInstanceInterface
     private ?string $parentSku;
     private string $sku;
     private string $id;
+    private ?string $enteredOptions;
+    private ?string $selectedOptions;
 
     public function setParentSku(?string $sku): ProductInstanceInterface
     {
@@ -44,5 +46,29 @@ class ProductInstance implements ProductInstanceInterface
     public function getId(): string
     {
         return $this->id;
+    }
+
+    public function setEnteredOptions(?string $options): ProductInstanceInterface
+    {
+        $this->enteredOptions = $options;
+
+        return $this;
+    }
+
+    public function getEnteredOptions(): ?string
+    {
+        return $this->enteredOptions;
+    }
+
+    public function setSelectedOptions(?string $options): ProductInstanceInterface
+    {
+        $this->selectedOptions = $options;
+
+        return $this;
+    }
+
+    public function getSelectedOptions(): ?string
+    {
+        return $this->selectedOptions;
     }
 }
