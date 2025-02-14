@@ -5,9 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres
 to [Semantic Versioning](http://semver.org/).
 
-## 0.2.3
+## 0.3.0
 ### Added
 - support for additional options on sku api call
+- REST endpoint to fetch statistics about Shopgate orders
 
 ## 0.2.2
 ### Fixed
