@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
     <route url="/V1/sgwebcheckout/me/token" method="POST">
         <service class="Shopgate\WebCheckout\Api\TokenInterface" method="getCustomerToken"/>
         <resources>
@@ -49,5 +50,11 @@
             <parameter name="page"/>
             <parameter name="lines"/>
         </data>
+    </route>
+    <route url="/V1/sgwebcheckout/orders" method="GET">
+        <service class="Shopgate\WebCheckout\Api\ShopgateWebCheckoutOrderRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Sales::actions_view"/>
+        </resources>
     </route>
 </routes>

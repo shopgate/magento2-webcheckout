@@ -8,6 +8,11 @@ bin/magento module:enable Shopgate_WebCheckout
 bib/magento setup:upgrade
 ```
 
+### Configurations:
+
+We suggest updating the `Services > Mage Web API > JWT Auth > Customer JWT Expires in` to a longer timeframe,
+otherwise the customer will be logged out every 60 minutes by default. This is not very user friendly.
+
 ### Endpoints
 
 #### Product ID to SKU mapping
@@ -116,6 +121,49 @@ Result:
         "[2024-07-28T19:08:21.400242+00:00] shopgate_webc.ERROR: Could not find products by IDs: 99999 [] []\n",
         ""
     ]
+}
+```
+
+#### Shopgate WebCheckout orders
+
+```http request
+Backend User / Integration
+
+###
+GET http://localhost/rest/default/V1/sgwebcheckout/orders?searchCriteria[currentPage]=1&searchCriteria[pageSize]=10&searchCriteria[filter_groups][0][filters][0][field]=increment_id&searchCriteria[filter_groups][0][filters][0][value]=000000051&searchCriteria[filter_groups][0][filters][0][condition_type]=eq
+```
+Result:
+```json
+{
+    "items": [
+        {
+            ...
+            "entity_id": 51,
+            "increment_id": "000000051",
+            "items": [
+                {
+                    ...
+                }
+            ]
+            ...
+        }
+    ],
+    "search_criteria": {
+        "filter_groups": [
+            {
+                "filters": [
+                    {
+                        "field": "increment_id",
+                        "value": "000000051",
+                        "condition_type": "eq"
+                    }
+                ]
+            }
+        ],
+        "page_size": 10,
+        "current_page": 1
+    },
+    "total_count": 1
 }
 ```
 
