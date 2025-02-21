@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres
 to [Semantic Versioning](http://semver.org/).
 
+## 0.3.2
+### Fixed
+- compatibility with Magento below 2.4.7
+
 ## 0.3.1
 ### Added
 - extension_attribute values and user agent to Shopgate order REST endpoint
