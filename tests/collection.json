@@ -5168,6 +5168,84 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Check WebC order",
+			"item": [
+				{
+					"name": "M2A: get orders",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Has elements\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.items).to.be.a('array').to.not.be.empty;",
+									"    pm.expect(jsonData.total_count).to.be.greaterThan(0);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{gen_adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{m2_endpoint_api_sgwebc}}/orders?searchCriteria[currentPage]=1&searchCriteria[pageSize]=10",
+							"host": [
+								"{{m2_endpoint_api_sgwebc}}"
+							],
+							"path": [
+								"orders"
+							],
+							"query": [
+								{
+									"key": "searchCriteria[currentPage]",
+									"value": "1"
+								},
+								{
+									"key": "searchCriteria[pageSize]",
+									"value": "10"
+								},
+								{
+									"key": "searchCriteria[filter_groups][0][filters][0][field]",
+									"value": "increment_id",
+									"disabled": true
+								},
+								{
+									"key": "searchCriteria[filter_groups][0][filters][0][value]",
+									"value": "000000051",
+									"disabled": true
+								},
+								{
+									"key": "searchCriteria[filter_groups][0][filters][0][condition_type]",
+									"value": "eq",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "After Cypress tests create an order via Frontend we should have an order we can retrieve"
 		}
 	]
 }

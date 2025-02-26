@@ -34,9 +34,10 @@ test:
       - PHP: "8.1"
         MAGE_VER: "2.4.5-p1"
       - PHP: "8.2"
-        MAGE_VER: "2.4.7-p2" # if you change, the image needs to be created
+        MAGE_VER: "2.4.7-p4" # if you change, the image needs to be created
   script:
     - export APP_URL="http://$HOSTNAME"
+    - export CYPRESS_baseUrl=$APP_URL
     - cd $MAGE_DIR
     - mkdir -p plugins/shopgate-webcheckout
     - cp -r $CI_PROJECT_DIR/* plugins/shopgate-webcheckout
@@ -46,19 +47,27 @@ test:
     - bin/magento setup:upgrade --quiet
     - bin/magento setup:di:compile --quiet
     - bin/magento setup:static-content:deploy -f -a frontend -l en_US -t luma
+    - bin/magento config:set customer/captcha/enable 0
     - bin/magento config:set shopgate_webcheckout/development/enable_logging 1
+    - bin/magento config:set payment/cashondelivery/active 1
     - bin/magento cache:clean --quiet
     - cd plugins/shopgate-webcheckout/tests
+    - npm i
+    - npm run e2e
     - npm run ci -- --env-var="host=$APP_URL"
       --reporter-htmlextra-export="$CI_PROJECT_DIR/postman-report.html"
       --reporter-junitfull-export="$CI_PROJECT_DIR/newman.junit.xml";
+  after_script:
+    - mkdir -p $CI_PROJECT_DIR/cypress
+    - cp -R $MAGE_DIR/plugins/shopgate-webcheckout/tests/cypress/screenshots $CI_PROJECT_DIR/cypress/ || true
   artifacts:
     when: on_failure
-    expire_in: 7 days
+    expire_in: 3 days
     reports:
       junit: newman.junit.xml
     paths:
       - ./postman-report.html
+      - ./cypress
 
 register_package:
   image: curlimages/curl:latest
