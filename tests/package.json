@@ -1,17 +1,16 @@
 {
   "name": "apite-sgm2-test",
   "version": "1.0.0",
-  "description": "",
+  "description": "Install newman package globally yourself, latest version should be fine",
   "main": "index.js",
   "scripts": {
-    "local": "node_modules/.bin/newman run ./collection.json -e ./environment.json --color=on --bail",
-    "ci": "newman run -r cli,htmlextra,junitfull ./collection.json -e ./environment.json --color=on --insecure --no-insecure-file-read"
+    "local": "newman run ./collection.json -e ./environment.json --color=on --bail",
+    "ci": "newman run -r cli,htmlextra,junitfull ./collection.json -e ./environment.json --color=on --insecure --no-insecure-file-read",
+    "e2e": "node_modules/.bin/cypress run"
   },
   "author": "Konstantin Kiritsenko",
   "license": "ISC",
   "dependencies": {
-    "newman": "latest",
-    "newman-reporter-htmlextra": "latest",
-    "newman-reporter-junitfull": "latest"
+    "cypress": "^14.0.3"
   }
 }
