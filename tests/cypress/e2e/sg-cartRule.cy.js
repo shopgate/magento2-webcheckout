@@ -7,11 +7,19 @@ import adminPromo from '../fixtures/selectors/admin/promotion'
 describe('Login to admin, create SG coupon, check coupon on FE', () => {
     it('should create coupon & check storefront', () => {
         cy.fixture('adminUser.json').then((user) => {
-            cy.loginAdmin(user.username, user.password)
+            // login to admin
             cy.visit('/admin')
+            cy.get('#username').should('be.visible')
+                .clear()
+                .type(user.username, { delay: 0 })
+            cy.get('#login').should('be.visible')
+                .clear()
+                .type(user.password, { delay: 0 })
+            cy.get('#login-form').submit()
+
+            // go to promo creation page
             cy.get(adminNav.promoNavItem).find('a').as('promo')
             cy.get('@promo').click({force:true})
-
             cy.wait(1000)
             cy.get(adminPromo.addButton).click({force:true})
 

@@ -15,16 +15,3 @@ Cypress.Commands.add('loginPage', (username, password) => {
         cy.url().should('contain', '/customer/account')
     })
 })
-
-Cypress.Commands.add('loginAdmin', (username, password) => {
-    cy.session('loginAdmin', () => {
-        cy.visit('/admin')
-        cy.get('#username').should('be.visible')
-            .clear()
-            .type(username, { delay: 0 })
-        cy.get('#login').should('be.visible')
-            .clear()
-            .type(password, { delay: 0 })
-        cy.get('#login-form').submit()
-    })
-})
