@@ -9,11 +9,6 @@ use Magento\Rule\Model\Condition\AbstractCondition;
 use Magento\Rule\Model\Condition\Context;
 use Shopgate\WebCheckout\Services\ShopgateDetector;
 
-/**
- * Class WebCheckout
- *
- * @package Shopgate\WebCheckout\Model\Rule\Condition
- */
 class WebCheckout extends AbstractCondition
 {
     private const IS_WEBCHECKOUT_ORDER = 'is_webcheckout_order';
@@ -48,7 +43,7 @@ class WebCheckout extends AbstractCondition
         return 'select';
     }
 
-    public function getValueSelectOptions()
+    public function getValueSelectOptions(): mixed
     {
         if (!$this->hasData('value_select_options')) {
             $this->setData(
