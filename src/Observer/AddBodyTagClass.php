@@ -10,6 +10,7 @@ use Shopgate\WebCheckout\Services\ShopgateDetector;
 
 class AddBodyTagClass implements ObserverInterface
 {
+
     public function __construct(
         private readonly PageConfig $pageConfig,
         private readonly ShopgateDetector $shopgateDetector
