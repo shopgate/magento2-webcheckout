@@ -24,7 +24,7 @@ describe('creates a WebC order', () => {
 
         // cy.visit(checkout.checkoutUrl + '?XDEBUG_SESSION=PHPSTORM')
         cy.visit(checkout.checkoutUrl + '?sgWebView=1')
-        cy.wait(2000)
+        cy.wait(4000)
         cy.url().should('contain', '#shipping')
         cy.get(selectors.addressSelected).should('exist')
         cy.get('body')

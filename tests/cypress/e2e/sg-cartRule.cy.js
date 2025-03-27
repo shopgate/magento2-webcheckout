@@ -53,8 +53,10 @@ describe('Login to admin, create SG coupon, check coupon on FE', () => {
             .and('contain', 'Didi')
 
         cy.visit(checkout.cartUrl)
-        cy.get('.cart-summary').find('.title').click({ multiple: true })
+        cy.get('#block-shipping').click({ multiple: true, waitForAnimations: true })
+        cy.wait(500)
         cy.get('#s_method_flatrate_flatrate').check()
+        cy.wait(500)
         cy.get('[data-th="Discount"] .price').should('not.exist')
 
         cy.visit(checkout.cartUrl + '?sgWebView=1')
