@@ -19,15 +19,14 @@ describe('Login to admin, create SG coupon, check coupon on FE', () => {
 
             // go to promo creation page
             cy.get(adminNav.promoNavItem).find('a').as('promo')
-            cy.get('@promo').click({force:true})
+            cy.get('@promo').click({ force: true })
             cy.wait(1000)
-            cy.get(adminPromo.addButton).click({force:true})
+            cy.get(adminPromo.addButton).click({ force: true })
 
             cy.get(adminPromo.titleField).type('SG Rule test')
             cy.get(adminPromo.websiteMultiselect).select('Main Website')
-            cy.get(adminPromo.customerGroupMultiselect).select('NOT LOGGED IN')
-            cy.get(adminPromo.customerGroupMultiselect).select('General')
-            cy.get('.fieldset-wrapper').click({multiple: true})
+            cy.get(adminPromo.customerGroupMultiselect).select('0') // not logged in
+            cy.get('.fieldset-wrapper').click({ multiple: true })
             cy.wait(500)
 
             // set SG rule to Yes
@@ -43,24 +42,22 @@ describe('Login to admin, create SG coupon, check coupon on FE', () => {
             cy.get('#messages').contains('You saved the rule.')
         })
 
-        cy.fixture('defaultUser.json').then((user) => {
-            cy.loginPage(user.username, user.password)
-            // starting frontend tests with rule
-            cy.visit(product.simpleProductUrl)
+        // starting frontend tests with rule
+        cy.visit(product.simpleProductUrl)
+        // Find the add-to-cart form and submit it
+        cy.get(selectors.addToCartButton).click()
 
-            // Find the add-to-cart form and submit it
-            cy.get(selectors.addToCartButton).click()
+        // Check for the success message
+        cy.get('[data-ui-id="message-success"]')
+            .should('exist')
+            .and('contain', 'Didi')
 
-            // Check for the success message
-            cy.get('[data-ui-id="message-success"]')
-                .should('exist')
-                .and('contain', 'Didi')
+        cy.visit(checkout.cartUrl)
+        cy.get('.cart-summary').find('.title').click({ multiple: true })
+        cy.get('#s_method_flatrate_flatrate').check()
+        cy.get('[data-th="Discount"] .price').should('not.exist')
 
-            cy.visit(checkout.cartUrl)
-            cy.get('[data-th="Discount"] .price').should('not.exist')
-
-            cy.visit(checkout.cartUrl + '?sgWebView=1')
-            cy.get('[data-th="Discount"] .price').should('exist').contains('10.00')
-        })
+        cy.visit(checkout.cartUrl + '?sgWebView=1')
+        cy.get('[data-th="Discount"] .price').should('exist').contains('10.00')
     })
 })
