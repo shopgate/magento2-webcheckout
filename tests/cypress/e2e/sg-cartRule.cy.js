@@ -44,6 +44,7 @@ describe('Login to admin, create SG coupon, check coupon on FE', () => {
 
         // starting frontend tests with rule
         cy.visit(product.simpleProductUrl)
+        cy.wait(2000)
         // Find the add-to-cart form and submit it
         cy.get(selectors.addToCartButton).click()
 
@@ -53,13 +54,18 @@ describe('Login to admin, create SG coupon, check coupon on FE', () => {
             .and('contain', 'Didi')
 
         cy.visit(checkout.cartUrl)
-        cy.get('#block-shipping').click({ multiple: true, waitForAnimations: true })
+        cy.get('#block-shipping').click({ waitForAnimations: true })
         cy.wait(500)
-        cy.get('#s_method_flatrate_flatrate').check()
+        // this may not display on later M2 versions
+        cy.get('#s_method_flatrate_flatrate').check({ force: true })
         cy.wait(500)
         cy.get('[data-th="Discount"] .price').should('not.exist')
 
         cy.visit(checkout.cartUrl + '?sgWebView=1')
+        cy.wait(500)
+        cy.get('#block-shipping').click({ waitForAnimations: true })
+        cy.get('#s_method_flatrate_flatrate').check({ force: true })
+        cy.wait(500)
         cy.get('[data-th="Discount"] .price').should('exist').contains('10.00')
     })
 })
