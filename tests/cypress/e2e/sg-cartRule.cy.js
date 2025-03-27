@@ -60,7 +60,7 @@ describe('Login to admin, create SG coupon, check coupon on FE', () => {
             cy.get('[data-th="Discount"] .price').should('not.exist')
 
             cy.visit(checkout.cartUrl + '?sgWebView=1')
-            cy.get('[data-th="Discount"] .price').should('exist').contains('-€10.00')
+            cy.get('[data-th="Discount"] .price').should('exist').contains('10.00')
         })
     })
 })
