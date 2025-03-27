@@ -56,14 +56,11 @@ describe('Login to admin, create SG coupon, check coupon on FE', () => {
                 .should('exist')
                 .and('contain', 'Didi')
 
-            cy.visit(checkout.cartUrl, {
-                headers: {
-                    'User-Agent': 'CustomUserAgent/1.0 libshopgate'
-                }
-            });
-            // cy.visit(checkout.cartUrl + '?sgWebView=1')
-            //  todo: test 1 check discount without inApp
-            //  todo: test 2 check discount with inApp
+            cy.visit(checkout.cartUrl)
+            cy.get('[data-th="Discount"] .price').should('not.exist')
+
+            cy.visit(checkout.cartUrl + '?sgWebView=1')
+            cy.get('[data-th="Discount"] .price').should('exist').contains('-€10.00')
         })
     })
 })
