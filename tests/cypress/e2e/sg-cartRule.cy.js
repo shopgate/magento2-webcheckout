@@ -5,7 +5,7 @@ import adminNav from '../fixtures/selectors/admin/navigation'
 import adminPromo from '../fixtures/selectors/admin/promotion'
 
 describe('Login to admin, create SG coupon, check coupon on FE', () => {
-    it('should create coupon & check storefront', () => {
+    it('should create coupon in admin', () => {
         cy.fixture('adminUser.json').then((user) => {
             // login to admin
             cy.visit('/admin')
@@ -41,10 +41,11 @@ describe('Login to admin, create SG coupon, check coupon on FE', () => {
             cy.get('#save').click()
             cy.get('#messages').contains('You saved the rule.')
         })
+    })
 
+    it('check storefront', { defaultCommandTimeout: 7000 }, () => {
         // starting frontend tests with rule
         cy.visit(product.simpleProductUrl)
-        cy.wait(3000)
         // Find the add-to-cart form and submit it
         cy.get(selectors.addToCartButton).click({ force: true })
 
@@ -55,18 +56,13 @@ describe('Login to admin, create SG coupon, check coupon on FE', () => {
 
         cy.visit(checkout.cartUrl)
         cy.get('#block-shipping').click({ waitForAnimations: true })
-        cy.wait(500)
         // this may not display on later M2 versions
         cy.get('#s_method_flatrate_flatrate').check({ force: true })
-        cy.wait(500)
         cy.get('[data-th="Discount"] .price').should('not.exist')
 
         cy.visit(checkout.cartUrl + '?sgWebView=1')
-        cy.wait(500)
         cy.get('#block-shipping').click({ waitForAnimations: true })
-        cy.wait(1000)
         cy.get('#s_method_flatrate_flatrate').check({ force: true })
-        cy.wait(500)
         cy.get('[data-th="Discount"] .price').should('exist').contains('10.00')
     })
 })
