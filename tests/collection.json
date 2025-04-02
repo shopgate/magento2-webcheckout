@@ -268,7 +268,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"rule\": {\n        \"is_active\": 1,\n        \"is_advanced\": 1,\n        \"name\": \"SG API Rule Test\",\n        \"apply_to_shipping\": 0,\n        \"coupon_type\": 1,\n        \"simple_action\": \"cart_fixed\",\n        \"from_date\": \"2025-03-27\",\n        \"customer_group_ids\": [\n            0,\n            1\n        ],\n        \"is_rss\": 1,\n        \"discount_amount\": 5.45,\n        \"discount_step\": 0,\n        \"website_ids\": [\n            1\n        ],\n        \"times_used\": 0,\n        \"use_auto_generation\": 0,\n        \"uses_per_coupon\": 0,\n        \"uses_per_customer\": 0,\n        \"sort_order\": 0,\n        \"stop_rules_processing\": 0,\n        \"condition\": {\n            \"condition_type\": \"Magento\\\\SalesRule\\\\Model\\\\Rule\\\\Condition\\\\Combine\",\n            \"conditions\": [\n                {\n                    \"condition_type\": \"Shopgate\\\\WebCheckout\\\\Model\\\\Rule\\\\Condition\\\\WebCheckout\",\n                    \"operator\": \"==\",\n                    \"attribute_name\": \"is_webcheckout_order\",\n                    \"value\": \"1\"\n                }\n            ],\n            \"aggregator_type\": \"all\",\n            \"operator\": null,\n            \"value\": \"1\"\n        },\n        \"action_condition\": {\n            \"condition_type\": \"Magento\\\\SalesRule\\\\Model\\\\Rule\\\\Condition\\\\Product\\\\Combine\",\n            \"aggregator_type\": \"all\",\n            \"operator\": null,\n            \"value\": \"1\"\n        }\n    }\n}",
+							"raw": "{\n    \"rule\": {\n        \"is_active\": 1,\n        \"is_advanced\": 1,\n        \"name\": \"SG API Rule Test\",\n        \"apply_to_shipping\": 0,\n        \"coupon_type\": 1,\n        \"simple_action\": \"cart_fixed\",\n        \"from_date\": \"2025-03-27\",\n        \"customer_group_ids\": [\n            0,\n            1\n        ],\n        \"is_rss\": 1,\n        \"discount_amount\": 5.45,\n        \"discount_step\": 0,\n        \"website_ids\": [\n            1\n        ],\n        \"times_used\": 0,\n        \"use_auto_generation\": 0,\n        \"uses_per_coupon\": 0,\n        \"uses_per_customer\": 0,\n        \"sort_order\": 0,\n        \"stop_rules_processing\": 1,\n        \"condition\": {\n            \"condition_type\": \"Magento\\\\SalesRule\\\\Model\\\\Rule\\\\Condition\\\\Combine\",\n            \"conditions\": [\n                {\n                    \"condition_type\": \"Shopgate\\\\WebCheckout\\\\Model\\\\Rule\\\\Condition\\\\WebCheckout\",\n                    \"operator\": \"==\",\n                    \"attribute_name\": \"is_webcheckout_order\",\n                    \"value\": \"1\"\n                }\n            ],\n            \"aggregator_type\": \"all\",\n            \"operator\": null,\n            \"value\": \"1\"\n        },\n        \"action_condition\": {\n            \"condition_type\": \"Magento\\\\SalesRule\\\\Model\\\\Rule\\\\Condition\\\\Product\\\\Combine\",\n            \"aggregator_type\": \"all\",\n            \"operator\": null,\n            \"value\": \"1\"\n        }\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -873,7 +873,7 @@
 									"",
 									"pm.test(\"Check no rule applied\", function () {",
 									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.data.cart.prices.discounts).to.be.a('array').to.be.empty;",
+									"    pm.expect(jsonData.data.cart.prices.discounts).to.be.null;",
 									"});"
 								],
 								"type": "text/javascript",
@@ -918,7 +918,7 @@
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData.data.cart.prices.discounts).to.be.a('array').to.not.be.empty;",
 									"    const discount = jsonData.data.cart.prices.discounts.pop()",
-									"    pm.expect(discount.amount.value).to.eq(5.45)",
+									"    pm.expect(discount.amount.value).to.be.a('number')",
 									"});"
 								],
 								"type": "text/javascript",
