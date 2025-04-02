@@ -46,8 +46,9 @@ describe('Login to admin, create SG coupon, check coupon on FE', () => {
     it('check storefront', { defaultCommandTimeout: 7000 }, () => {
         // starting frontend tests with rule
         cy.visit(product.simpleProductUrl)
+        cy.wait(3000)
         // Find the add-to-cart form and submit it
-        cy.get(selectors.addToCartButton).click({ force: true })
+        cy.get(selectors.addToCartButton).click()
 
         // Check for the success message
         cy.get('[data-ui-id="message-success"]')
