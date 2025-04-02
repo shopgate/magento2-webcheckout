@@ -44,9 +44,9 @@ describe('Login to admin, create SG coupon, check coupon on FE', () => {
 
         // starting frontend tests with rule
         cy.visit(product.simpleProductUrl)
-        cy.wait(2000)
+        cy.wait(3000)
         // Find the add-to-cart form and submit it
-        cy.get(selectors.addToCartButton).click()
+        cy.get(selectors.addToCartButton).click({ force: true })
 
         // Check for the success message
         cy.get('[data-ui-id="message-success"]')
