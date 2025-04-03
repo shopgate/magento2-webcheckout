@@ -220,6 +220,959 @@
 			]
 		},
 		{
+			"name": "WebC only rule",
+			"item": [
+				{
+					"name": "M2A: create SG App rule",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Save ID\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.rule_id).to.be.a('number');",
+									"    pm.environment.set('gen_rule_sgApp_id', jsonData.rule_id)",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{gen_adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"rule\": {\n        \"is_active\": 1,\n        \"is_advanced\": 1,\n        \"name\": \"SG API Rule Test\",\n        \"apply_to_shipping\": 0,\n        \"coupon_type\": 1,\n        \"simple_action\": \"cart_fixed\",\n        \"from_date\": \"2025-03-27\",\n        \"customer_group_ids\": [\n            0,\n            1\n        ],\n        \"is_rss\": 1,\n        \"discount_amount\": 5.45,\n        \"discount_step\": 0,\n        \"website_ids\": [\n            1\n        ],\n        \"times_used\": 0,\n        \"use_auto_generation\": 0,\n        \"uses_per_coupon\": 0,\n        \"uses_per_customer\": 0,\n        \"sort_order\": 0,\n        \"stop_rules_processing\": 1,\n        \"condition\": {\n            \"condition_type\": \"Magento\\\\SalesRule\\\\Model\\\\Rule\\\\Condition\\\\Combine\",\n            \"conditions\": [\n                {\n                    \"condition_type\": \"Shopgate\\\\WebCheckout\\\\Model\\\\Rule\\\\Condition\\\\WebCheckout\",\n                    \"operator\": \"==\",\n                    \"attribute_name\": \"is_webcheckout_order\",\n                    \"value\": \"1\"\n                }\n            ],\n            \"aggregator_type\": \"all\",\n            \"operator\": null,\n            \"value\": \"1\"\n        },\n        \"action_condition\": {\n            \"condition_type\": \"Magento\\\\SalesRule\\\\Model\\\\Rule\\\\Condition\\\\Product\\\\Combine\",\n            \"aggregator_type\": \"all\",\n            \"operator\": null,\n            \"value\": \"1\"\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{m2_endpoint_api}}/salesRules",
+							"host": [
+								"{{m2_endpoint_api}}"
+							],
+							"path": [
+								"salesRules"
+							],
+							"query": [
+								{
+									"key": "searchCriteria[requestName]",
+									"value": "<string>",
+									"disabled": true
+								},
+								{
+									"key": "searchCriteria[filterGroups][0][filters][0][field]",
+									"value": "name",
+									"description": "Field",
+									"disabled": true
+								},
+								{
+									"key": "searchCriteria[filterGroups][0][filters][0][value]",
+									"value": "%Shopgate%",
+									"description": "Value",
+									"disabled": true
+								},
+								{
+									"key": "searchCriteria[filterGroups][0][filters][0][conditionType]",
+									"value": "like",
+									"description": "Condition type",
+									"disabled": true
+								},
+								{
+									"key": "searchCriteria[sortOrders][0][field]",
+									"value": "<string>",
+									"description": "Sorting field.",
+									"disabled": true
+								},
+								{
+									"key": "searchCriteria[sortOrders][0][direction]",
+									"value": "<string>",
+									"description": "Sorting direction.",
+									"disabled": true
+								},
+								{
+									"key": "searchCriteria[pageSize]",
+									"value": "<integer>",
+									"description": "Page size.",
+									"disabled": true
+								},
+								{
+									"key": "searchCriteria[currentPage]",
+									"value": "<integer>",
+									"description": "Current page.",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Create access token for admin given the customer credentials."
+					},
+					"response": [
+						{
+							"name": "200 Success.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/V1/integration/customer/token",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"V1",
+										"integration",
+										"customer",
+										"token"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "<string>"
+						},
+						{
+							"name": "400 Bad Request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/V1/integration/customer/token",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"V1",
+										"integration",
+										"customer",
+										"token"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"<string>\",\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"code\": \"<integer>\",\n  \"parameters\": [\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    },\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    }\n  ],\n  \"trace\": \"<string>\"\n}"
+						},
+						{
+							"name": "Unexpected error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/V1/integration/customer/token",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"V1",
+										"integration",
+										"customer",
+										"token"
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"<string>\",\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"code\": \"<integer>\",\n  \"parameters\": [\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    },\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    }\n  ],\n  \"trace\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "M2: create guest cart",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Body is a string\", function () {",
+									"    const cartId = pm.response.text().replace(/['\"]+/g, '');",
+									"    pm.expect(cartId).to.be.a('string');",
+									"    pm.environment.set('gen_cartId', cartId);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{m2_endpoint_api}}/guest-carts",
+							"host": [
+								"{{m2_endpoint_api}}"
+							],
+							"path": [
+								"guest-carts"
+							]
+						},
+						"description": "Enable an customer or guest user to create an empty cart and quote for an anonymous customer."
+					},
+					"response": [
+						{
+							"name": "200 Success.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/V1/guest-carts",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"V1",
+										"guest-carts"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "<string>"
+						},
+						{
+							"name": "400 Bad Request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/V1/guest-carts",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"V1",
+										"guest-carts"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"<string>\",\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"code\": \"<integer>\",\n  \"parameters\": [\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    },\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    }\n  ],\n  \"trace\": \"<string>\"\n}"
+						},
+						{
+							"name": "Unexpected error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/V1/guest-carts",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"V1",
+										"guest-carts"
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"<string>\",\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"code\": \"<integer>\",\n  \"parameters\": [\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    },\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    }\n  ],\n  \"trace\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "M2: add prod 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Make sure product was added\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.errors, 'item was not added!').to.be.undefined",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Allow cookie deletion by going to cookies -> Domain Allowlist",
+									"const jar = pm.cookies.jar();",
+									"jar.unset(pm.environment.get(\"host\"), 'PHPSESSID', function (error) {",
+									"    if (error) {",
+									"        console.log(error.message)",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  addSimpleProductsToCart(\n    input: {\n      cart_id: \"{{gen_cartId}}\", \n      cart_items: [{\n        data: {\n          quantity: 1\n          sku: \"24-WG02\"\n        }\n      }]\n    }) {\n    cart {\n      id\n    }\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/graphql",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"graphql"
+							]
+						},
+						"description": "Add/update the specified cart item."
+					},
+					"response": [
+						{
+							"name": "200 Success.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"cartItem\": {\n    \"qty\": \"<number>\",\n    \"quote_id\": \"<string>\",\n    \"item_id\": \"<integer>\",\n    \"sku\": \"<string>\",\n    \"name\": \"<string>\",\n    \"price\": \"<number>\",\n    \"product_type\": \"<string>\",\n    \"product_option\": {\n      \"extension_attributes\": {\n        \"custom_options\": [\n          {\n            \"option_id\": \"<string>\",\n            \"option_value\": \"<string>\",\n            \"extension_attributes\": {\n              \"file_info\": {\n                \"base64_encoded_data\": \"<string>\",\n                \"type\": \"<string>\",\n                \"name\": \"<string>\"\n              }\n            }\n          },\n          {\n            \"option_id\": \"<string>\",\n            \"option_value\": \"<string>\",\n            \"extension_attributes\": {\n              \"file_info\": {\n                \"base64_encoded_data\": \"<string>\",\n                \"type\": \"<string>\",\n                \"name\": \"<string>\"\n              }\n            }\n          }\n        ],\n        \"bundle_options\": [\n          {\n            \"option_id\": \"<integer>\",\n            \"option_qty\": \"<integer>\",\n            \"option_selections\": [\n              \"<integer>\",\n              \"<integer>\"\n            ],\n            \"extension_attributes\": {}\n          },\n          {\n            \"option_id\": \"<integer>\",\n            \"option_qty\": \"<integer>\",\n            \"option_selections\": [\n              \"<integer>\",\n              \"<integer>\"\n            ],\n            \"extension_attributes\": {}\n          }\n        ],\n        \"downloadable_option\": {\n          \"downloadable_links\": [\n            \"<integer>\",\n            \"<integer>\"\n          ]\n        },\n        \"configurable_item_options\": [\n          {\n            \"option_id\": \"<string>\",\n            \"option_value\": \"<integer>\",\n            \"extension_attributes\": {}\n          },\n          {\n            \"option_id\": \"<string>\",\n            \"option_value\": \"<integer>\",\n            \"extension_attributes\": {}\n          }\n        ],\n        \"grouped_options\": [\n          {\n            \"id\": \"<integer>\",\n            \"qty\": \"<integer>\",\n            \"extension_attributes\": {}\n          },\n          {\n            \"id\": \"<integer>\",\n            \"qty\": \"<integer>\",\n            \"extension_attributes\": {}\n          }\n        ]\n      }\n    },\n    \"extension_attributes\": {\n      \"discounts\": [\n        {\n          \"discount_data\": {\n            \"amount\": \"<number>\",\n            \"base_amount\": \"<number>\",\n            \"original_amount\": \"<number>\",\n            \"base_original_amount\": \"<number>\"\n          },\n          \"rule_label\": \"<string>\",\n          \"rule_id\": \"<integer>\"\n        },\n        {\n          \"discount_data\": {\n            \"amount\": \"<number>\",\n            \"base_amount\": \"<number>\",\n            \"original_amount\": \"<number>\",\n            \"base_original_amount\": \"<number>\"\n          },\n          \"rule_label\": \"<string>\",\n          \"rule_id\": \"<integer>\"\n        }\n      ]\n    }\n  }\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/V1/guest-carts/:cartId/items",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"V1",
+										"guest-carts",
+										":cartId",
+										"items"
+									],
+									"variable": [
+										{
+											"key": "cartId"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"qty\": \"<number>\",\n  \"quote_id\": \"<string>\",\n  \"item_id\": \"<integer>\",\n  \"sku\": \"<string>\",\n  \"name\": \"<string>\",\n  \"price\": \"<number>\",\n  \"product_type\": \"<string>\",\n  \"product_option\": {\n    \"extension_attributes\": {\n      \"custom_options\": [\n        {\n          \"option_id\": \"<string>\",\n          \"option_value\": \"<string>\",\n          \"extension_attributes\": {\n            \"file_info\": {\n              \"base64_encoded_data\": \"<string>\",\n              \"type\": \"<string>\",\n              \"name\": \"<string>\"\n            }\n          }\n        },\n        {\n          \"option_id\": \"<string>\",\n          \"option_value\": \"<string>\",\n          \"extension_attributes\": {\n            \"file_info\": {\n              \"base64_encoded_data\": \"<string>\",\n              \"type\": \"<string>\",\n              \"name\": \"<string>\"\n            }\n          }\n        }\n      ],\n      \"bundle_options\": [\n        {\n          \"option_id\": \"<integer>\",\n          \"option_qty\": \"<integer>\",\n          \"option_selections\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"extension_attributes\": {}\n        },\n        {\n          \"option_id\": \"<integer>\",\n          \"option_qty\": \"<integer>\",\n          \"option_selections\": [\n            \"<integer>\",\n            \"<integer>\"\n          ],\n          \"extension_attributes\": {}\n        }\n      ],\n      \"downloadable_option\": {\n        \"downloadable_links\": [\n          \"<integer>\",\n          \"<integer>\"\n        ]\n      },\n      \"configurable_item_options\": [\n        {\n          \"option_id\": \"<string>\",\n          \"option_value\": \"<integer>\",\n          \"extension_attributes\": {}\n        },\n        {\n          \"option_id\": \"<string>\",\n          \"option_value\": \"<integer>\",\n          \"extension_attributes\": {}\n        }\n      ],\n      \"grouped_options\": [\n        {\n          \"id\": \"<integer>\",\n          \"qty\": \"<integer>\",\n          \"extension_attributes\": {}\n        },\n        {\n          \"id\": \"<integer>\",\n          \"qty\": \"<integer>\",\n          \"extension_attributes\": {}\n        }\n      ]\n    }\n  },\n  \"extension_attributes\": {\n    \"discounts\": [\n      {\n        \"discount_data\": {\n          \"amount\": \"<number>\",\n          \"base_amount\": \"<number>\",\n          \"original_amount\": \"<number>\",\n          \"base_original_amount\": \"<number>\"\n        },\n        \"rule_label\": \"<string>\",\n        \"rule_id\": \"<integer>\"\n      },\n      {\n        \"discount_data\": {\n          \"amount\": \"<number>\",\n          \"base_amount\": \"<number>\",\n          \"original_amount\": \"<number>\",\n          \"base_original_amount\": \"<number>\"\n        },\n        \"rule_label\": \"<string>\",\n        \"rule_id\": \"<integer>\"\n      }\n    ]\n  }\n}"
+						},
+						{
+							"name": "400 Bad Request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"cartItem\": {\n    \"qty\": \"<number>\",\n    \"quote_id\": \"<string>\",\n    \"item_id\": \"<integer>\",\n    \"sku\": \"<string>\",\n    \"name\": \"<string>\",\n    \"price\": \"<number>\",\n    \"product_type\": \"<string>\",\n    \"product_option\": {\n      \"extension_attributes\": {\n        \"custom_options\": [\n          {\n            \"option_id\": \"<string>\",\n            \"option_value\": \"<string>\",\n            \"extension_attributes\": {\n              \"file_info\": {\n                \"base64_encoded_data\": \"<string>\",\n                \"type\": \"<string>\",\n                \"name\": \"<string>\"\n              }\n            }\n          },\n          {\n            \"option_id\": \"<string>\",\n            \"option_value\": \"<string>\",\n            \"extension_attributes\": {\n              \"file_info\": {\n                \"base64_encoded_data\": \"<string>\",\n                \"type\": \"<string>\",\n                \"name\": \"<string>\"\n              }\n            }\n          }\n        ],\n        \"bundle_options\": [\n          {\n            \"option_id\": \"<integer>\",\n            \"option_qty\": \"<integer>\",\n            \"option_selections\": [\n              \"<integer>\",\n              \"<integer>\"\n            ],\n            \"extension_attributes\": {}\n          },\n          {\n            \"option_id\": \"<integer>\",\n            \"option_qty\": \"<integer>\",\n            \"option_selections\": [\n              \"<integer>\",\n              \"<integer>\"\n            ],\n            \"extension_attributes\": {}\n          }\n        ],\n        \"downloadable_option\": {\n          \"downloadable_links\": [\n            \"<integer>\",\n            \"<integer>\"\n          ]\n        },\n        \"configurable_item_options\": [\n          {\n            \"option_id\": \"<string>\",\n            \"option_value\": \"<integer>\",\n            \"extension_attributes\": {}\n          },\n          {\n            \"option_id\": \"<string>\",\n            \"option_value\": \"<integer>\",\n            \"extension_attributes\": {}\n          }\n        ],\n        \"grouped_options\": [\n          {\n            \"id\": \"<integer>\",\n            \"qty\": \"<integer>\",\n            \"extension_attributes\": {}\n          },\n          {\n            \"id\": \"<integer>\",\n            \"qty\": \"<integer>\",\n            \"extension_attributes\": {}\n          }\n        ]\n      }\n    },\n    \"extension_attributes\": {\n      \"discounts\": [\n        {\n          \"discount_data\": {\n            \"amount\": \"<number>\",\n            \"base_amount\": \"<number>\",\n            \"original_amount\": \"<number>\",\n            \"base_original_amount\": \"<number>\"\n          },\n          \"rule_label\": \"<string>\",\n          \"rule_id\": \"<integer>\"\n        },\n        {\n          \"discount_data\": {\n            \"amount\": \"<number>\",\n            \"base_amount\": \"<number>\",\n            \"original_amount\": \"<number>\",\n            \"base_original_amount\": \"<number>\"\n          },\n          \"rule_label\": \"<string>\",\n          \"rule_id\": \"<integer>\"\n        }\n      ]\n    }\n  }\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/V1/guest-carts/:cartId/items",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"V1",
+										"guest-carts",
+										":cartId",
+										"items"
+									],
+									"variable": [
+										{
+											"key": "cartId"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"<string>\",\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"code\": \"<integer>\",\n  \"parameters\": [\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    },\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    }\n  ],\n  \"trace\": \"<string>\"\n}"
+						},
+						{
+							"name": "Unexpected error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"cartItem\": {\n    \"qty\": \"<number>\",\n    \"quote_id\": \"<string>\",\n    \"item_id\": \"<integer>\",\n    \"sku\": \"<string>\",\n    \"name\": \"<string>\",\n    \"price\": \"<number>\",\n    \"product_type\": \"<string>\",\n    \"product_option\": {\n      \"extension_attributes\": {\n        \"custom_options\": [\n          {\n            \"option_id\": \"<string>\",\n            \"option_value\": \"<string>\",\n            \"extension_attributes\": {\n              \"file_info\": {\n                \"base64_encoded_data\": \"<string>\",\n                \"type\": \"<string>\",\n                \"name\": \"<string>\"\n              }\n            }\n          },\n          {\n            \"option_id\": \"<string>\",\n            \"option_value\": \"<string>\",\n            \"extension_attributes\": {\n              \"file_info\": {\n                \"base64_encoded_data\": \"<string>\",\n                \"type\": \"<string>\",\n                \"name\": \"<string>\"\n              }\n            }\n          }\n        ],\n        \"bundle_options\": [\n          {\n            \"option_id\": \"<integer>\",\n            \"option_qty\": \"<integer>\",\n            \"option_selections\": [\n              \"<integer>\",\n              \"<integer>\"\n            ],\n            \"extension_attributes\": {}\n          },\n          {\n            \"option_id\": \"<integer>\",\n            \"option_qty\": \"<integer>\",\n            \"option_selections\": [\n              \"<integer>\",\n              \"<integer>\"\n            ],\n            \"extension_attributes\": {}\n          }\n        ],\n        \"downloadable_option\": {\n          \"downloadable_links\": [\n            \"<integer>\",\n            \"<integer>\"\n          ]\n        },\n        \"configurable_item_options\": [\n          {\n            \"option_id\": \"<string>\",\n            \"option_value\": \"<integer>\",\n            \"extension_attributes\": {}\n          },\n          {\n            \"option_id\": \"<string>\",\n            \"option_value\": \"<integer>\",\n            \"extension_attributes\": {}\n          }\n        ],\n        \"grouped_options\": [\n          {\n            \"id\": \"<integer>\",\n            \"qty\": \"<integer>\",\n            \"extension_attributes\": {}\n          },\n          {\n            \"id\": \"<integer>\",\n            \"qty\": \"<integer>\",\n            \"extension_attributes\": {}\n          }\n        ]\n      }\n    },\n    \"extension_attributes\": {\n      \"discounts\": [\n        {\n          \"discount_data\": {\n            \"amount\": \"<number>\",\n            \"base_amount\": \"<number>\",\n            \"original_amount\": \"<number>\",\n            \"base_original_amount\": \"<number>\"\n          },\n          \"rule_label\": \"<string>\",\n          \"rule_id\": \"<integer>\"\n        },\n        {\n          \"discount_data\": {\n            \"amount\": \"<number>\",\n            \"base_amount\": \"<number>\",\n            \"original_amount\": \"<number>\",\n            \"base_original_amount\": \"<number>\"\n          },\n          \"rule_label\": \"<string>\",\n          \"rule_id\": \"<integer>\"\n        }\n      ]\n    }\n  }\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/V1/guest-carts/:cartId/items",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"V1",
+										"guest-carts",
+										":cartId",
+										"items"
+									],
+									"variable": [
+										{
+											"key": "cartId"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"<string>\",\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"code\": \"<integer>\",\n  \"parameters\": [\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    },\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    }\n  ],\n  \"trace\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "GQL: getCart (no header)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check no rule applied\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.cart.prices.discounts).to.be.null;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "{\n  cart(cart_id: \"{{gen_cartId}}\") {\n        id,\n        email,\n        applied_coupons {\n            code\n        },\n        prices {\n            discounts {\n                amount {\n                    value,\n                    currency\n                },\n                label\n            }\n        }\n    }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{host}}/graphql",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GQL: getCart (/w header)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check no rule applied\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.cart.prices.discounts).to.be.a('array').to.not.be.empty;",
+									"    const discount = jsonData.data.cart.prices.discounts.pop()",
+									"    pm.expect(discount.amount.value).to.be.a('number')",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "shopgate-check",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "{\n  cart(cart_id: \"{{gen_cartId}}\") {\n        id,\n        email,\n        applied_coupons {\n            code\n        },\n        prices {\n            discounts {\n                amount {\n                    value,\n                    currency\n                },\n                label\n            }\n        }\n    }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{host}}/graphql",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "M2A: delete rule",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{gen_adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"rule\": {\n        \"is_active\": 1,\n        \"is_advanced\": 1,\n        \"name\": \"SG API Rule Test\",\n        \"apply_to_shipping\": 0,\n        \"coupon_type\": 1,\n        \"simple_action\": \"by_fixed\",\n        \"from_date\": \"2025-03-27\",\n        \"customer_group_ids\": [\n            0,\n            1\n        ],\n        \"is_rss\": 1,\n        \"discount_amount\": 5.45,\n        \"discount_step\": 0,\n        \"website_ids\": [\n            1\n        ],\n        \"times_used\": 0,\n        \"use_auto_generation\": 0,\n        \"uses_per_coupon\": 0,\n        \"uses_per_customer\": 0,\n        \"sort_order\": 0,\n        \"stop_rules_processing\": 0,\n        \"condition\": {\n            \"condition_type\": \"Magento\\\\SalesRule\\\\Model\\\\Rule\\\\Condition\\\\Combine\",\n            \"conditions\": [\n                {\n                    \"condition_type\": \"Shopgate\\\\WebCheckout\\\\Model\\\\Rule\\\\Condition\\\\WebCheckout\",\n                    \"operator\": \"==\",\n                    \"attribute_name\": \"is_webcheckout_order\",\n                    \"value\": \"1\"\n                }\n            ],\n            \"aggregator_type\": \"all\",\n            \"operator\": null,\n            \"value\": \"1\"\n        },\n        \"action_condition\": {\n            \"condition_type\": \"Magento\\\\SalesRule\\\\Model\\\\Rule\\\\Condition\\\\Product\\\\Combine\",\n            \"aggregator_type\": \"all\",\n            \"operator\": null,\n            \"value\": \"1\"\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{m2_endpoint_api}}/salesRules/:ruleId",
+							"host": [
+								"{{m2_endpoint_api}}"
+							],
+							"path": [
+								"salesRules",
+								":ruleId"
+							],
+							"variable": [
+								{
+									"key": "ruleId",
+									"value": "{{gen_rule_sgApp_id}}"
+								}
+							]
+						},
+						"description": "Create access token for admin given the customer credentials."
+					},
+					"response": [
+						{
+							"name": "200 Success.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/V1/integration/customer/token",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"V1",
+										"integration",
+										"customer",
+										"token"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "<string>"
+						},
+						{
+							"name": "400 Bad Request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/V1/integration/customer/token",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"V1",
+										"integration",
+										"customer",
+										"token"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"<string>\",\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"code\": \"<integer>\",\n  \"parameters\": [\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    },\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    }\n  ],\n  \"trace\": \"<string>\"\n}"
+						},
+						{
+							"name": "Unexpected error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/V1/integration/customer/token",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"V1",
+										"integration",
+										"customer",
+										"token"
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"<string>\",\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"parameters\": [\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        },\n        {\n          \"resources\": \"<string>\",\n          \"fieldName\": \"<string>\",\n          \"fieldValue\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"code\": \"<integer>\",\n  \"parameters\": [\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    },\n    {\n      \"resources\": \"<string>\",\n      \"fieldName\": \"<string>\",\n      \"fieldValue\": \"<string>\"\n    }\n  ],\n  \"trace\": \"<string>\"\n}"
+						}
+					]
+				}
+			],
+			"description": "Checks if our SG inApp rule discount is applied when necessary"
+		},
+		{
 			"name": "Customer",
 			"item": [
 				{

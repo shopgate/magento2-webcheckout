@@ -17,8 +17,9 @@ class ShopgateDetector
     {
         $sgDevMode = $this->handleDevelopmentMode();
         $sgAgent = str_contains((string)$this->request->getHeader('User-Agent'), 'libshopgate');
+        $sgAppApiRequest = $this->request->getHeader('shopgate-check', false);
 
-        return $sgAgent || $sgDevMode;
+        return $sgAgent || $sgAppApiRequest || $sgDevMode;
     }
 
     private function handleDevelopmentMode(): bool

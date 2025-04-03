@@ -3,7 +3,7 @@
     "description": "Helps SG connect/engage extensions with web checkout, auto-login, allows to add CSS for register/checkout pages",
     "license": "proprietary",
     "type": "magento2-module",
-    "version": "0.3.2",
+    "version": "1.1.0",
     "authors": [
         {
             "name": "Konstantin Kiritsenko"

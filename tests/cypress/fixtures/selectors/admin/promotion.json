@@ -1,0 +1,6 @@
+{
+  "addButton": "#add",
+  "titleField": "input[name=\"name\"]",
+  "websiteMultiselect": "[name=\"website_ids\"]",
+  "customerGroupMultiselect": "[name=\"customer_group_ids\"]"
+}

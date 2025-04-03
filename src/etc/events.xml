@@ -3,4 +3,7 @@
     <event name="checkout_submit_all_after">
         <observer name="shopgate_webcheckout_quote_submitted" instance="Shopgate\WebCheckout\Observer\SaveWebcheckoutOrder" />
     </event>
+    <event name="salesrule_rule_condition_combine">
+        <observer name="shopgate_webcheckout_salesrule_condition" instance="Shopgate\WebCheckout\Observer\AddWebCheckoutOnlySalesRuleCondition" />
+    </event>
 </config>

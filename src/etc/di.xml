@@ -39,4 +39,11 @@
             <argument name="logger" xsi:type="object">Shopgate\WebCheckout\Services\Logger</argument>
         </arguments>
     </type>
+    <type name="Shopgate\WebCheckout\Model\Rule\Condition\WebCheckout">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="form_name" xsi:type="string">sales_rule_form</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
