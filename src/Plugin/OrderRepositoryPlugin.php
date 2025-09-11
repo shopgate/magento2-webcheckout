@@ -45,6 +45,7 @@ class OrderRepositoryPlugin
 
         return $searchResult;
     }
+
     private function loadShopgateUserAgent(OrderInterface $order): void
     {
         $orderId = $order->getEntityId();
@@ -52,6 +53,7 @@ class OrderRepositoryPlugin
         $userAgent = $userAgents[$orderId] ?? null;
         $this->setShopgateUserAgentExtensionAttribute($order, $userAgent);
     }
+
     private function loadUserAgentsForOrders(array $orderIds): array
     {
         if (empty($orderIds)) {
@@ -73,6 +75,7 @@ class OrderRepositoryPlugin
             return [];
         }
     }
+
     private function setShopgateUserAgentExtensionAttribute(OrderInterface $order, ?string $userAgent): void
     {
         $extensionAttributes = $order->getExtensionAttributes();
