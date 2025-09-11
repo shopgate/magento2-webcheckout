@@ -13,4 +13,18 @@ class ShopgateWebCheckoutOrder extends AbstractDb
     {
         $this->_init(self::TABLE_NAME, ShopgateWebCheckoutOrderInterface::ENTITY_ID);
     }
+
+    public function getUserAgentsForOrders(array $orderIds): array
+    {
+        if (empty($orderIds)) {
+            return [];
+        }
+
+        $connection = $this->getConnection();
+        $select = $connection->select()
+            ->from($this->getMainTable(), ['order_id', 'user_agent'])
+            ->where('order_id IN (?)', $orderIds);
+
+        return $connection->fetchPairs($select) ?: [];
+    }
 }

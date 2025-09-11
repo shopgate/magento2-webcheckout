@@ -61,16 +61,7 @@ class OrderRepositoryPlugin
         }
 
         try {
-            $connection = $this->shopgateOrderResource->getConnection();
-            $tableName = $this->shopgateOrderResource->getMainTable();
-
-            $select = $connection->select()
-                ->from($tableName, ['order_id', 'user_agent'])
-                ->where('order_id IN (?)', $orderIds);
-
-            $result = $connection->fetchPairs($select);
-            return $result ?: [];
-
+            return $this->shopgateOrderResource->getUserAgentsForOrders($orderIds);
         } catch (Exception $exception) {
             return [];
         }
