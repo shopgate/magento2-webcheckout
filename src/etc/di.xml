@@ -46,10 +46,13 @@
             </argument>
         </arguments>
     </type>
-
-    <!-- Plugin to add shopgate_order_user_agent extension attribute -->
     <type name="Magento\Sales\Api\OrderRepositoryInterface">
         <plugin name="shopgate_order_user_agent_plugin"
+                type="Shopgate\WebCheckout\Plugin\OrderRepositoryPlugin"
+                sortOrder="10"/>
+    </type>
+    <type name="Shopgate\WebCheckout\Api\ShopgateWebCheckoutOrderRepositoryInterface">
+        <plugin name="shopgate_webcheckout_order_user_agent_plugin"
                 type="Shopgate\WebCheckout\Plugin\OrderRepositoryPlugin"
                 sortOrder="10"/>
     </type>

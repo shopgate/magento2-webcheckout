@@ -8,6 +8,7 @@ use Magento\Sales\Api\Data\OrderSearchResultInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\Data\OrderExtensionFactory;
 use Shopgate\WebCheckout\Model\ResourceModel\ShopgateWebCheckoutOrder;
+use Shopgate\WebCheckout\Api\ShopgateWebCheckoutOrderRepositoryInterface;
 
 class OrderRepositoryPlugin
 {
@@ -23,7 +24,7 @@ class OrderRepositoryPlugin
     }
 
     public function afterGetList(
-        OrderRepositoryInterface $subject,
+        OrderRepositoryInterface|ShopgateWebCheckoutOrderRepositoryInterface $subject,
         OrderSearchResultInterface $searchResult
     ): OrderSearchResultInterface {
         $orderIds = [];
