@@ -53,10 +53,11 @@ class ShopgateWebCheckoutOrderRepository implements ShopgateWebCheckoutOrderRepo
     {
         $searchResult = $this->searchResultFactory->create();
         $select = $searchResult->getSelect();
+
         $select->joinInner(
             ['sgo' => $searchResult->getTable(WebCheckoutOrder::TABLE_NAME)],
             'main_table.entity_id = sgo.order_id',
-            ['user_agent' => 'user_agent']
+            []
         );
 
         $this->extensionAttributesJoinProcessor->process($searchResult);
